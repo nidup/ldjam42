@@ -3,7 +3,7 @@
     "tutorial": "Aliens are hidden in the population, no way to recognize infected citizens. You have no choice... kill'em all.",
     "characters": {
       "citizens": {
-        "sane": 3,
+        "sane": 100,
         "infected": 1
       },
       "cowboy_with_gun": {
@@ -23,8 +23,6 @@
       "Small",
       "Medium",
       "Hostel",
-      "Small",
-      "Medium",
       "Small"
     ]
   },
