@@ -155,11 +155,13 @@ export default class Play extends Phaser.State
             this.playerPosition
         );
         this.street = new Street(generator, this.isFinalLevel);
-        this.buildings = [];
+        //this.buildings = [];
 
+        /*
         new LevelInstructions(interfaceLayer, streetPositionX, 0, 'LevelInstructions', level);
         new Inventory(interfaceLayer, streetPositionX + 600, 0, 'Inventory', this.street.player());
         new FlashMessages(interfaceLayer, this.street.player().pastGameEvents(), this.street.player());
+        */
 
         const worldBoundX = 0;
         const worldBoundY = 0;
@@ -171,6 +173,7 @@ export default class Play extends Phaser.State
 
     public update()
     {
+        /*
         if (this.isFinalLevel) {
             if (this.street.alienQueen().isDead()) {
                 const levelText = this.game.add.bitmapText(100, 300, 'cowboy','Congratz, you defeat the aliens!', 30);
@@ -188,7 +191,7 @@ export default class Play extends Phaser.State
             if (this.street.isEmpty()) {
                 this.nextLevel();
             }
-        }
+        }*/
 
         this.game.physics.arcade.collide(this.street.player(), this.street.citizens().all());
 
@@ -214,6 +217,7 @@ export default class Play extends Phaser.State
         this.game.physics.arcade.collide(this.rightBoundMargin, this.street.cops().all());
         this.game.physics.arcade.collide(this.rightBoundMargin, this.street.swats().all());
 
+        /*
         const skyParallaxSpeed = 0.03;
         this.sky.tilePosition.x -= skyParallaxSpeed;
 
@@ -222,10 +226,11 @@ export default class Play extends Phaser.State
             this.background.tilePosition.x -= backgroundParallaxSpeed;
         } else if (this.street.player().movingToTheLeft()) {
             this.background.tilePosition.x += backgroundParallaxSpeed;
-        }
+        }*/
 
         this.characterLayer.sort('y', Phaser.Group.SORT_ASCENDING);
 
+        /*
         if (this.street.player().isDead()) {
             const hospital = this.buildings.hospital();
             if (hospital && this.street.player().money() >= hospital.nurseCost()) {
@@ -256,7 +261,7 @@ export default class Play extends Phaser.State
                     );
                 }, this);
             }
-        }
+        }*/
     }
 
     public render()
