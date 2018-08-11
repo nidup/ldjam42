@@ -94,7 +94,7 @@ export class CharactersGenerator
                     sceneCenter.y + Math.sin(randomAngle) * radius
                 );
 
-                if (pos.x > 0 && pos.x < 885 && pos.y > 20 && pos.y < 770
+                if (pos.x > 0 && pos.x < 900 && pos.y > 20 && pos.y < 770
                     && this.thereIsNoCitizenUnder(citizens, pos)) {
                     return pos;
                 }

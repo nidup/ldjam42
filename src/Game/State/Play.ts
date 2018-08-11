@@ -98,7 +98,7 @@ export default class Play extends Phaser.State
         const rightCameraMargin = this.game.add.tileSprite(rightCameraMarginX, 0, sideMarginWidth, 800, 'Side', 0, interfaceLayer);
         rightCameraMargin.fixedToCamera = true;
 
-        const streetWidth = 900;
+        const streetWidth = 915;
 
         let worldWidth = streetWidth;
         let rightBoundMarginX = streetWidth;
@@ -283,7 +283,7 @@ export default class Play extends Phaser.State
             //this.game.debug.spriteInfo(this.street.citizens().all()[0], 32, 300);
             //this.game.debug.bodyInfo(this.street.citizens().all()[0], 32, 300);
 
-            this.street.citizens().all().forEach(citizen => this.game.debug.body(citizen));
+            //this.street.citizens().all().forEach(citizen => this.game.debug.body(citizen));
         }
     }
 

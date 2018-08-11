@@ -49,7 +49,7 @@ export class KeyBoardController implements Controller
 
     shooting(): boolean
     {
-        return this.shotKey.isDown;
+        return this.shotKey.justDown;
     }
 
     switchingWeapon(): boolean

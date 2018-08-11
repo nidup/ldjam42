@@ -3267,7 +3267,7 @@ declare module Phaser {
                 setCircle(radius: number, offsetX?: number, offsetY?: number): void;
                 setSize(width: number, height: number, offsetX?: number, offsetY?: number): void;
                 updateBounds(): boolean;
-
+                updateCenter(): void;
             }
 
             class FaceChoices {
