@@ -16,12 +16,16 @@ const reactions = [
     'dude...',
     'no worries mate',
     'want some?',
+    'STAHP',
+    'what the.',
+    ':|',
+    'FU',
 ];
 
 export const TEXT_STYLE = {
     align: 'center',
     fill: '#fff',
-    font: '12px PICO-8'
+    font: '8px PICO-8'
 };
 
 export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplicant
@@ -79,10 +83,14 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         this.animations.add('drink', [52, 53, 52, 52, 52, 54, 55, 55, 56, 55, 55, 56, 55, 54, 52, 52, 52, 52, 52, 52, 52], drinkRate, true);
         this.animations.add('nervous', [57, 58, 59, 60, 61, 62, 63, 64, 65, 64, 65, 64, 65, 66, 67], 12, true);
 
+        this.animations.add('hell', [88, 89, 88, 89, 88, 89, 90, 91, 90, 91], 10, true);
+
         const randAnim = Math.random();
 
-        if (randAnim < 0.4) {
+        if (randAnim < 0.2) {
             this.animations.play('idle');
+        } else if (randAnim < 0.4) {
+            this.animations.play('hell');
         } else if (randAnim < 0.6) {
             this.animations.play('smoke');
         } else if (randAnim < 0.7) {
@@ -112,6 +120,7 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
                     this.text && this.text.destroy();
                     this.text = null;
                 }, this);
+                this.animations.play('nervous');
             }
         });
 
