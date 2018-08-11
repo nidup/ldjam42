@@ -56,7 +56,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         this.inputEnabled = true;
         this.scale.setTo(Config.pixelScaleRatio(), Config.pixelScaleRatio());
         this.anchor.setTo(0.5, 0.5);
-        this.body.setCircle(9, 7, 8);
+        this.body.setCircle(5, 5, 14);
         this.body.allowGravity = false;
         this.body.collideWorldBounds = true;
 
