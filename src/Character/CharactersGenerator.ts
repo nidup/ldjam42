@@ -72,37 +72,35 @@ export class CharactersGenerator
         return new AlienQueen(this.characterGroup, queenX, queenY, 'AlienQueen');
     }
 
-    generateRandomMescouilles(citizens: Citizens)
+    generateRandomPosition(citizens: Citizens)
     {
-        const center = new PIXI.Point(1000, 400);
-        const radiusMax = 1000;
+        const sceneCenter = new PIXI.Point(1000, 400);
+        const radiusMax = 900;
         const radiusMin = 100;
-        const radiusMed = 350;
+        const radiusMed = 400;
 
-        const a = -4*radiusMin+4*radiusMed;
-        const b = radiusMax + 3*radiusMin - 4*radiusMed;
-        const c = radiusMin;
+        let circlesTries = 500;
+        while (circlesTries > 0) {
+            const randForCircle = Math.random();
+            const radius = (-4*radiusMin+4*radiusMed) * randForCircle * randForCircle
+                + (radiusMax + 3*radiusMin - 4*radiusMed) * randForCircle
+                + radiusMin;
 
-        let j = 0;
-        while (j < 500) {
-            const rand = Math.random();
-            const radius = a * rand * rand + b * rand + c;
-
-            let i = 0;
-            while (i < 500) {
-                const randCircle = Math.random() * Math.PI * 2;
-
+            let angleTries = 500;
+            while (angleTries > 0) {
+                const randomAngle = Math.random() * Math.PI * 2;
                 const pos = new PIXI.Point(
-                    center.x + Math.cos(randCircle) * radius,
-                    center.y + Math.sin(randCircle) * radius
+                    sceneCenter.x + Math.cos(randomAngle) * radius,
+                    sceneCenter.y + Math.sin(randomAngle) * radius
                 );
 
-                if (pos.x > 0 && pos.x < 900 && pos.y > 20 && pos.y < 800 && this.thereIsNoCitizenUnder(citizens, pos)) {
+                if (pos.x > 0 && pos.x < 900 && pos.y > 20 && pos.y < 770
+                    && this.thereIsNoCitizenUnder(citizens, pos)) {
                     return pos;
                 }
-                i++;
+                angleTries--;
             }
-            j++;
+            circlesTries--;
         }
 
         return null;
@@ -112,53 +110,11 @@ export class CharactersGenerator
     {
 
         for (let indCiv = 0; indCiv < this.level.saneCitizens(); indCiv++) {
-        //for (let indCiv = 0; indCiv < 500; indCiv++) {
-            const mescouilles = this.generateRandomMescouilles(citizens);
-            if (mescouilles) {
-                //let randY = this.characterGroup.game.rnd.integerInRange(this.limits.minY(), this.limits.maxY());
-                citizens.add(new Citizen(this.characterGroup, mescouilles.x, mescouilles.y, 'citizen1', street, false));
+            const position = this.generateRandomPosition(citizens);
+            if (position) {
+                citizens.add(new Citizen(this.characterGroup, position.x, position.y, 'citizen1', street, false));
             }
         }
-        /*
-        for (let indCiv = 0; indCiv < this.level.infectedCitizens(); indCiv++) {
-            let randX = this.characterGroup.game.rnd.integerInRange(this.limits.minX(), this.limits.maxX());
-            let randY = this.characterGroup.game.rnd.integerInRange(this.limits.minY(), this.limits.maxY());
-            citizens.add(new Citizen(this.characterGroup, randX, randY, 'citizen1', street, true));
-        }
-
-        for (let indCop = 0; indCop < this.level.saneCowboysWithGun(); indCop++) {
-            let randX = this.characterGroup.game.rnd.integerInRange(this.limits.minX(), this.limits.maxX());
-            let randY = this.characterGroup.game.rnd.integerInRange(this.limits.minY(), this.limits.maxY());
-            cops.add(new Cop(this.characterGroup, randX, randY, 'cop', street, false));
-        }
-        for (let indCop = 0; indCop < this.level.infectedCowboysWithGun(); indCop++) {
-            let randX = this.characterGroup.game.rnd.integerInRange(this.limits.minX(), this.limits.maxX());
-            let randY = this.characterGroup.game.rnd.integerInRange(this.limits.minY(), this.limits.maxY());
-            cops.add(new Cop(this.characterGroup, randX, randY, 'cop', street, true));
-        }
-
-        for (let indCop = 0; indCop < this.level.saneCowboysWithShotgun(); indCop++) {
-            let randX = this.characterGroup.game.rnd.integerInRange(this.limits.minX(), this.limits.maxX());
-            let randY = this.characterGroup.game.rnd.integerInRange(this.limits.minY(), this.limits.maxY());
-            cops.add(new Cop(this.characterGroup, randX, randY, 'cop-shotgun', street, false));
-        }
-        for (let indCop = 0; indCop < this.level.infectedCowboysWithShotgun(); indCop++) {
-            let randX = this.characterGroup.game.rnd.integerInRange(this.limits.minX(), this.limits.maxX());
-            let randY = this.characterGroup.game.rnd.integerInRange(this.limits.minY(), this.limits.maxY());
-            cops.add(new Cop(this.characterGroup, randX, randY, 'cop-shotgun', street, true));
-        }
-
-        for (let indSwat = 0; indSwat < this.level.saneCowboysWithMachinegun(); indSwat++) {
-            let randX = this.characterGroup.game.rnd.integerInRange(this.limits.minX(), this.limits.maxX());
-            let randY = this.characterGroup.game.rnd.integerInRange(this.limits.minY(), this.limits.maxY());
-            swats.add(new Swat(this.characterGroup, randX, randY, 'enemy-machinegun', street, false));
-        }
-        for (let indSwat = 0; indSwat < this.level.infectedCowboysWithMachinegun(); indSwat++) {
-            let randX = this.characterGroup.game.rnd.integerInRange(this.limits.minX(), this.limits.maxX());
-            let randY = this.characterGroup.game.rnd.integerInRange(this.limits.minY(), this.limits.maxY());
-            swats.add(new Swat(this.characterGroup, randX, randY, 'enemy-machinegun', street, true));
-        }
-        */
     }
 
     private thereIsNoCitizenUnder(citizens: Citizens, pos: PIXI.Point) {

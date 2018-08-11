@@ -18,7 +18,7 @@ export class Steering
         this.randomGenerator = randomGenerator;
         this.bot = host;
         this.botGun = hostGun;
-        this.walkToARandomDirection();
+        //this.walkToARandomDirection();
     }
 
     blockedToTheLeft(): boolean
@@ -37,8 +37,14 @@ export class Steering
         this.bot.body.velocity.y = 0;
     }
 
+    walk()
+    {
+        this.bot.body.velocity.x = 100;
+    }
+
     walkToTheRight()
     {
+        debugger;
         this.turnToTheRight();
         this.bot.body.velocity.x = this.walkSpeed;
     }
@@ -96,6 +102,7 @@ export class Steering
         if (this.botGun) {
             this.botGun.turnToTheRight();
         }
+        this.bot.scale.x = Config.pixelScaleRatio();
     }
 
     private turnToTheLeft()

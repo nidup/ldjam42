@@ -16,6 +16,9 @@ export class StackFSM
     public update() :void
     {
         const currentState = this.getCurrentState();
+        if (!currentState) {
+            return;
+        }
         const currentStateFunction :Function = currentState.getFunc();
         if (currentStateFunction != null) {
             currentStateFunction();

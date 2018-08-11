@@ -30,7 +30,7 @@ export class CitizenBrain
         this.steering = new Steering(this.host.game.rnd, this.host);
         this.vision = new Vision(this.host, this.street);
         this.fearStatus = fearStatus;
-        this.toWalk();
+        this.toRest();
     }
 
     public think()
@@ -49,12 +49,12 @@ export class CitizenBrain
         if (this.vision.playerIsClose()) {
             this.fsm.pushState(new State('reactToProximity', this.reactToProximity));
         }
-        if (this.steering.blockedToTheLeft()) {
-            this.steering.walkToTheRight();
-        }
-        if (this.steering.blockedToTheRight()) {
-            this.steering.walkToTheLeft();
-        }
+    }
+
+    private isTooFar() {
+        const distance = Phaser.Math.distance(this.host.x, this.host.y, this.host.startingPosition.x, this.host.startingPosition.y);
+
+        return distance > 1;
     }
 
     private toRest()
@@ -73,7 +73,14 @@ export class CitizenBrain
 
     public resting = () =>
     {
-        if (this.host.health <= 0) {
+        if (this.vision.playerIsClose()) {
+            this.fsm.pushState(new State('reactToProximity', this.reactToProximity));
+        }
+        if (this.isTooFar()) {
+            console.log('too far');
+            this.steering.walk();
+        }
+        /*if (this.host.health <= 0) {
             this.toDie();
 
         } else if (this.vision.playerIsCloseAndAggressive()) {
@@ -84,7 +91,7 @@ export class CitizenBrain
             if (this.energy.minimalAmountToMoveIsReached()) {
                 this.fromRestToWalk();
             }
-        }
+        }*/
     }
 
     private fromRestToWalk()
@@ -97,8 +104,8 @@ export class CitizenBrain
 
     public reactToProximity = () =>
     {
-        if (this.vision.playerIsClose()) {
 
+        if (this.vision.playerIsClose()) {
             if (this.steering.blockedToTheLeft()) {
                 this.steering.runToTheRight();
             }
@@ -107,8 +114,10 @@ export class CitizenBrain
             }
 
         } else {
-            this.fromFleeToWalk();
+            this.toRest();
         }
+
+
     }
 
     private fromFleeToWalk()
@@ -125,6 +134,9 @@ export class CitizenBrain
 
     public currentStateName(): string
     {
-        return this.fsm.getCurrentState().getName();
+        if (this.fsm.getCurrentState()) {
+            return this.fsm.getCurrentState().getName();
+        }
+        return null;
     }
 }

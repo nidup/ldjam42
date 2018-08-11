@@ -14,16 +14,17 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 {
     public body: Phaser.Physics.Arcade.Body;
     private brain: CitizenBrain;
-    private dead: boolean = false;
     protected isReplicant: boolean = false;
     private fearStatus: FearStatus;
     private group: Phaser.Group;
     private street: Street;
+    startingPosition: PIXI.Point;
 
     constructor(group: Phaser.Group, x: number, y: number, key: string, street: Street, replicant: boolean)
     {
         super(group.game, x, y, key, 0);
 
+        this.startingPosition = new PIXI.Point(x, y);
         group.game.physics.enable(this, Phaser.Physics.ARCADE);
         group.add(this);
         this.group = group;
@@ -55,28 +56,13 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
     update()
     {
-        if (!this.dead) {
-            this.brain.think();
+        if (this.isTooFarFromStartingPosition()) {
+            this.rapprocheToiDeTaStartingPosition();
         }
     }
 
     die()
     {
-        if (this.isReplicant) {
-            const audio = this.game.add.audio('alien-dying', 1, false);
-            audio.play();
-        } else {
-            const audio = this.game.add.audio('human-dying', 0.5, false);
-            audio.play();
-        }
-
-        this.animations.play('die');
-        let randMoney = this.group.game.rnd.integerInRange(1, 3);
-        if (randMoney === 1) {
-            new PickableItem(this.group, this.x, this.y, 'Money', this.street.player());
-        }
-
-        this.dead = true;
     }
 
     run()
@@ -103,7 +89,8 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
     isDead(): boolean
     {
-        return this.dead;
+        // TODO Remove
+        return false;
     }
 
     isDying(): boolean
@@ -119,5 +106,19 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
     replicant(): boolean
     {
         return this.isReplicant;
+    }
+
+    private isTooFarFromStartingPosition() {
+        return Phaser.Math.distance(this.x, this.y, this.startingPosition.x, this.startingPosition.y) > 2;
+    }
+
+    private rapprocheToiDeTaStartingPosition() {
+        const dist = Phaser.Math.distance(this.x, this.y, this.startingPosition.x, this.startingPosition.y);
+        const vector = new PIXI.Point(
+            (this.x - this.startingPosition.x) / dist,
+            (this.y - this.startingPosition.y) /dist
+        );
+        this.x = this.x - vector.x;
+        this.y = this.y - vector.y;
     }
 }
