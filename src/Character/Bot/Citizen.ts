@@ -16,12 +16,16 @@ const reactions = [
     'dude...',
     'no worries mate',
     'want some?',
+    'STAHP',
+    'what the.',
+    ':|',
+    'FU',
 ];
 
 export const TEXT_STYLE = {
     align: 'center',
     fill: '#fff',
-    font: '12px PICO-8'
+    font: '8px PICO-8'
 };
 
 export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplicant
