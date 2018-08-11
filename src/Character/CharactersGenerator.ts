@@ -121,7 +121,7 @@ export class CharactersGenerator
         return citizens.all().find((citizen: Citizen) => {
             const dist = Phaser.Math.distance(citizen.x, citizen.y, pos.x, pos.y);
 
-            return dist < 18;
+            return dist < 20;
         }) == null;
     }
 }
