@@ -62,14 +62,12 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         this.currentGun = this.gun;
         this.moneyAmount = backbag.money();
 
-        this.animations.add('idle-'+this.gun.identifier(), [6, 7, 8], 4, true);
-        this.animations.add('walk-'+this.gun.identifier(), [5, 4, 3, 2, 1, 0], 12, true);
-        this.animations.add('die-'+this.gun.identifier(), [0], 12, false);
-        this.animations.add('shot-'+this.gun.identifier(), [0], 12, false);
+        this.animations.add('idle', [6, 7, 8], 4, true);
+        this.animations.add('walk', [5, 4, 3, 2, 1, 0], 12, true);
+        this.animations.add('die', [0], 12, false);
+        this.animations.add('shot', [0], 12, false);
 
         this.controller = controller;
-
-        //this.switchToGun();
 
         this.cameraFx = new HeroCamera(group.game.camera);
         this.gameEvents = new GameEvents();
@@ -162,7 +160,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
 
         } else {
             this.scale.x = Config.pixelScaleRatio();
-            this.animations.play('walk-'+this.currentGun.identifier());
+            this.animations.play('walk');
             if (this.controller.goingLeft()) {
                 this.body.velocity.x = -this.speed;
                 this.gun.turnToTheLeft();
@@ -174,24 +172,22 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
 
             if (this.controller.goingUp()) {
                 this.body.velocity.y = -this.speed;
-                this.animations.play('walk-'+this.currentGun.identifier());
+                this.animations.play('walk');
 
             } else if (this.controller.goingDown()) {
                 this.body.velocity.y = this.speed;
-                this.animations.play('walk-'+this.currentGun.identifier());
+                this.animations.play('walk');
             }
 
             if (!this.controller.goingLeft() && !this.controller.goingRight() && !this.controller.goingDown() && !this.controller.goingUp()) {
-
-
-                this.animations.play('idle-'+this.currentGun.identifier());
+                this.animations.play('idle');
             }
         }
     }
 
     private shot()
     {
-        this.animations.play('shot-'+this.currentGun.identifier());
+        this.animations.play('shot');
         this.currentGun.fire();
         this.shotCameraEffects();
         this.agressivenessGauge.increase();
@@ -210,7 +206,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
             this.dead = true;
             this.body.velocity.x = 0;
             this.body.velocity.y = 0;
-            this.animations.play('die-'+this.currentGun.identifier());
+            this.animations.play('die');
             this.gameEvents.register(new HeroKilled(this.game.time.now));
         }
     }
