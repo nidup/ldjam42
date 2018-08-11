@@ -72,13 +72,17 @@ export class CharactersGenerator
         return new AlienQueen(this.characterGroup, queenX, queenY, 'AlienQueen');
     }
 
+
+
     generateBots(street: Street, cops: Cops, citizens: Citizens, swats: Swats): void
     {
         for (let indCiv = 0; indCiv < this.level.saneCitizens(); indCiv++) {
-            let randX = this.characterGroup.game.rnd.integerInRange(this.limits.minX(), this.limits.maxX());
+            const rand = Math.random();
+            const randX = Math.sin(rand * 1.5) * 900;
             let randY = this.characterGroup.game.rnd.integerInRange(this.limits.minY(), this.limits.maxY());
             citizens.add(new Citizen(this.characterGroup, randX, randY, 'citizen1', street, false));
         }
+        /*
         for (let indCiv = 0; indCiv < this.level.infectedCitizens(); indCiv++) {
             let randX = this.characterGroup.game.rnd.integerInRange(this.limits.minX(), this.limits.maxX());
             let randY = this.characterGroup.game.rnd.integerInRange(this.limits.minY(), this.limits.maxY());
@@ -117,5 +121,6 @@ export class CharactersGenerator
             let randY = this.characterGroup.game.rnd.integerInRange(this.limits.minY(), this.limits.maxY());
             swats.add(new Swat(this.characterGroup, randX, randY, 'enemy-machinegun', street, true));
         }
+        */
     }
 }
