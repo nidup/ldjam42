@@ -26,8 +26,6 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
     private speed: number = 150;
     private currentGun: BaseGun;
     private gun: Gun;
-    private shotgun: ShotGun;
-    private machinegun: MachineGun;
     private switchedTime: number = 0;
     private dead: boolean = false;
     private moneyAmount: number = 0;
@@ -61,40 +59,17 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         this.body.collideWorldBounds = true;
 
         this.gun = new Gun(group, this, backbag.gunAmno());
-        this.shotgun = new ShotGun(group, this, backbag.shotgunAmno());
-        this.machinegun = new MachineGun(group, this, backbag.machinegunAmno());
+        this.currentGun = this.gun;
         this.moneyAmount = backbag.money();
 
-        this.animations.add('idle-'+this.gun.identifier(), [0], 4, true);
-        this.animations.add('walk-'+this.gun.identifier(), [0], 12, true);
+        this.animations.add('idle-'+this.gun.identifier(), [6, 7, 8], 4, true);
+        this.animations.add('walk-'+this.gun.identifier(), [5, 4, 3, 2, 1, 0], 12, true);
         this.animations.add('die-'+this.gun.identifier(), [0], 12, false);
         this.animations.add('shot-'+this.gun.identifier(), [0], 12, false);
 
-        this.animations.add('idle-'+this.shotgun.identifier(), [0], 4, true);
-        this.animations.add('walk-'+this.shotgun.identifier(), [0], 12, true);
-        this.animations.add('die-'+this.shotgun.identifier(), [0], 12, false);
-        this.animations.add('shot-'+this.shotgun.identifier(), [0], 6, false);
-
-        this.animations.add('idle-'+this.machinegun.identifier(), [0], 4, true);
-        this.animations.add('walk-'+this.machinegun.identifier(), [0], 12, true);
-        this.animations.add('die-'+this.machinegun.identifier(), [0], 12, false);
-        this.animations.add('shot-'+this.machinegun.identifier(), [0], 24, false);
-
         this.controller = controller;
 
-        switch (gunIdentifier) {
-            case 'Gun':
-                this.switchToGun();
-                break;
-            case 'ShotGun':
-                this.switchToShotGun();
-                break;
-            case 'MachineGun':
-                this.switchToMachineGun();
-                break;
-            default:
-                throw new Error("Gun identifier "+gunIdentifier+" is unknown");
-        }
+        //this.switchToGun();
 
         this.cameraFx = new HeroCamera(group.game.camera);
         this.gameEvents = new GameEvents();
@@ -111,6 +86,11 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
             this.controls();
             this.bulletHits.hit();
         }
+    }
+
+    equippedGun()
+    {
+        return this.gun;
     }
 
     hurt(damage: number, fromDirection: HorizontalDirection)
@@ -155,72 +135,6 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         return this.gun.amno();
     }
 
-    shotgunAmno(): number
-    {
-        return this.shotgun.amno();
-    }
-
-    machinegunAmno(): number
-    {
-        return this.machinegun.amno();
-    }
-
-    switchToNextUsableGun()
-    {
-        if (this.currentGun === this.gun) {
-            if (this.shotgunAmno() > 0) {
-                this.switchToShotGun();
-            } else if (this.machinegunAmno() > 0) {
-                this.switchToMachineGun();
-            }
-        } else if (this.currentGun === this.shotgun) {
-            if (this.machinegunAmno() > 0) {
-                this.switchToMachineGun();
-            } else if (this.gunAmno() > 0) {
-                this.switchToGun();
-            }
-        } else if (this.currentGun === this.machinegun) {
-            if (this.gunAmno() > 0) {
-                this.switchToGun();
-            } else if (this.shotgunAmno() > 0) {
-                this.switchToShotGun();
-            }
-        }
-    }
-
-    switchToMachineGun()
-    {
-        this.currentGun = this.machinegun;
-        this.switchGunEffect();
-    }
-
-    switchToShotGun()
-    {
-        this.currentGun = this.shotgun;
-        this.switchGunEffect();
-    }
-
-    switchToGun()
-    {
-        this.currentGun = this.gun;
-        this.switchGunEffect();
-    }
-
-    isEquipedWithGun(): boolean
-    {
-        return this.currentGun == this.gun;
-    }
-
-    isEquipedWithShotgun(): boolean
-    {
-        return this.currentGun == this.shotgun;
-    }
-
-    equippedGun(): BaseGun
-    {
-        return this.currentGun;
-    }
-
     pick(item: PickableItem)
     {
         if (item.key === 'Money') {
@@ -229,34 +143,8 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
             const randAmount = this.game.rnd.integerInRange(2, 50);
             this.moneyAmount = this.moneyAmount + randAmount;
             this.gameEvents.register(new MoneyPicked(this.game.time.now, randAmount, this.moneyAmount));
-        } else if (item.key === 'Gun') {
-            const audio = this.game.add.audio('pick-weapon', 1, false);
-            audio.play();
-            this.gun.reload(11);
-            this.gameEvents.register(new GunPicked(this.game.time.now));
-        } else if (item.key === 'ShotGun') {
-            const audio = this.game.add.audio('pick-weapon', 1, false);
-            audio.play();
-            if (this.shotgunAmno() === 0) {
-                this.switchToShotGun();
-            }
-            this.shotgun.reload(6);
-            this.gameEvents.register(new ShotGunPicked(this.game.time.now));
-        } else if (item.key === 'MachineGun') {
-            const audio = this.game.add.audio('pick-weapon', 1, false);
-            audio.play();
-            if (this.machinegunAmno() === 0) {
-                this.switchToMachineGun();
-            }
-            this.machinegun.reload(15);
-            this.gameEvents.register(new MachineGunPicked(this.game.time.now));
         }
         item.kill();
-    }
-
-    nurse(hospital: Hospital)
-    {
-        this.moneyAmount -= hospital.nurseCost();
     }
 
     pastGameEvents(): GameEvents
@@ -272,25 +160,16 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         if (this.controller.shooting()) {
             this.shot();
 
-        // TODO: use justDown to fix this??
-        } else if (this.controller.switchingWeapon() && this.game.time.now > this.switchedTime) {
-            this.switchedTime = this.game.time.now + 500;
-            this.switchToNextUsableGun();
-
         } else {
             this.scale.x = Config.pixelScaleRatio();
             this.animations.play('walk-'+this.currentGun.identifier());
             if (this.controller.goingLeft()) {
                 this.body.velocity.x = -this.speed;
                 this.gun.turnToTheLeft();
-                this.shotgun.turnToTheLeft();
-                this.machinegun.turnToTheLeft();
 
             } else if (this.controller.goingRight()) {
                 this.body.velocity.x = this.speed;
                 this.gun.turnToTheRight();
-                this.shotgun.turnToTheRight();
-                this.machinegun.turnToTheRight();
             }
 
             if (this.controller.goingUp()) {
@@ -303,6 +182,8 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
             }
 
             if (!this.controller.goingLeft() && !this.controller.goingRight() && !this.controller.goingDown() && !this.controller.goingUp()) {
+
+
                 this.animations.play('idle-'+this.currentGun.identifier());
             }
         }
@@ -313,32 +194,12 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         this.animations.play('shot-'+this.currentGun.identifier());
         this.currentGun.fire();
         this.shotCameraEffects();
-        if (this.currentGun === this.machinegun && this.machinegunAmno() === 0) {
-            this.switchToShotGun();
-        }
-        if (this.currentGun === this.shotgun && this.shotgunAmno() === 0) {
-            this.switchToGun();
-        }
         this.agressivenessGauge.increase();
     }
 
     private shotCameraEffects()
     {
-        if (this.currentGun === this.machinegun) {
-            this.cameraFx.machinegunEffect();
-        } else if (this.currentGun === this.shotgun) {
-            this.cameraFx.shootgunEffect();
-        } else {
-            this.cameraFx.gunEffect();
-        }
-    }
-
-    private switchGunEffect()
-    {
-        const switchGunSprite = this.game.add.sprite(this.x - 10, this.y - 40, this.currentGun.identifier(), 1, this.group);
-        const duration = 300;
-        const tween = this.group.game.add.tween(switchGunSprite).to( { y: switchGunSprite.y - 20 }, duration, "Linear", true);
-        tween.onComplete.addOnce(function () { switchGunSprite.destroy();} );
+        this.cameraFx.gunEffect();
     }
 
     private die()

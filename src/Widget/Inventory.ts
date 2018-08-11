@@ -100,6 +100,7 @@ export class Inventory extends Phaser.Sprite
             this.statusText.setText(' Alive');
         }
 
+        /*
         if (this.player.isEquipedWithGun()) {
             this.gunSprite.play('selected');
             this.shotgunSprite.play('unselected');
@@ -112,12 +113,14 @@ export class Inventory extends Phaser.Sprite
             this.gunSprite.play('unselected');
             this.shotgunSprite.play('unselected');
             this.machinegunSprite.play('selected');
-        }
+        }*/
 
         this.moneyText.setText(this.alignText(this.player.money()));
         this.gunText.setText(this.alignText(this.player.gunAmno()));
+        /*
         this.shotgunText.setText(this.alignText(this.player.shotgunAmno()));
         this.machinegunText.setText(this.alignText(this.player.machinegunAmno()));
+        */
     }
 
     private alignText(amount: number): string

@@ -326,8 +326,8 @@ export default class Play extends Phaser.State
     {
         return {
             'gunAmno': this.street.player().gunAmno(),
-            'shotgunAmno': this.street.player().shotgunAmno(),
-            'machinegunAmno': this.street.player().machinegunAmno(),
+            'shotgunAmno': 0,//this.street.player().shotgunAmno(),
+            'machinegunAmno': 0,//this.street.player().machinegunAmno(),
             'money': this.street.player().money(),
         };
     }
