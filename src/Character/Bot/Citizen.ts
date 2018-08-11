@@ -40,6 +40,8 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
     private text;
     private venere: boolean = false;
     private circlePitCenter: PIXI.Point = null;
+    private wallOfDeathY: number = null;
+    private fightY: number = null;
 
     constructor(group: Phaser.Group, x: number, y: number, key: string, street: Street, replicant: boolean)
     {
@@ -121,6 +123,18 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
             const newAngle = currentAngle + 0.017;
             this.x = this.circlePitCenter.x + Math.cos(newAngle) * dist;
             this.y = this.circlePitCenter.y + Math.sin(newAngle) * dist;
+
+            return;
+        }
+
+        if (this.wallOfDeathY) {
+            this.rapprocheToiDe(new PIXI.Point(this.x, this.wallOfDeathY));
+
+            return;
+        }
+
+        if (this.fightY) {
+            this.rapprocheToiDe(new PIXI.Point(this.x, this.fightY), 3);
 
             return;
         }
@@ -215,17 +229,51 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         return Phaser.Math.distance(this.x, this.y, this.startingPosition.x, this.startingPosition.y) > 3;
     }
 
-    private rapprocheToiDeTaStartingPosition() {
-        const dist = Phaser.Math.distance(this.x, this.y, this.startingPosition.x, this.startingPosition.y) / 0.5;
+    private rapprocheToiDe(point: PIXI.Point, speed = 0.8) {
+        const dist = Phaser.Math.distance(this.x, this.y, point.x, point.y) / speed;
         const vector = new PIXI.Point(
-            (this.x - this.startingPosition.x) / dist,
-            (this.y - this.startingPosition.y) /dist
+            (this.x - point.x) / dist,
+            (this.y - point.y) /dist
         );
         this.x = this.x - vector.x;
         this.y = this.y - vector.y;
     }
 
+    private rapprocheToiDeTaStartingPosition() {
+        this.rapprocheToiDe(this.startingPosition);
+    }
+
     setCirclePitCenter(center: PIXI.Point|null) {
         this.circlePitCenter = center;
+    }
+
+    goTopForWallOfDeath(height: number) {
+        const wodHeight = 120;
+        const a = wodHeight / height;
+        const b = 400 - height + wodHeight - (400 * wodHeight) / height;
+        //this.y = a * this.y + b;
+        this.wallOfDeathY = a * this.y + b;
+    }
+
+    goBottomForWallOfDeath(height: number) {
+        const wodHeight = 120;
+        const a = wodHeight / height;
+        const b = 400 + height - wodHeight - (400 * wodHeight) / height;
+        //this.y = a * this.y + b;
+        this.wallOfDeathY = a * this.y + b;
+    }
+
+    fight() {
+        const gap = 70;
+        if (this.wallOfDeathY > 400) {
+            this.fightY = 400 + gap;
+        } else {
+            this.fightY = 500 - gap;
+        }
+        this.wallOfDeathY = null;
+    }
+
+    stopFight() {
+        this.fightY = null;
     }
 }

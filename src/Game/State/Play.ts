@@ -16,6 +16,7 @@ import {Buildings} from "../../Building/Buildings";
 import {HeroNursed} from "../../Character/Player/Events";
 import {AlienQueen} from "../../Character/Bot/AlienQueen";
 import {CirclePit} from "../../Yolo/CirclePit";
+import {WallOfDeath} from "../../Yolo/WallOfDeath";
 
 export default class Play extends Phaser.State
 {
@@ -171,8 +172,15 @@ export default class Play extends Phaser.State
 
         this.game.camera.follow(this.street.player());
 
-        const circlePit = new CirclePit(this.game, this.street.citizens());
-        circlePit.start();
+        this.game.time.events.add(20 * Phaser.Timer.SECOND, () => {
+            const circlePit = new CirclePit(this.game, this.street.citizens());
+            circlePit.start();
+        });
+
+        this.game.time.events.add(40 * Phaser.Timer.SECOND, () => {
+            const wallOfDeath = new WallOfDeath(this.game, this.street.citizens());
+            wallOfDeath.start();
+        });
     }
 
     public update()

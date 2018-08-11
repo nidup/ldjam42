@@ -90,6 +90,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         if (angryCount > 2) {
             this.body.checkCollision.none = !this.movingToTheRight();
             this.x -= 1;
+            this.y += Math.random() - 0.5;
         }
         else {
             this.body.checkCollision.none = false;
