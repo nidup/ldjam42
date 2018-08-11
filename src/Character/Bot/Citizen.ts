@@ -9,6 +9,20 @@ import {FearStatus} from "./FearStatus";
 import {PickableItem} from "../Player/PickableItem";
 import {BrainStateMarker} from "./BrainStateMarker";
 import {CouldBeAReplicant} from "./CouldBeAReplicant";
+import {Hero} from "../Player/Hero";
+
+const reactions = [
+    'hey!',
+    'dude...',
+    'no worries mate',
+    'want some?',
+];
+
+export const TEXT_STYLE = {
+    align: 'center',
+    fill: '#fff',
+    font: '12px PICO-8'
+};
 
 export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplicant
 {
@@ -19,6 +33,7 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
     private group: Phaser.Group;
     private street: Street;
     startingPosition: PIXI.Point;
+    private text;
 
     constructor(group: Phaser.Group, x: number, y: number, key: string, street: Street, replicant: boolean)
     {
@@ -88,6 +103,18 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
     update()
     {
+        this.body.onCollide = new Phaser.Signal();
+        this.body.onCollide.add((citizen, other) => {
+            if (other instanceof Hero) {
+                let text = reactions[Math.floor(Math.random()*reactions.length)];
+                this.text = this.text || this.game.add.text(this.x, this.y, text, TEXT_STYLE);
+                this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
+                    this.text && this.text.destroy();
+                    this.text = null;
+                }, this);
+            }
+        });
+
         if (this.isTooFarFromStartingPosition()) {
             this.rapprocheToiDeTaStartingPosition();
         }

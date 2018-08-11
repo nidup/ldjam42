@@ -66,7 +66,5 @@ export default class Preload extends Phaser.State
 
     private loadFonts()
     {
-        this.load.bitmapFont('carrier-command', 'assets/fonts/carrier_command.png', 'assets/fonts/carrier_command.xml');
-        this.load.bitmapFont('cowboy', 'assets/fonts/cowboy.png', 'assets/fonts/cowboy.fnt');
     }
 }
