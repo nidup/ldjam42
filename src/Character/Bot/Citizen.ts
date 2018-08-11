@@ -139,6 +139,10 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
             return;
         }
 
+        if (this.y > 915) {
+            this.y = 915;
+        }
+
         this.body.onCollide = new Phaser.Signal();
         this.body.onCollide.add((citizen, other) => {
             if (other instanceof Hero) {

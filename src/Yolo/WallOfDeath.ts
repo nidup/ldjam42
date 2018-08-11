@@ -15,13 +15,14 @@ export class WallOfDeath {
         this.right = 800;
         this.height = 300;
         const middle = 400;
+        const gap = 20;
         this.citizenTop = citizens.all().filter((citizen: Citizen) => {
             return citizen.x > this.left && citizen.x < this.right
-                && citizen.y < middle && citizen.y > (middle - this.height);
+                && citizen.y < middle - gap && citizen.y > (middle - this.height);
         });
         this.citizenBottom = citizens.all().filter((citizen: Citizen) => {
             return citizen.x > this.left && citizen.x < this.right
-                && citizen.y > middle && citizen.y < (middle + this.height);
+                && citizen.y > middle + gap && citizen.y < (middle + this.height);
         });
     }
 
