@@ -190,6 +190,15 @@ export default class Play extends Phaser.State
             }
         }
 
+        this.game.physics.arcade.collide(this.street.player(), this.street.citizens().all());
+
+        this.game.physics.arcade.collide(this.street.citizens().all(), this.street.citizens().all());
+
+        //this.street.citizens().all().forEach(citizen => this.game.debug.body(citizen));
+
+//        this.game.physics.arcade.checkCollision.down = false;
+//        this.game.physics.arcade.checkCollision.up = false;
+
         this.game.physics.arcade.collide(this.topBoundMargin, this.street.player());
         this.game.physics.arcade.collide(this.topBoundMargin, this.street.citizens().all());
         this.game.physics.arcade.collide(this.topBoundMargin, this.street.cops().all());
