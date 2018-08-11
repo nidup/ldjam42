@@ -1,0 +1,340 @@
+[
+  {
+    "tutorial": "Aliens are hidden in the population, no way to recognize infected citizens. You have no choice... kill'em all.",
+    "characters": {
+      "citizens": {
+        "sane": 3,
+        "infected": 1
+      },
+      "cowboy_with_gun": {
+        "sane": 0,
+        "infected": 0
+      },
+      "cowboy_with_shotgun": {
+        "sane": 0,
+        "infected": 0
+      },
+      "cowboy_with_machinegun": {
+        "sane": 0,
+        "infected": 0
+      }
+    },
+    "buildings": [
+      "Small",
+      "Medium",
+      "Hostel",
+      "Small",
+      "Medium",
+      "Small"
+    ]
+  },
+  {
+    "tutorial": "Take care to armed cowboys, they'll don't hesitate to shoot at you. Once killed, you can pick-up extra amno.",
+    "characters": {
+      "citizens": {
+        "sane": 4,
+        "infected": 2
+      },
+      "cowboy_with_gun": {
+        "sane": 0,
+        "infected": 1
+      },
+      "cowboy_with_shotgun": {
+        "sane": 0,
+        "infected": 0
+      },
+      "cowboy_with_machinegun": {
+        "sane": 0,
+        "infected": 0
+      }
+    },
+    "buildings": [
+      "Hostel",
+      "Medium",
+      "Small",
+      "Small",
+      "Hostel"
+    ]
+  },
+  {
+    "tutorial": "Citizen flee away when you're aggressive, when they don't see you anymore, they go back to their normal behavior",
+    "characters": {
+      "citizens": {
+        "sane": 4,
+        "infected": 3
+      },
+      "cowboy_with_gun": {
+        "sane": 1,
+        "infected": 1
+      },
+      "cowboy_with_shotgun": {
+        "sane": 0,
+        "infected": 0
+      },
+      "cowboy_with_machinegun": {
+        "sane": 0,
+        "infected": 0
+      }
+    },
+    "buildings": [
+      "Hostel",
+      "Medium",
+      "Small",
+      "Small",
+      "Hostel"
+    ]
+  },
+  {
+    "tutorial": "When seing you're agressive, an armed cowboy will shoot at you. He may hurts other citizens helping you to clear the street.",
+    "characters": {
+      "citizens": {
+        "sane": 7,
+        "infected": 5
+      },
+      "cowboy_with_gun": {
+        "sane": 4,
+        "infected": 2
+      },
+      "cowboy_with_shotgun": {
+        "sane": 0,
+        "infected": 0
+      },
+      "cowboy_with_machinegun": {
+        "sane": 0,
+        "infected": 0
+      }
+    },
+    "buildings": [
+      "Small",
+      "Hostel",
+      "Medium",
+      "Small",
+      "Hostel"
+    ]
+  },
+  {
+    "tutorial": "Cowboys can also be equipped with shotguns, super efficient to clear a crowdy place but not as accurate as your colt.",
+    "characters": {
+      "citizens": {
+        "sane": 6,
+        "infected": 4
+      },
+      "cowboy_with_gun": {
+        "sane": 1,
+        "infected": 1
+      },
+      "cowboy_with_shotgun": {
+        "sane": 1,
+        "infected": 1
+      },
+      "cowboy_with_machinegun": {
+        "sane": 0,
+        "infected": 0
+      }
+    },
+    "buildings": [
+      "Small",
+      "Hostel",
+      "Medium",
+      "Small",
+      "Hostel"
+    ]
+  },
+  {
+    "tutorial": "Looks like the plague is progressing, more and more citizens are infected.",
+    "characters": {
+      "citizens": {
+        "sane": 8,
+        "infected": 8
+      },
+      "cowboy_with_gun": {
+        "sane": 1,
+        "infected": 1
+      },
+      "cowboy_with_shotgun": {
+        "sane": 2,
+        "infected": 2
+      },
+      "cowboy_with_machinegun": {
+        "sane": 0,
+        "infected": 0
+      }
+    },
+    "buildings": [
+      "Medium",
+      "Hostel",
+      "Small",
+      "Hostel",
+      "Small"
+    ]
+  },
+  {
+    "tutorial": "Friendly fire is definitely your best friend forever! ",
+    "characters": {
+      "citizens": {
+        "sane": 4,
+        "infected": 8
+      },
+      "cowboy_with_gun": {
+        "sane": 2,
+        "infected": 3
+      },
+      "cowboy_with_shotgun": {
+        "sane": 2,
+        "infected": 3
+      },
+      "cowboy_with_machinegun": {
+        "sane": 0,
+        "infected": 0
+      }
+    },
+    "buildings": [
+      "Small",
+      "Hostel",
+      "Small",
+      "Hostel",
+      "Hostel"
+    ]
+  },
+  {
+    "tutorial": "Mexican soldiers are patrolling in the town, they're super resistant and equipped with machine guns.",
+    "characters": {
+      "citizens": {
+        "sane": 4,
+        "infected": 6
+      },
+      "cowboy_with_gun": {
+        "sane": 1,
+        "infected": 1
+      },
+      "cowboy_with_shotgun": {
+        "sane": 0,
+        "infected": 0
+      },
+      "cowboy_with_machinegun": {
+        "sane": 1,
+        "infected": 1
+      }
+    },
+    "buildings": [
+      "Small",
+      "Hostel",
+      "Medium",
+      "Small",
+      "Hostel"
+    ]
+  },
+  {
+    "tutorial": "Each weapon behaves differently and spread shots can be a drawback as well as an advantage.",
+    "characters": {
+      "citizens": {
+        "sane": 6,
+        "infected": 10
+      },
+      "cowboy_with_gun": {
+        "sane": 2,
+        "infected": 2
+      },
+      "cowboy_with_shotgun": {
+        "sane": 2,
+        "infected": 2
+      },
+      "cowboy_with_machinegun": {
+        "sane": 1,
+        "infected": 1
+      }
+    },
+    "buildings": [
+      "Hostel",
+      "Small",
+      "Hostel",
+      "Hostel",
+      "Small",
+      "Medium"
+    ]
+  },
+  {
+    "tutorial": "Amno are not unlimited, use them wisely but use them all :)",
+    "characters": {
+      "citizens": {
+        "sane": 12,
+        "infected": 2
+      },
+      "cowboy_with_gun": {
+        "sane": 8,
+        "infected": 2
+      },
+      "cowboy_with_shotgun": {
+        "sane": 1,
+        "infected": 1
+      },
+      "cowboy_with_machinegun": {
+        "sane": 1,
+        "infected": 0
+      }
+    },
+    "buildings": [
+      "Hostel",
+      "Small",
+      "Medium",
+      "Small",
+      "Hostel"
+    ]
+  },
+  {
+    "tutorial": "There are less and less aliens there, some citizens talked about a huge tentacle shadow.",
+    "characters": {
+      "citizens": {
+        "sane": 11,
+        "infected": 1
+      },
+      "cowboy_with_gun": {
+        "sane": 7,
+        "infected": 0
+      },
+      "cowboy_with_shotgun": {
+        "sane": 4,
+        "infected": 0
+      },
+      "cowboy_with_machinegun": {
+        "sane": 2,
+        "infected": 0
+      }
+    },
+    "buildings": [
+      "Hostel",
+      "Small",
+      "Small",
+      "Hostel",
+      "Hostel"
+    ]
+  },
+  {
+    "tutorial": "What the hell, what's this monster, it should be the Alien's Queen!",
+    "characters": {
+      "citizens": {
+        "sane": 0,
+        "infected": 0
+      },
+      "cowboy_with_gun": {
+        "sane": 0,
+        "infected": 0
+      },
+      "cowboy_with_shotgun": {
+        "sane": 0,
+        "infected": 0
+      },
+      "cowboy_with_machinegun": {
+        "sane": 0,
+        "infected": 0
+      }
+    },
+    "buildings": [
+      "Small",
+      "Hostel",
+      "Small",
+      "Medium",
+      "Small"
+    ]
+  }
+]
