@@ -278,18 +278,16 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
             this.switchToNextUsableGun();
 
         } else {
+            this.scale.x = Config.pixelScaleRatio();
+            this.animations.play('walk-'+this.currentGun.identifier());
             if (this.controller.goingLeft()) {
-                this.scale.x = -Config.pixelScaleRatio();
                 this.body.velocity.x = -this.speed;
-                this.animations.play('walk-'+this.currentGun.identifier());
                 this.gun.turnToTheLeft();
                 this.shotgun.turnToTheLeft();
                 this.machinegun.turnToTheLeft();
 
             } else if (this.controller.goingRight()) {
-                this.scale.x = Config.pixelScaleRatio();
                 this.body.velocity.x = this.speed;
-                this.animations.play('walk-'+this.currentGun.identifier());
                 this.gun.turnToTheRight();
                 this.shotgun.turnToTheRight();
                 this.machinegun.turnToTheRight();

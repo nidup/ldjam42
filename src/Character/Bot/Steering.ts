@@ -96,7 +96,6 @@ export class Steering
         if (this.botGun) {
             this.botGun.turnToTheRight();
         }
-        this.bot.scale.x = Config.pixelScaleRatio();
     }
 
     private turnToTheLeft()
@@ -105,6 +104,5 @@ export class Steering
         if (this.botGun) {
             this.botGun.turnToTheLeft();
         }
-        this.bot.scale.x = -Config.pixelScaleRatio();
     }
 }
