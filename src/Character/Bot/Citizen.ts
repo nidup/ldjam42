@@ -9,6 +9,20 @@ import {FearStatus} from "./FearStatus";
 import {PickableItem} from "../Player/PickableItem";
 import {BrainStateMarker} from "./BrainStateMarker";
 import {CouldBeAReplicant} from "./CouldBeAReplicant";
+import {Hero} from "../Player/Hero";
+
+const reactions = [
+    'hey!',
+    'dude...',
+    'no worries mate',
+    'want some?',
+];
+
+export const TEXT_STYLE = {
+    align: 'center',
+    fill: '#fff',
+    font: '12px PICO-8'
+};
 
 export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplicant
 {
@@ -19,6 +33,7 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
     private group: Phaser.Group;
     private street: Street;
     startingPosition: PIXI.Point;
+    private text;
 
     constructor(group: Phaser.Group, x: number, y: number, key: string, street: Street, replicant: boolean)
     {
@@ -39,12 +54,44 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         //this.body.immovable = Math.random() > 0.95;
         this.body.maxVelocity.set(1, 1);
 
-        this.animations.add('idle', [12, 13, 14], 4, true);
+
+        const idleRate = 2 + (Math.random() * 10);
+        this.animations.add('idle', [12, 13, 14], idleRate, true);
         this.animations.add('walk', [0, 1, 2, 3, 4, 5], 12, true);
-        this.animations.add('smoke', [24, 25, 26, 27, 28, 29, 30, 31], 15, true);
-        this.animations.add('talk', [40, 41, 42, 43, 44, 45], 4, true);
-        this.animations.add('drink', [52, 53, 54, 55, 56], 4, true);
+
+        let smokeFrames = [24, 25, 26, 27, 28, 29, 30, 31];
+        for (let i = 0; i < 6; i++) {
+            // Take smoke length
+            smokeFrames.push(31)
+        }
+        smokeFrames = smokeFrames.concat([30, 29, 28, 27, 26, 25, 24]);
+        for (let i = 0; i < 20; i++) {
+            // Do nothing length
+            smokeFrames.push(24)
+        }
+        const smokeRate = 4 + (Math.random() * 4);
+        this.animations.add('smoke', smokeFrames, smokeRate, true);
+
+        const talkRate = 4 + (Math.random() * 4);
+        this.animations.add('talk', [40, 41, 42, 43, 44, 45], talkRate, true);
+
+        const drinkRate = 4 + (Math.random() * 4);
+        this.animations.add('drink', [52, 53, 52, 52, 52, 54, 55, 55, 56, 55, 55, 56, 55, 54, 52, 52, 52, 52, 52, 52, 52], drinkRate, true);
         this.animations.add('nervous', [57, 58, 59, 60, 61, 62, 63, 64, 65, 64, 65, 64, 65, 66, 67], 12, true);
+
+        const randAnim = Math.random();
+
+        if (randAnim < 0.4) {
+            this.animations.play('idle');
+        } else if (randAnim < 0.6) {
+            this.animations.play('smoke');
+        } else if (randAnim < 0.7) {
+            this.animations.play('talk');
+        } else {
+            this.animations.play('drink');
+        }
+
+
 
         //this.fearStatus = new FearStatus();
         //this.brain = new CitizenBrain(this, street, group, this.fearStatus);
@@ -56,6 +103,18 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
     update()
     {
+        this.body.onCollide = new Phaser.Signal();
+        this.body.onCollide.add((citizen, other) => {
+            if (other instanceof Hero) {
+                let text = reactions[Math.floor(Math.random()*reactions.length)];
+                this.text = this.text || this.game.add.text(this.x, this.y, text, TEXT_STYLE);
+                this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
+                    this.text && this.text.destroy();
+                    this.text = null;
+                }, this);
+            }
+        });
+
         if (this.isTooFarFromStartingPosition()) {
             this.rapprocheToiDeTaStartingPosition();
         }

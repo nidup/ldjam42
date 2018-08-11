@@ -5,7 +5,12 @@
     <link rel="icon" href="assets/favicon.ico" />
     <title>Running out of space</title>
     <style>
+        @font-face {
+            font-family: "PICO-8";
+            src: url('assets/fonts/PICO-8.ttf');
+        }
         body {
+            font-family: "PICO-8", Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
             background: #1b1128;
@@ -14,7 +19,7 @@
 </head>
 <body>
 <div class="app">
-    <div id="gameDiv"></div>
+    <div id="gameDiv">plop</div>
 </div>
 <script type="text/javascript" src="lib/phaser.js"></script>
 <script type="text/javascript" src="build/bundle.js"></script>
