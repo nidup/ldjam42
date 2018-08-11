@@ -46,33 +46,15 @@ export class CitizenBrain
 
     public walk = () =>
     {
-        this.energy.decrease();
-
-        if (this.host.health <= 0) {
-            this.toDie();
-
-        } else if (this.vision.playerIsCloseAndAggressive()) {
-            this.toFlee();
-
-        } else if (this.energy.empty()) {
-            this.toRest();
-
-        } else {
-            if (this.steering.blockedToTheLeft()) {
-                this.steering.walkToTheRight();
-            }
-            if (this.steering.blockedToTheRight()) {
-                this.steering.walkToTheLeft();
-            }
+        if (this.vision.playerIsClose()) {
+            this.fsm.pushState(new State('reactToProximity', this.reactToProximity));
         }
-    }
-
-    private toFlee()
-    {
-        this.steering.runFromTheSprite(this.street.player());
-        this.fearStatus.frighten();
-        this.host.run();
-        this.fsm.pushState(new State('flee', this.flee));
+        if (this.steering.blockedToTheLeft()) {
+            this.steering.walkToTheRight();
+        }
+        if (this.steering.blockedToTheRight()) {
+            this.steering.walkToTheLeft();
+        }
     }
 
     private toRest()
@@ -95,7 +77,7 @@ export class CitizenBrain
             this.toDie();
 
         } else if (this.vision.playerIsCloseAndAggressive()) {
-            this.toFlee();
+            this.reactToProximity();
 
         } else {
             this.energy.increase();
@@ -113,12 +95,9 @@ export class CitizenBrain
         this.fsm.popState();
     }
 
-    public flee = () =>
+    public reactToProximity = () =>
     {
-        if (this.host.health <= 0) {
-            this.toDie();
-
-        } else if (this.vision.playerIsClose()) {
+        if (this.vision.playerIsClose()) {
 
             if (this.steering.blockedToTheLeft()) {
                 this.steering.runToTheRight();

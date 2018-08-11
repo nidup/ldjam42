@@ -3,7 +3,7 @@ import {Street} from "../../Game/Street";
 
 export class Vision
 {
-    private scope: number = 300;
+    private scope: number = 30;
     private bot: Phaser.Sprite;
     private street: Street;
 

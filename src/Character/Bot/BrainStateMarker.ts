@@ -16,7 +16,7 @@ export class BrainStateMarker extends Phaser.Sprite
 
         this.scale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
         this.animations.add('nothing', [5], 4, true);
-        this.animations.add('afraid', [3, 4], 4, true);
+        this.animations.add('reactToProximity', [3, 4], 4, true);
         this.animations.add('attack', [0, 1, 2], 4, true);
         if (replicant) {
             this.animations.add('dying', [8, 9, 10], 2, false);
@@ -30,8 +30,8 @@ export class BrainStateMarker extends Phaser.Sprite
         if (this.brain.currentStateName() === 'dying') {
             this.play('dying', 4, false, true);
 
-        } else if (this.brain.currentStateName() === 'flee') {
-            this.play('afraid');
+        } else if (this.brain.currentStateName() === 'reactToProximity') {
+            this.play('reactToProximity');
 
         } else if (this.brain.currentStateName() === 'attack') {
             this.play('attack');
