@@ -6,7 +6,6 @@ import {Inventory} from "../../Widget/Inventory";
 import {BackBag} from "../../Character/Player/BackBag";
 import {LevelInstructions} from "../../Widget/LevelInstructions";
 import {FlashMessages} from "../../Widget/FlashMessages";
-import {BuildingLayout} from "../../Building/BuildingLayout";
 import {Config} from "../../Config";
 import {LevelLoader} from "../LevelLoader";
 import {GamePadController, KeyBoardController, VirtualPadController} from "../Controller";
@@ -99,8 +98,7 @@ export default class Play extends Phaser.State
         const rightCameraMargin = this.game.add.tileSprite(rightCameraMarginX, 0, sideMarginWidth, 800, 'Side', 0, interfaceLayer);
         rightCameraMargin.fixedToCamera = true;
 
-        const layout = new BuildingLayout(level, buildingsLayer, streetPositionX);
-        const streetWidth = layout.streetWidth();
+        const streetWidth = 900;
 
         let worldWidth = streetWidth;
         let rightBoundMarginX = streetWidth;
@@ -113,7 +111,7 @@ export default class Play extends Phaser.State
         this.rightBoundMargin.body.immovable = true;
         this.rightBoundMargin.body.allowGravity = false;
 
-        const streetPositionY = 580;
+        const streetPositionY = 20;
         let topBoundMarginY = streetPositionY - 40;
         this.topBoundMargin = this.game.add.tileSprite(0, topBoundMarginY, worldWidth, 1, 'Top', 0, interfaceLayer);
         this.game.physics.enable(this.topBoundMargin, Phaser.Physics.ARCADE);
@@ -126,12 +124,13 @@ export default class Play extends Phaser.State
         this.sky = this.game.add.tileSprite(streetPositionX, heightPosition, streetWidth, height,'sky',0, skyLayer);
         this.sky.tileScale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
 
-        this.background = this.game.add.tileSprite(streetPositionX, heightPosition, streetWidth, height,'background',0, backgroundLayer);
+        this.background = this.game.add.tileSprite(0, 0, 1200, 800, 'main', 0, backgroundLayer);
+        //this.background = this.game.add.tileSprite(streetPositionX, heightPosition, streetWidth, height,'background',0, backgroundLayer);
         this.background.tileScale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
 
-        const streetHeight = 220;
-        const street = this.game.add.tileSprite(streetPositionX, streetPositionY, streetWidth, streetHeight,'Street',0, buildingsLayer);
-        street.tileScale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
+        const streetHeight = 800;
+        //const street = this.game.add.tileSprite(streetPositionX, streetPositionY, streetWidth, streetHeight,'Street',0, buildingsLayer);
+        //street.tileScale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
 
         let controller = null;
         if (this.controllerType === 'keyboard') {
@@ -156,7 +155,7 @@ export default class Play extends Phaser.State
             this.playerPosition
         );
         this.street = new Street(generator, this.isFinalLevel);
-        this.buildings = layout.buildings();
+        this.buildings = [];
 
         new LevelInstructions(interfaceLayer, streetPositionX, 0, 'LevelInstructions', level);
         new Inventory(interfaceLayer, streetPositionX + 600, 0, 'Inventory', this.street.player());

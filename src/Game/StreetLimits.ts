@@ -12,7 +12,7 @@ export class StreetLimits
 
     minY(): number
     {
-        return 570;
+        return 20;
     }
 
     maxY(): number
