@@ -72,15 +72,52 @@ export class CharactersGenerator
         return new AlienQueen(this.characterGroup, queenX, queenY, 'AlienQueen');
     }
 
+    generateRandomMescouilles(citizens: Citizens)
+    {
+        const center = new PIXI.Point(1000, 400);
+        const radiusMax = 1000;
+        const radiusMin = 100;
+        const radiusMed = 350;
 
+        const a = -4*radiusMin+4*radiusMed;
+        const b = radiusMax + 3*radiusMin - 4*radiusMed;
+        const c = radiusMin;
+
+        let j = 0;
+        while (j < 500) {
+            const rand = Math.random();
+            const radius = a * rand * rand + b * rand + c;
+
+            let i = 0;
+            while (i < 500) {
+                const randCircle = Math.random() * Math.PI * 2;
+
+                const pos = new PIXI.Point(
+                    center.x + Math.cos(randCircle) * radius,
+                    center.y + Math.sin(randCircle) * radius
+                );
+
+                if (pos.x > 0 && pos.x < 900 && pos.y > 20 && pos.y < 800 && this.thereIsNoCitizenUnder(citizens, pos)) {
+                    return pos;
+                }
+                i++;
+            }
+            j++;
+        }
+
+        return null;
+    }
 
     generateBots(street: Street, cops: Cops, citizens: Citizens, swats: Swats): void
     {
+
         for (let indCiv = 0; indCiv < this.level.saneCitizens(); indCiv++) {
-            const rand = Math.random();
-            const randX = Math.sin(rand * 1.5) * 900;
-            let randY = this.characterGroup.game.rnd.integerInRange(this.limits.minY(), this.limits.maxY());
-            citizens.add(new Citizen(this.characterGroup, randX, randY, 'citizen1', street, false));
+        //for (let indCiv = 0; indCiv < 500; indCiv++) {
+            const mescouilles = this.generateRandomMescouilles(citizens);
+            if (mescouilles) {
+                //let randY = this.characterGroup.game.rnd.integerInRange(this.limits.minY(), this.limits.maxY());
+                citizens.add(new Citizen(this.characterGroup, mescouilles.x, mescouilles.y, 'citizen1', street, false));
+            }
         }
         /*
         for (let indCiv = 0; indCiv < this.level.infectedCitizens(); indCiv++) {
@@ -122,5 +159,13 @@ export class CharactersGenerator
             swats.add(new Swat(this.characterGroup, randX, randY, 'enemy-machinegun', street, true));
         }
         */
+    }
+
+    private thereIsNoCitizenUnder(citizens: Citizens, pos: PIXI.Point) {
+        return citizens.all().find((citizen: Citizen) => {
+            const dist = Phaser.Math.distance(citizen.x, citizen.y, pos.x, pos.y);
+
+            return dist < 18;
+        }) == null;
     }
 }

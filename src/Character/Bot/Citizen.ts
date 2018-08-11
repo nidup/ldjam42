@@ -32,7 +32,7 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         this.scale.setTo(Config.pixelScaleRatio(), Config.pixelScaleRatio());
         this.anchor.setTo(0.5, 0.5);
 
-        this.body.setCircle(5, 5, 14);
+        this.body.setCircle(4, 5, 14);
         this.body.allowGravity = false;
         this.body.collideWorldBounds = true;
 
