@@ -54,13 +54,29 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
             // Do nothing length
             smokeFrames.push(24)
         }
-        this.animations.add('smoke', smokeFrames, 8, true);
+        const smokeRate = 4 + (Math.random() * 4);
+        this.animations.add('smoke', smokeFrames, smokeRate, true);
 
-        this.animations.add('talk', [40, 41, 42, 43, 44, 45], 4, true);
-        this.animations.add('drink', [52, 53, 52, 52, 52, 54, 55, 55, 56, 55, 55, 56, 55, 54, 52, 52, 52, 52, 52, 52, 52], 4, true);
+        const talkRate = 4 + (Math.random() * 4);
+        this.animations.add('talk', [40, 41, 42, 43, 44, 45], talkRate, true);
+
+        const drinkRate = 4 + (Math.random() * 4);
+        this.animations.add('drink', [52, 53, 52, 52, 52, 54, 55, 55, 56, 55, 55, 56, 55, 54, 52, 52, 52, 52, 52, 52, 52], drinkRate, true);
         this.animations.add('nervous', [57, 58, 59, 60, 61, 62, 63, 64, 65, 64, 65, 64, 65, 66, 67], 12, true);
 
-        this.animations.play('idle');
+        const randAnim = Math.random();
+
+        if (randAnim < 0.4) {
+            this.animations.play('idle');
+        } else if (randAnim < 0.6) {
+            this.animations.play('smoke');
+        } else if (randAnim < 0.7) {
+            this.animations.play('talk');
+        } else {
+            this.animations.play('drink');
+        }
+
+
 
         //this.fearStatus = new FearStatus();
         //this.brain = new CitizenBrain(this, street, group, this.fearStatus);
