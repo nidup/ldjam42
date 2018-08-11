@@ -116,6 +116,7 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
                     this.text && this.text.destroy();
                     this.text = null;
                 }, this);
+                this.animations.play('nervous');
             }
         });
 
