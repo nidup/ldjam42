@@ -44,8 +44,8 @@ export class CharactersGenerator
 
     generateHero(street: Street): Hero
     {
-        const x = (this.heroPosition) ? this.heroPosition.x : this.limits.minX();
-        const y = (this.heroPosition) ? this.heroPosition.y : this.limits.maxY();
+        const x = (this.heroPosition) ? this.heroPosition.x : 100;
+        const y = (this.heroPosition) ? this.heroPosition.y : 370;
 
         return new Hero(
             this.characterGroup,

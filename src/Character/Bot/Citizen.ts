@@ -128,7 +128,6 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         this.body.onCollide = new Phaser.Signal();
         this.body.onCollide.add((citizen, other) => {
             if (other instanceof Hero) {
-
                 if (this.venere == false) {
                     this.venere = true;
                     const beforeVenerageAnim = this.animations.currentAnim.name;
@@ -138,13 +137,17 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
                         this.venere = false;
                     }, this);
                 }
+                this.animations.play('nervous');
 
                 let text = reactions[Math.floor(Math.random()*reactions.length)];
-                this.text = this.text || this.game.add.text(this.x, this.y, text, TEXT_STYLE);
-                this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
-                    this.text && this.text.destroy();
-                    this.text = null;
-                }, this);
+                if (!this.text) {
+                    this.text = this.game.add.text(this.x, this.y, text, TEXT_STYLE);
+                    let ref = this.text;
+                    this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
+                        ref.destroy();
+                        this.text = null;
+                    }, this);
+                }
             }
         });
 

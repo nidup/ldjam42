@@ -35,6 +35,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
     private group: Phaser.Group;
     private controller: Controller;
     private agressivenessGauge: AggressivenessGauge;
+    private citizens;
 
     constructor(
         group: Phaser.Group,
@@ -72,6 +73,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         this.cameraFx = new HeroCamera(group.game.camera);
         this.gameEvents = new GameEvents();
         this.bulletHits = new BulletHits(this, street);
+        this.citizens = street.citizens();
         this.agressivenessGauge = new AggressivenessGauge(this.game.time);
     }
 
@@ -83,6 +85,14 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         } else {
             this.controls();
             this.bulletHits.hit();
+        }
+        let angryCount = this.citizens.all().filter(citizen => citizen.text).length;
+        if (angryCount > 2) {
+            this.body.checkCollision.none = !this.movingToTheRight();
+            this.x -= 1;
+        }
+        else {
+            this.body.checkCollision.none = false;
         }
     }
 
