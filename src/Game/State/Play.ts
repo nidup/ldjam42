@@ -15,6 +15,7 @@ import {CharactersGenerator} from "../../Character/CharactersGenerator";
 import {Buildings} from "../../Building/Buildings";
 import {HeroNursed} from "../../Character/Player/Events";
 import {AlienQueen} from "../../Character/Bot/AlienQueen";
+import {CirclePit} from "../../Yolo/CirclePit";
 
 export default class Play extends Phaser.State
 {
@@ -169,6 +170,9 @@ export default class Play extends Phaser.State
         this.game.world.setBounds(worldBoundX, worldBoundY, worldWidth, worldHeight);
 
         this.game.camera.follow(this.street.player());
+
+        const circlePit = new CirclePit(this.game, this.street.citizens());
+        circlePit.start();
     }
 
     public update()

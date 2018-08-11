@@ -39,6 +39,7 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
     startingPosition: PIXI.Point;
     private text;
     private venere: boolean = false;
+    private circlePitCenter: PIXI.Point = null;
 
     constructor(group: Phaser.Group, x: number, y: number, key: string, street: Street, replicant: boolean)
     {
@@ -112,6 +113,18 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
     update()
     {
+        if (this.circlePitCenter) {
+            const y = this.y - this.circlePitCenter.y;
+            const x = this.x - this.circlePitCenter.x;
+            const dist = Phaser.Math.distance(this.x, this.y, this.circlePitCenter.x, this.circlePitCenter.y);
+            const currentAngle = Math.atan2(y, x);
+            const newAngle = currentAngle + 0.017;
+            this.x = this.circlePitCenter.x + Math.cos(newAngle) * dist;
+            this.y = this.circlePitCenter.y + Math.sin(newAngle) * dist;
+
+            return;
+        }
+
         this.body.onCollide = new Phaser.Signal();
         this.body.onCollide.add((citizen, other) => {
             if (other instanceof Hero) {
@@ -207,5 +220,9 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         );
         this.x = this.x - vector.x;
         this.y = this.y - vector.y;
+    }
+
+    setCirclePitCenter(center: PIXI.Point|null) {
+        this.circlePitCenter = center;
     }
 }
