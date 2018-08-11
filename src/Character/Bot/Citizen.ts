@@ -38,6 +38,7 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
     private street: Street;
     startingPosition: PIXI.Point;
     private text;
+    private venere: boolean = false;
 
     constructor(group: Phaser.Group, x: number, y: number, key: string, street: Street, replicant: boolean)
     {
@@ -83,7 +84,7 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         this.animations.add('drink', [52, 53, 52, 52, 52, 54, 55, 55, 56, 55, 55, 56, 55, 54, 52, 52, 52, 52, 52, 52, 52], drinkRate, true);
         this.animations.add('nervous', [57, 58, 59, 60, 61, 62, 63, 64, 65, 64, 65, 64, 65, 66, 67], 12, true);
 
-        this.animations.add('hell', [88, 89, 88, 89, 88, 89], 10, true);
+        this.animations.add('hell', [88, 89, 88, 89, 88, 89], 7, true);
 
         const randAnim = Math.random();
 
@@ -114,13 +115,23 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         this.body.onCollide = new Phaser.Signal();
         this.body.onCollide.add((citizen, other) => {
             if (other instanceof Hero) {
+
+                if (this.venere == false) {
+                    this.venere = true;
+                    const beforeVenerageAnim = this.animations.currentAnim.name;
+                    this.animations.play('nervous');
+                    this.game.time.events.add(Phaser.Timer.SECOND * 4, () => {
+                        this.animations.play(beforeVenerageAnim);
+                        this.venere = false;
+                    }, this);
+                }
+
                 let text = reactions[Math.floor(Math.random()*reactions.length)];
                 this.text = this.text || this.game.add.text(this.x, this.y, text, TEXT_STYLE);
                 this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
                     this.text && this.text.destroy();
                     this.text = null;
                 }, this);
-                this.animations.play('nervous');
             }
         });
 
