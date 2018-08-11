@@ -6,8 +6,6 @@ import {CanBeHurt} from "../CanBeHurt";
 import {HorizontalDirection} from "../HorizontalDirection";
 import {CharacterHurt} from "../SFX/CharacterHurt";
 import {FearStatus} from "./FearStatus";
-import {PickableItem} from "../Player/PickableItem";
-import {BrainStateMarker} from "./BrainStateMarker";
 import {CouldBeAReplicant} from "./CouldBeAReplicant";
 import {Hero} from "../Player/Hero";
 
@@ -20,6 +18,11 @@ const reactions = [
     'what the.',
     ':|',
     'FU',
+    'don\'t touch my boobs',
+    'you wanna dance?',
+    'sorry, oh sorry',
+    'calm down',
+    'fuck you'
 ];
 
 export const TEXT_STYLE = {

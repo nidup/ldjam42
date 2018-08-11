@@ -6,7 +6,8 @@
     "rootDir": "src",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "allowJs": true
   },
   "exclude": [
     "node_modules",

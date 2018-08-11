@@ -18,6 +18,8 @@ import {AlienQueen} from "../../Character/Bot/AlienQueen";
 import {CirclePit} from "../../Yolo/CirclePit";
 import {WallOfDeath} from "../../Yolo/WallOfDeath";
 
+import beepbox from '../../../lib/beepbox_synth';
+
 export default class Play extends Phaser.State
 {
     private sky: Phaser.TileSprite;
@@ -56,6 +58,8 @@ export default class Play extends Phaser.State
 
     public create()
     {
+        beepbox;
+
         if (Config.debug()) {
             this.game.time.advancedTiming = true
         }
@@ -180,6 +184,10 @@ export default class Play extends Phaser.State
         this.game.time.events.add(40 * Phaser.Timer.SECOND, () => {
             const wallOfDeath = new WallOfDeath(this.game, this.street.citizens());
             wallOfDeath.start();
+        });
+
+        this.game.time.events.add(5 * Phaser.Timer.SECOND, () => {
+           // beepbox;
         });
     }
 
