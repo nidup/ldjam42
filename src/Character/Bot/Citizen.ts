@@ -39,13 +39,9 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         this.animations.add('idle', [12, 13, 14], 4, true);
         this.animations.add('walk', [0, 1, 2, 3, 4, 5], 12, true);
         this.animations.add('smoke', [24, 25, 26, 27, 28, 29, 30, 31], 4, true);
-
-        this.animations.add('run', [0], 24, true);
-        if (replicant) {
-            this.animations.add('die', [0], 12, false);
-        } else {
-            this.animations.add('die', [0], 12, false);
-        }
+        this.animations.add('talk', [40, 41, 42, 43, 44, 45], 4, true);
+        this.animations.add('drink', [52, 53, 54, 55, 56], 4, true);
+        this.animations.add('nervous', [57, 58, 59, 60, 61, 62, 63, 64, 65, 64, 65, 64, 65, 66, 67], 12, true);
 
         this.fearStatus = new FearStatus();
         this.brain = new CitizenBrain(this, street, group, this.fearStatus);
