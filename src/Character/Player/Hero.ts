@@ -156,8 +156,8 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         this.body.velocity.y = 0;
 
         if (this.controller.shooting()) {
-            this.shot();
-
+            // TODO Do this temporary
+            this.body.setCircle(5, 5, 18);
         } else {
             this.scale.x = Config.pixelScaleRatio();
             this.animations.play('walk');

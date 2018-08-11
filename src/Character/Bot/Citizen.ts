@@ -41,7 +41,7 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
         this.animations.add('idle', [12, 13, 14], 4, true);
         this.animations.add('walk', [0, 1, 2, 3, 4, 5], 12, true);
-        this.animations.add('smoke', [24, 25, 26, 27, 28, 29, 30, 31], 4, true);
+        this.animations.add('smoke', [24, 25, 26, 27, 28, 29, 30, 31], 15, true);
         this.animations.add('talk', [40, 41, 42, 43, 44, 45], 4, true);
         this.animations.add('drink', [52, 53, 54, 55, 56], 4, true);
         this.animations.add('nervous', [57, 58, 59, 60, 61, 62, 63, 64, 65, 64, 65, 64, 65, 66, 67], 12, true);
@@ -58,6 +58,14 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
     {
         if (this.isTooFarFromStartingPosition()) {
             this.rapprocheToiDeTaStartingPosition();
+        }
+        if (Math.random() > 0.999) {
+            // Random move
+            const max = 30;
+            this.startingPosition = new PIXI.Point(
+                this.startingPosition.x + Math.random() * max - max / 2,
+                this.startingPosition.y + Math.random() * max - max / 2
+            );
         }
     }
 
@@ -113,7 +121,7 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
     }
 
     private rapprocheToiDeTaStartingPosition() {
-        const dist = Phaser.Math.distance(this.x, this.y, this.startingPosition.x, this.startingPosition.y) / 2;
+        const dist = Phaser.Math.distance(this.x, this.y, this.startingPosition.x, this.startingPosition.y) / 0.5;
         const vector = new PIXI.Point(
             (this.x - this.startingPosition.x) / dist,
             (this.y - this.startingPosition.y) /dist

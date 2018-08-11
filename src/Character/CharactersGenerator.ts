@@ -75,7 +75,7 @@ export class CharactersGenerator
     generateRandomPosition(citizens: Citizens)
     {
         const sceneCenter = new PIXI.Point(1000, 400);
-        const radiusMax = 900;
+        const radiusMax = 950;
         const radiusMin = 100;
         const radiusMed = 400;
 
@@ -94,7 +94,7 @@ export class CharactersGenerator
                     sceneCenter.y + Math.sin(randomAngle) * radius
                 );
 
-                if (pos.x > 0 && pos.x < 900 && pos.y > 20 && pos.y < 770
+                if (pos.x > 0 && pos.x < 885 && pos.y > 20 && pos.y < 770
                     && this.thereIsNoCitizenUnder(citizens, pos)) {
                     return pos;
                 }
