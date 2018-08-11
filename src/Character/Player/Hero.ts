@@ -65,20 +65,20 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         this.machinegun = new MachineGun(group, this, backbag.machinegunAmno());
         this.moneyAmount = backbag.money();
 
-        this.animations.add('idle-'+this.gun.identifier(), [0, 1, 2, 3, 4], 4, true);
-        this.animations.add('walk-'+this.gun.identifier(), [5, 6, 7, 8, 9, 10, 11, 12, 13], 12, true);
-        this.animations.add('die-'+this.gun.identifier(), [14, 15, 16, 17, 18, 19, 20], 12, false);
-        this.animations.add('shot-'+this.gun.identifier(), [21, 22, 23, 24, 25, 26], 12, false);
+        this.animations.add('idle-'+this.gun.identifier(), [0], 4, true);
+        this.animations.add('walk-'+this.gun.identifier(), [0], 12, true);
+        this.animations.add('die-'+this.gun.identifier(), [0], 12, false);
+        this.animations.add('shot-'+this.gun.identifier(), [0], 12, false);
 
-        this.animations.add('idle-'+this.shotgun.identifier(), [27, 28, 29, 30, 31], 4, true);
-        this.animations.add('walk-'+this.shotgun.identifier(), [32, 33, 34, 35, 36, 37, 38, 39, 40], 12, true);
-        this.animations.add('die-'+this.shotgun.identifier(), [41, 42, 43, 44, 45, 46, 47], 12, false);
-        this.animations.add('shot-'+this.shotgun.identifier(), [48, 49, 50, 51, 52, 53], 6, false);
+        this.animations.add('idle-'+this.shotgun.identifier(), [0], 4, true);
+        this.animations.add('walk-'+this.shotgun.identifier(), [0], 12, true);
+        this.animations.add('die-'+this.shotgun.identifier(), [0], 12, false);
+        this.animations.add('shot-'+this.shotgun.identifier(), [0], 6, false);
 
-        this.animations.add('idle-'+this.machinegun.identifier(), [54, 55, 56, 57, 58], 4, true);
-        this.animations.add('walk-'+this.machinegun.identifier(), [59, 60, 61, 62, 63, 64, 65, 66, 67], 12, true);
-        this.animations.add('die-'+this.machinegun.identifier(), [68, 69, 70, 71, 72, 73, 74], 12, false);
-        this.animations.add('shot-'+this.machinegun.identifier(), [75, 76, 77, 78, 79, 80], 24, false);
+        this.animations.add('idle-'+this.machinegun.identifier(), [0], 4, true);
+        this.animations.add('walk-'+this.machinegun.identifier(), [0], 12, true);
+        this.animations.add('die-'+this.machinegun.identifier(), [0], 12, false);
+        this.animations.add('shot-'+this.machinegun.identifier(), [0], 24, false);
 
         this.controller = controller;
 
