@@ -112,7 +112,7 @@ export class CharactersGenerator
         for (let indCiv = 0; indCiv < (num || this.level.saneCitizens()); indCiv++) {
             const position = this.generateRandomPosition(citizens);
             if (position) {
-                let citizen = new Citizen(this.characterGroup, position.x, position.y, 'citizen1', street, false);
+                let citizen = new Citizen(this.characterGroup, position.x, position.y, Math.random() > 0.5 ? 'citizen1' : 'citizen2', street, false);
                 citizens.add(citizen);
                 if (outOfBounds) {
                     citizen.x = 0;
