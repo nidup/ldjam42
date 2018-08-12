@@ -48,6 +48,7 @@ export default class Play extends Phaser.State
     private beginningIsIn = null;
     private singerText: Phaser.Text = null;
     private singerTextShadow: Phaser.Text = null;
+    private lamps: Phaser.Sprite[];
 
     public init (
         controllerType: string,
@@ -388,6 +389,17 @@ export default class Play extends Phaser.State
                 this.pointsDisplay.fill = '#fff';
             }
         });
+
+        this.lamps = [];
+        for (let i = 1; i <= 6; i++) {
+            const lamp = this.game.add.sprite(1200 - 102 * 2, 56, 'lamp' + i);
+            lamp.scale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
+            lamp.alpha = 0;
+            this.game.time.events.loop(measureTime / 32 * Phaser.Timer.SECOND, () => {
+                lamp.alpha = Math.random() > 0.7 ? 0.5 : 0;
+            });
+            this.lamps.push(lamp);
+        }
 
         const textPos = new PIXI.Point(950, 262);
         this.singerTextShadow = this.game.add.text(textPos.x + 2, textPos.y + 2, '', TEXT_STYLE_MIDDLE);

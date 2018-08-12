@@ -181,6 +181,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         }
 
         if (this.controller.shooting()) {
+            this.x += 5;
             this.energy = Math.max(0, this.energy - 1);
             this.animations.play(walkAnimName);
             if (this.energy)  {
