@@ -56,9 +56,11 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
     private text;
     private venere: boolean = false;
     private circlePitCenter: PIXI.Point = null;
-    private wallOfDeathY: number = null;
+    private wallOfDeath: PIXI.Point = null;
     private fightY: number = null;
     private exitZone;
+    private exiting: boolean = false;
+    private isFighing: boolean = false;
 
     constructor(group: Phaser.Group, x: number, y: number, key: string, street: Street, replicant: boolean)
     {
@@ -128,18 +130,30 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
     update()
     {
-        if (this.body.offset.x < 5) {
+        const previousX = this.x;
+
+        if (!this.exiting && this.body.offset.x < 5) {
             this.body.setCircle(4, Math.min(this.body.offset.x + 0.3, 5), 18);
+        }
+        if (this.exiting) {
+            this.body.collideWorldBounds = false;
+            this.x -= 1;
+
+            if (this.x < -20) {
+                this.destroy(true);
+            }
+
+            return;
         }
 
         if (this.exitZone) {
             if (this.exitZone.isIn(this.position)) {
-                this.visible = false;
+                this.exiting = true;
+
                 return;
             }
             this.rapprocheToiDe(new PIXI.Point(0, 350), 3);
         }
-        const previousX = this.x;
 
         if (this.circlePitCenter) {
             const y = this.y - this.circlePitCenter.y;
@@ -162,22 +176,46 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
             return;
         }
 
-        if (this.wallOfDeathY) {
-            this.rapprocheToiDe(new PIXI.Point(this.x, this.wallOfDeathY));
+        if (this.wallOfDeath) {
+            if (Phaser.Math.distance(this.x, this.y, this.wallOfDeath.x, this.wallOfDeath.y) > 2) {
+                this.rapprocheToiDe(this.wallOfDeath);
 
-            if (this.animations.currentAnim.name !== 'hell' && Phaser.Math.distance(this.x, this.y, this.x, this.wallOfDeathY) < 2) {
-                this.animations.play('hell');
+                this.mirrorIfNeeded(previousX);
+            } else {
+                if (this.animations.currentAnim.name !== 'hell') {
+                    this.animations.play('hell');
+                }
             }
-
-            this.mirrorIfNeeded(previousX);
 
             return;
         }
 
         if (this.fightY) {
-            this.rapprocheToiDe(new PIXI.Point(this.x, this.fightY), 3);
+            if (Phaser.Math.distance(this.x, this.y, this.x, this.fightY) > 1) {
+                this.rapprocheToiDe(new PIXI.Point(this.x, this.fightY), 3);
 
-            this.mirrorIfNeeded(previousX);
+                this.mirrorIfNeeded(previousX);
+            } else {
+                this.isFighing = true;
+                this.fightY = null;
+            }
+        }
+
+        if (this.isFighing) {
+            const moveY = 6;
+            const moveX = 1;
+            const ecartement = 0.4;
+            this.x += - moveX / 2 + Math.random() * moveX;
+            if (this.y > 400) {
+                this.y += -moveY / 2 + Math.random() * moveY + ecartement;
+            } else {
+                this.y += -moveY / 2 + Math.random() * moveY - ecartement;
+            }
+
+            if (Math.random() > 0.99) {
+                this.fightY = 400;
+                this.isFighing = false;
+            }
 
             return;
         }
@@ -188,37 +226,39 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
         this.body.onCollide = new Phaser.Signal();
         this.body.onCollide.add((citizen, other) => {
-            if (other instanceof Hero) {
-                if (this.venere == false) {
-                    this.venere = true;
+            if (!this.exiting) {
+                if (other instanceof Hero) {
+                    if (this.venere == false) {
+                        this.venere = true;
+                        this.animations.play('nervous');
+                        this.game.time.events.add(Phaser.Timer.SECOND * 4, () => {
+                            this.playRandomAnim();
+                            this.venere = false;
+                        }, this);
+                    }
                     this.animations.play('nervous');
-                    this.game.time.events.add(Phaser.Timer.SECOND * 4, () => {
-                        this.playRandomAnim();
-                        this.venere = false;
-                    }, this);
-                }
-                this.animations.play('nervous');
 
-                let text = Object.keys(reactionsWithSounds)[Math.floor(Math.random()*Object.keys(reactionsWithSounds).length)];
-                if (!this.text) {
-                    this.text = this.game.add.text(this.x, this.y, text, TEXT_STYLE);
+                    let text = Object.keys(reactionsWithSounds)[Math.floor(Math.random() * Object.keys(reactionsWithSounds).length)];
+                    if (!this.text) {
+                        this.text = this.game.add.text(this.x, this.y, text, TEXT_STYLE);
 
-                    let possibleSounds = reactionsWithSounds[text];
-                    let soundName = possibleSounds[Math.floor(Math.random()*possibleSounds.length)];
-                    const venereAudio = this.game.add.audio(soundName, 0.6, false);
-                    venereAudio.play();
+                        let possibleSounds = reactionsWithSounds[text];
+                        let soundName = possibleSounds[Math.floor(Math.random() * possibleSounds.length)];
+                        const venereAudio = this.game.add.audio(soundName, 0.6, false);
+                        venereAudio.play();
 
-                    this.game.time.events.add(Phaser.Timer.SECOND * 1, () => {
-                        let sorryName = playerApologizes[Math.floor(Math.random()*playerApologizes.length)];
-                        const sorryAudio = this.game.add.audio(sorryName, 0.9, false);
-                        sorryAudio.play();
-                    }, this);
+                        this.game.time.events.add(Phaser.Timer.SECOND * 1, () => {
+                            let sorryName = playerApologizes[Math.floor(Math.random() * playerApologizes.length)];
+                            const sorryAudio = this.game.add.audio(sorryName, 0.9, false);
+                            sorryAudio.play();
+                        }, this);
 
-                    let ref = this.text;
-                    this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
-                        ref.destroy();
-                        this.text = null;
-                    }, this);
+                        let ref = this.text;
+                        this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
+                            ref.destroy();
+                            this.text = null;
+                        }, this);
+                    }
                 }
             }
         });
@@ -254,7 +294,9 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
     exit(zone)
     {
-        this.exitZone = zone;
+        this.game.time.events.add(Math.random() * 10 * Phaser.Timer.SECOND, () => {
+            this.exitZone = zone;
+        });
     }
 
     die()
@@ -330,32 +372,33 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         this.circlePitCenter = center;
     }
 
-    goTopForWallOfDeath(height: number) {
+    goTopForWallOfDeath(height: number, x: number) {
         const wodHeight = 120;
         const a = wodHeight / height;
         const b = 400 - height + wodHeight - (400 * wodHeight) / height;
-        this.wallOfDeathY = a * this.y + b;
+        this.wallOfDeath = new PIXI.Point(x, a * this.y + b);
     }
 
-    goBottomForWallOfDeath(height: number) {
+    goBottomForWallOfDeath(height: number, x: number) {
         const wodHeight = 120;
         const a = wodHeight / height;
         const b = 400 + height - wodHeight - (400 * wodHeight) / height;
-        this.wallOfDeathY = a * this.y + b;
+        this.wallOfDeath = new PIXI.Point(x, a * this.y + b);
     }
 
     fight() {
-        const gap = 20;
-        if (this.wallOfDeathY > 400) {
-            this.fightY = 400 + gap;
+        const gap = 40;
+        if (this.wallOfDeath.y > 400) {
+            this.fightY = 400 + (this.wallOfDeath.y - 400) / 5 - gap;
         } else {
-            this.fightY = 400 - gap;
+            this.fightY = 400 - (400 - this.wallOfDeath.y) / 5 + gap;
         }
-        this.wallOfDeathY = null;
+        this.wallOfDeath = null;
     }
 
     stopFight() {
         this.fightY = null;
+        this.isFighing = false;
     }
 
     private mirrorIfNeeded(previousX: number) {

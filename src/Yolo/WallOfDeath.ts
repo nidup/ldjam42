@@ -34,11 +34,19 @@ export class WallOfDeath extends MetalMovement {
     }
 
     public start(graphics: Phaser.Graphics) {
-        this.citizenTop.forEach((citizen: Citizen) => {
-            citizen.goTopForWallOfDeath(this.height);
+        const random = 5;
+        const topGap = (this.right - this.left) / this.citizenTop.length;
+        this.citizenTop.sort((c1, c2) => {
+            return c1.x - c2.x;
+        }).forEach((citizen: Citizen, i: number) => {
+            citizen.goTopForWallOfDeath(this.height, this.left + i * topGap + random / 2 + Math.random() * random / 2);
         });
-        this.citizenBottom.forEach((citizen: Citizen) => {
-            citizen.goBottomForWallOfDeath(this.height);
+
+        const bottomGap = (this.right - this.left) / this.citizenBottom.length;
+        this.citizenBottom.sort((c1, c2) => {
+            return c1.x - c2.x;
+        }).forEach((citizen: Citizen, i: number) => {
+            citizen.goBottomForWallOfDeath(this.height, this.left + i * bottomGap + random / 2 + Math.random() * random / 2);
         });
 
         this.game.time.events.add(this.waitDuration, () => {

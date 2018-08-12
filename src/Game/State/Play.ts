@@ -199,6 +199,7 @@ export default class Play extends Phaser.State
         this.musicians.animations.add('play-hard', [0, 1], 32/measureTime, true);
         this.musicians.animations.play('play');
 
+        // const startingPeople = 300;
         const startingPeople = 100;
         const finalPeople = 300;
         const totalDuration = 37 * measureTime * Phaser.Timer.SECOND;
@@ -234,14 +235,14 @@ export default class Play extends Phaser.State
             height: 200,
         };
         const bigCirclePitInfo = {
-            //startingTime: 0 * measureTime * Phaser.Timer.SECOND,
+            // startingTime: 0 * measureTime * Phaser.Timer.SECOND,
             startingTime: 20 * measureTime * Phaser.Timer.SECOND,
             duration: 4 * measureTime * Phaser.Timer.SECOND,
             radiusMax: 300,
             radiusMin: 100,
         };
         const bigWallOfDeath = {
-            //startingTime: 28 * measureTime * Phaser.Timer.SECOND,
+            // startingTime: 0 * measureTime * Phaser.Timer.SECOND,
             startingTime: 28 * measureTime * Phaser.Timer.SECOND,
             waitDuration: 2 * measureTime * Phaser.Timer.SECOND,
             fightDuration: 4 * measureTime * Phaser.Timer.SECOND,
@@ -252,7 +253,7 @@ export default class Play extends Phaser.State
         this.currentMetalMovement = new Nothing();
         this.currentMetalMovement.start(this.draw());
 
-        const prepareTime = 2.5 * Phaser.Timer.SECOND;
+        const prepareTime = 3 * Phaser.Timer.SECOND;
 
         // Circle pit 1
         this.game.time.events.add(littleCirclePitInfo.startingTime - prepareTime, () => {
@@ -330,17 +331,6 @@ export default class Play extends Phaser.State
         this.game.time.events.add(38.5 * measureTime * Phaser.Timer.SECOND, () => {
             const singerAudio2 = this.game.add.audio('gueulage2', 1, false);
             singerAudio2.play();
-        });
-
-        this.game.time.events.add(bigWallOfDeath.startingTime, () => {
-            const singerAudio = this.game.add.audio('the-wall-of-death', 1, false);
-            singerAudio.play();
-            this.currentMetalMovement = new WallOfDeath(this.game, this.street.citizens(), bigWallOfDeath.waitDuration, bigWallOfDeath.fightDuration, bigWallOfDeath.length, bigWallOfDeath.height);
-            this.currentMetalMovement.start(this.draw());
-            this.game.time.events.add(bigWallOfDeath.waitDuration + bigWallOfDeath.fightDuration, () => {
-                this.currentMetalMovement = new Nothing();
-                this.currentMetalMovement.start(this.draw());
-            });
         });
 
         this.game.time.events.add(45 * measureTime * Phaser.Timer.SECOND, () => {

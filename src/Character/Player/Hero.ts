@@ -92,7 +92,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         if (angryCount > 2 && this.x > 0) {
             this.body.checkCollision.none = !this.movingToTheRight();
             this.x -= 1;
-            this.y += (Math.random() - 0.5) * 2;
+            this.y += (Math.random() - 0.5) * 4;
         }
         else {
             this.body.checkCollision.none = false;
@@ -181,10 +181,10 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         }
 
         if (this.controller.shooting()) {
-            this.x += 5;
             this.energy = Math.max(0, this.energy - 1);
             this.animations.play(walkAnimName);
             if (this.energy)  {
+                this.x += 5;
                 const change = 0.5;
                 const minRadius = 3;
                 const radius = this.body.radius - change;
