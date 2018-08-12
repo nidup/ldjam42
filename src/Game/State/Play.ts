@@ -19,7 +19,7 @@ const SINGER_TEXTS = [
     "You're awesome!",
     'You rock!!!',
     "Amazing!!!",
-    "Motherfuckers!",
+    "You motherfuckers!",
     "Come onnnnn!"
 ];
 
