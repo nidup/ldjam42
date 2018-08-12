@@ -190,6 +190,12 @@ export default class Play extends Phaser.State
             const wallOfDeath = new WallOfDeath(this.game, this.street.citizens());
             wallOfDeath.start();
         });
+
+        this.game.time.events.loop(2 * Phaser.Timer.SECOND, () => {
+            if (this.street.citizens().all().length < 400) {
+                this.street.addPeople(10, true);
+            }
+        });
     }
 
     public update()

@@ -106,13 +106,18 @@ export class CharactersGenerator
         return null;
     }
 
-    generateBots(street: Street, cops: Cops, citizens: Citizens, swats: Swats): void
+    generateBots(street: Street, citizens: Citizens, num = null, outOfBounds = false): void
     {
 
-        for (let indCiv = 0; indCiv < this.level.saneCitizens(); indCiv++) {
+        for (let indCiv = 0; indCiv < (num || this.level.saneCitizens()); indCiv++) {
             const position = this.generateRandomPosition(citizens);
             if (position) {
-                citizens.add(new Citizen(this.characterGroup, position.x, position.y, 'citizen1', street, false));
+                let citizen = new Citizen(this.characterGroup, position.x, position.y, 'citizen1', street, false);
+                citizens.add(citizen);
+                if (outOfBounds) {
+                    citizen.x = 0;
+                    citizen.y = Math.random() * 800;
+                }
             }
         }
     }

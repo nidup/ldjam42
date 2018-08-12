@@ -13,6 +13,7 @@ export class Street
     private citizenRepository: Citizens;
     private hero: Hero;
     private queen: AlienQueen;
+    private generator;
 
     constructor(generator: CharactersGenerator, lastLevel: boolean = false)
     {
@@ -20,12 +21,20 @@ export class Street
         this.citizenRepository = new Citizens();
         this.swatRepository = new Swats();
 
-        generator.generateBots(this, this.cops(), this.citizens(), this.swats());
+        this.generator = generator;
+
+        this.addPeople();
+
 
         this.hero = generator.generateHero(this);
         if (lastLevel) {
             this.queen = generator.generateAlienQueen(this.hero);
         }
+    }
+
+    addPeople(num = null, outOfBounds = false)
+    {
+        this.generator.generateBots(this, this.citizens(), num, outOfBounds);
     }
 
     isEmpty(): boolean
