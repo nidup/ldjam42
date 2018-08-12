@@ -8,12 +8,16 @@ export class WallOfDeath {
     private left: number;
     private right: number;
     private height: number;
-    
-    constructor(game: Phaser.Game, citizens: Citizens) {
+    private waitDuration: number;
+    private fightDuration: number;
+
+    constructor(game: Phaser.Game, citizens: Citizens, waitDuration: number, fightDuration: number, length: number, height: number) {
         this.game = game;
-        this.left = 300;
-        this.right = 800;
-        this.height = 300;
+        this.right = 830;
+        this.left = 830 - length;
+        this.height = height;
+        this.waitDuration = waitDuration;
+        this.fightDuration = fightDuration;
         const middle = 400;
         const gap = 20;
         this.citizenTop = citizens.all().filter((citizen: Citizen) => {
@@ -34,21 +38,23 @@ export class WallOfDeath {
             citizen.goBottomForWallOfDeath(this.height);
         });
 
-        this.game.time.events.add(10 * Phaser.Timer.SECOND, () => {
+        this.game.time.events.add(this.waitDuration, () => {
             this.citizenTop.forEach((citizen) => {
                 citizen.fight();
             });
             this.citizenBottom.forEach((citizen) => {
                 citizen.fight();
             });
-        });
 
-        this.game.time.events.add(20 * Phaser.Timer.SECOND, () => {
             this.citizenTop.forEach((citizen) => {
-                citizen.stopFight();
+                this.game.time.events.add(this.fightDuration / 2 + this.fightDuration / 2 * Math.random(), () => {
+                    citizen.stopFight();
+                });
             });
             this.citizenBottom.forEach((citizen) => {
-                citizen.stopFight();
+                this.game.time.events.add(this.fightDuration / 2 + this.fightDuration / 2 * Math.random(), () => {
+                    citizen.stopFight();
+                });
             });
         });
     }

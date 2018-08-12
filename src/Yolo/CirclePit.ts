@@ -9,17 +9,16 @@ export class CirclePit {
     private time: number;
     private game: Phaser.Game;
 
-    constructor(game: Phaser.Game, citizens: Citizens) {
+    constructor(game: Phaser.Game, citizens: Citizens, duration: number, radiusMin: number, radiusMax: number) {
         this.game = game;
-        this.center = new PIXI.Point(700, 400);
-        this.radiusMin = 100;
-        this.radiusMax = 200;
+        this.center = new PIXI.Point(900 - radiusMax / 2 - 130, 400);
+        this.radiusMin = radiusMin;
+        this.radiusMax = radiusMax;
         this.citizens = citizens.all().filter((citizen: Citizen) => {
             const dist = Phaser.Math.distance(this.center.x, this.center.y, citizen.x, citizen.y);
             return dist > this.radiusMin && dist < this.radiusMax;
         });
-
-        this.time = 20 * Phaser.Timer.SECOND;
+        this.time = duration;
     }
 
     public start() {
@@ -28,7 +27,7 @@ export class CirclePit {
         });
 
         this.citizens.forEach((citizen) => {
-            this.game.time.events.add(this.time * Math.random(), () => {
+            this.game.time.events.add(this.time / 2 + this.time / 2 * Math.random(), () => {
                 citizen.setCirclePitCenter(null);
             });
         });

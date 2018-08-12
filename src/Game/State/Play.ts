@@ -181,13 +181,50 @@ export default class Play extends Phaser.State
         musicians.animations.add('play', [0, 1], 10, true);
         musicians.animations.play('play');
 
-        this.game.time.events.add(20 * Phaser.Timer.SECOND, () => {
-            const circlePit = new CirclePit(this.game, this.street.citizens());
+        const littleCirclePitInfo = {
+            startingTime: 30 * Phaser.Timer.SECOND,
+            duration: 20 * Phaser.Timer.SECOND,
+            radiusMax: 150,
+            radiusMin: 60,
+        };
+        const littleWallOfDeath = {
+            startingTime: 70 * Phaser.Timer.SECOND,
+            waitDuration: 10 * Phaser.Timer.SECOND,
+            fightDuration: 10 * Phaser.Timer.SECOND,
+            length: 400,
+            height: 200,
+        };
+        const bigCirclePitInfo = {
+            startingTime: 110 * Phaser.Timer.SECOND,
+            duration: 20 * Phaser.Timer.SECOND,
+            radiusMax: 300,
+            radiusMin: 100,
+        };
+        const bigWallOfDeath = {
+            startingTime: 150 * Phaser.Timer.SECOND,
+            waitDuration: 10 * Phaser.Timer.SECOND,
+            fightDuration: 10 * Phaser.Timer.SECOND,
+            length: 600,
+            height: 300,
+        };
+
+        this.game.time.events.add(littleCirclePitInfo.startingTime, () => {
+            const circlePit = new CirclePit(this.game, this.street.citizens(), littleCirclePitInfo.duration, littleCirclePitInfo.radiusMin, littleCirclePitInfo.radiusMax);
             circlePit.start();
         });
 
-        this.game.time.events.add(40 * Phaser.Timer.SECOND, () => {
-            const wallOfDeath = new WallOfDeath(this.game, this.street.citizens());
+        this.game.time.events.add(littleWallOfDeath.startingTime, () => {
+            const wallOfDeath = new WallOfDeath(this.game, this.street.citizens(), littleWallOfDeath.waitDuration, littleWallOfDeath.fightDuration, littleWallOfDeath.length, littleWallOfDeath.height);
+            wallOfDeath.start();
+        });
+
+        this.game.time.events.add(bigCirclePitInfo.startingTime, () => {
+            const circlePit = new CirclePit(this.game, this.street.citizens(), bigCirclePitInfo.duration, bigCirclePitInfo.radiusMin, bigCirclePitInfo.radiusMax);
+            circlePit.start();
+        });
+
+        this.game.time.events.add(bigWallOfDeath.startingTime, () => {
+            const wallOfDeath = new WallOfDeath(this.game, this.street.citizens(), bigWallOfDeath.waitDuration, bigWallOfDeath.fightDuration, bigWallOfDeath.length, bigWallOfDeath.height);
             wallOfDeath.start();
         });
 

@@ -123,7 +123,10 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
             const x = this.x - this.circlePitCenter.x;
             const dist = Phaser.Math.distance(this.x, this.y, this.circlePitCenter.x, this.circlePitCenter.y);
             const currentAngle = Math.atan2(y, x);
-            const newAngle = currentAngle + 0.017;
+            const desiredLength = 3;
+            const fullCircleLength = Math.PI * 2 * dist;
+            const percentage = desiredLength / fullCircleLength;
+            const newAngle = currentAngle + Math.PI * 2 * percentage;
             this.x = this.circlePitCenter.x + Math.cos(newAngle) * dist;
             this.y = this.circlePitCenter.y + Math.sin(newAngle) * dist;
 
@@ -142,9 +145,9 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
             return;
         }
 
-        if (this.y > 915) {
-            this.y = 915;
-        }
+        /*if (this.x > 910) {
+            this.x = 800;
+        }*/
 
         this.body.onCollide = new Phaser.Signal();
         this.body.onCollide.add((citizen, other) => {
@@ -258,7 +261,6 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         const wodHeight = 120;
         const a = wodHeight / height;
         const b = 400 - height + wodHeight - (400 * wodHeight) / height;
-        //this.y = a * this.y + b;
         this.wallOfDeathY = a * this.y + b;
     }
 
@@ -266,16 +268,15 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         const wodHeight = 120;
         const a = wodHeight / height;
         const b = 400 + height - wodHeight - (400 * wodHeight) / height;
-        //this.y = a * this.y + b;
         this.wallOfDeathY = a * this.y + b;
     }
 
     fight() {
-        const gap = 70;
+        const gap = 20;
         if (this.wallOfDeathY > 400) {
             this.fightY = 400 + gap;
         } else {
-            this.fightY = 500 - gap;
+            this.fightY = 400 - gap;
         }
         this.wallOfDeathY = null;
     }
