@@ -268,7 +268,8 @@ export default class Play extends Phaser.State
                 this.currentMetalMovement = new Nothing();
                 this.currentMetalMovement.start(this.draw());
                 const singerAudio = this.game.add.audio('clapclap', 1, false);
-                singerAudio.play();
+                singerAudio.play()
+                this.hellyeah(0.5, 4);
             });
         });
 
@@ -287,6 +288,7 @@ export default class Play extends Phaser.State
                 this.currentMetalMovement.start(this.draw());
                 const singerAudio = this.game.add.audio('clapclap', 1, false);
                 singerAudio.play();
+                this.hellyeah(0.6, 4);
             });
         });
 
@@ -306,6 +308,7 @@ export default class Play extends Phaser.State
                 singerAudio.play();
                 const singerAudio2 = this.game.add.audio('gueulage', 1, false);
                 singerAudio2.play();
+                this.hellyeah(0.7, 4);
             });
         });
 
@@ -325,17 +328,22 @@ export default class Play extends Phaser.State
                 singerAudio.play();
                 const singerAudio2 = this.game.add.audio('gueulage', 1, false);
                 singerAudio2.play();
+                this.hellyeah(0.8, 4);
             });
         });
 
         this.game.time.events.add(38.5 * measureTime * Phaser.Timer.SECOND, () => {
             const singerAudio2 = this.game.add.audio('gueulage2', 1, false);
             singerAudio2.play();
+            this.hellyeah(1.0, 8);
         });
 
-        this.game.time.events.add(45 * measureTime * Phaser.Timer.SECOND, () => {
+        this.game.time.events.add(42 * measureTime * Phaser.Timer.SECOND, () => {
             this.currentMetalMovement = new Exit(this.street.citizens(), this.street.player());
             this.currentMetalMovement.start(this.draw());
+        });
+
+        this.game.time.events.add(40.1 * measureTime * Phaser.Timer.SECOND, () => {
             this.musicians.animations.stop();
             this.lamps.forEach(lamp => lamp.destroy());
         });
@@ -558,5 +566,18 @@ export default class Play extends Phaser.State
             this.singerText.setText('');
             this.singerTextShadow.setText('');
         });
+    }
+
+    private hellyeah(percentage: number, duration: number) {
+        const citizens = this.street.citizens().all().filter((citizen: Citizen) => {
+            return true;
+        }).sort((c1, c2) => {
+            return - 0.5 + Math.random();
+        });
+        for (let i = 0; i < citizens.length * percentage; i++) {
+            this.game.time.events.add(Math.random() * 0.5 * Phaser.Timer.SECOND, () => {
+                citizens[i].hellYeah(duration);
+            });
+        }
     }
 }

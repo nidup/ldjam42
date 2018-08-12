@@ -61,6 +61,7 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
     private exitZone;
     private exiting: boolean = false;
     private isFighing: boolean = false;
+    private isHellyeahing: boolean = false;
 
     constructor(group: Phaser.Group, x: number, y: number, key: string, street: Street, replicant: boolean)
     {
@@ -115,13 +116,13 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
     private playRandomAnim() {
         const randAnim = Math.random();
-        if (randAnim < 0.2) {
+        if (randAnim < 0.25) {
             this.animations.play('idle');
-        } else if (randAnim < 0.4) {
-            this.animations.play('hell');
-        } else if (randAnim < 0.6) {
+        // } else if (randAnim < 0.4) {
+            // this.animations.play('hell');
+        } else if (randAnim < 0.5) {
             this.animations.play('smoke');
-        } else if (randAnim < 0.7) {
+        } else if (randAnim < 0.75) {
             this.animations.play('talk');
         } else {
             this.animations.play('drink');
@@ -131,6 +132,10 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
     update()
     {
         const previousX = this.x;
+
+        if (this.isHellyeahing) {
+            return;
+        }
 
         if (!this.exiting && this.body.offset.x < 5) {
             this.body.setCircle(4, Math.min(this.body.offset.x + 0.3, 5), 18);
@@ -152,7 +157,7 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
                 return;
             }
-            this.rapprocheToiDe(new PIXI.Point(0, 350), 3);
+            this.rapprocheToiDe(new PIXI.Point(0, 350), 2.5);
         }
 
         if (this.circlePitCenter) {
@@ -249,8 +254,10 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
                         this.game.time.events.add(Phaser.Timer.SECOND * 1, () => {
                             let sorryName = playerApologizes[Math.floor(Math.random() * playerApologizes.length)];
-                            const sorryAudio = this.game.add.audio(sorryName, 0.9, false);
-                            sorryAudio.play();
+                            if (this.game) {
+                                const sorryAudio = this.game.add.audio(sorryName, 0.9, false);
+                                sorryAudio.play();
+                            }
                         }, this);
 
                         let ref = this.text;
@@ -270,9 +277,9 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
                 this.playRandomAnim();
             }
         }
-        if (Math.random() > 0.999) {
+        if (Math.random() > 0.995) {
             // Random move
-            const max = 30;
+            const max = 50;
             const newStartingPosition = new PIXI.Point(
                 this.startingPosition.x + Math.random() * max - max / 2,
                 this.startingPosition.y + Math.random() * max - max / 2
@@ -416,4 +423,17 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
             }
         }
     }
+
+    canHellYeah() {
+        return this.animations.currentAnim.name !== 'walk';
+    }
+
+    hellYeah(duration: number) {
+        this.isHellyeahing = true;
+        this.animations.play('hell');
+        this.game.time.events.add(Phaser.Timer.SECOND * duration * Math.random(), () => {
+            this.playRandomAnim();
+            this.isHellyeahing = false;
+        });
+    };
 }
