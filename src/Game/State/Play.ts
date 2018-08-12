@@ -188,7 +188,7 @@ export default class Play extends Phaser.State
         musicians.animations.play('play');
 
         const startingPeople = 100;
-        const finalPeople = 300;
+        const finalPeople = 270;
         const totalDuration = 180 * Phaser.Timer.SECOND;
 
         const begginingSlow = [0, 9, 17, 24, 34, 40];
@@ -240,7 +240,7 @@ export default class Play extends Phaser.State
         this.currentMetalMovement = new Nothing();
         this.currentMetalMovement.start(this.draw());
 
-        const prepareTime = 1.5 * Phaser.Timer.SECOND;
+        const prepareTime = 2.5 * Phaser.Timer.SECOND;
 
         // Circle pit 1
         this.game.time.events.add(littleCirclePitInfo.startingTime - prepareTime, () => {
@@ -249,12 +249,13 @@ export default class Play extends Phaser.State
             this.singerSay('CIRCLE PIT!')
         });
         this.game.time.events.add(littleCirclePitInfo.startingTime, () => {
-
             this.currentMetalMovement = new CirclePit(this.game, this.street.citizens(), littleCirclePitInfo.duration, littleCirclePitInfo.radiusMin, littleCirclePitInfo.radiusMax);
             this.currentMetalMovement.start(this.draw());
             this.game.time.events.add(littleCirclePitInfo.duration, () => {
                 this.currentMetalMovement = new Nothing();
                 this.currentMetalMovement.start(this.draw());
+                const singerAudio = this.game.add.audio('clapclap', 1, false);
+                singerAudio.play();
             });
         });
 
@@ -271,6 +272,8 @@ export default class Play extends Phaser.State
             this.game.time.events.add(littleWallOfDeath.waitDuration + littleWallOfDeath.fightDuration, () => {
                 this.currentMetalMovement = new Nothing();
                 this.currentMetalMovement.start(this.draw());
+                const singerAudio = this.game.add.audio('clapclap', 1, false);
+                singerAudio.play();
             });
         });
 
@@ -286,6 +289,10 @@ export default class Play extends Phaser.State
             this.game.time.events.add(bigCirclePitInfo.duration, () => {
                 this.currentMetalMovement = new Nothing();
                 this.currentMetalMovement.start(this.draw());
+                const singerAudio = this.game.add.audio('clapclap', 1, false);
+                singerAudio.play();
+                const singerAudio2 = this.game.add.audio('gueulage', 1, false);
+                singerAudio2.play();
             });
         });
 
@@ -301,7 +308,16 @@ export default class Play extends Phaser.State
             this.game.time.events.add(bigWallOfDeath.waitDuration + bigWallOfDeath.fightDuration, () => {
                 this.currentMetalMovement = new Nothing();
                 this.currentMetalMovement.start(this.draw());
+                const singerAudio = this.game.add.audio('clapclap', 1, false);
+                singerAudio.play();
+                const singerAudio2 = this.game.add.audio('gueulage', 1, false);
+                singerAudio2.play();
             });
+        });
+
+        this.game.time.events.add(38.5 * measureTime * Phaser.Timer.SECOND, () => {
+            const singerAudio2 = this.game.add.audio('gueulage2', 1, false);
+            singerAudio2.play();
         });
 
         this.street.addPeople(startingPeople);
@@ -339,12 +355,14 @@ export default class Play extends Phaser.State
         });
 
         const music = this.game.add.audio('music');
-        music.loopFull();
+        music.play();
 
-        const blinkScoreEvent = this.game.time.events.loop(0.1 * Phaser.Timer.SECOND, () => {
+        const blinkScoreEvent = this.game.time.events.loop(measureTime / 32 * Phaser.Timer.SECOND, () => {
             if (this.pointsDisplay.fill === '#fff') {
                 if (this.isInFuryMode()) {
                     this.pointsDisplay.fill = '#ff0000';
+                    this.camera.shake(0.006, 100);
+                    this.camera.flash(0xffffff, 100, true, 0.3);
                 }
             } else {
                 this.pointsDisplay.fill = '#fff';
