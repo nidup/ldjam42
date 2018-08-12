@@ -238,7 +238,7 @@ export default class Play extends Phaser.State
             height: 250,
         };
 
-        this.currentMetalMovement = new Exit();
+        this.currentMetalMovement = new Nothing();
         this.currentMetalMovement.start(this.draw());
 
         const prepareTime = 1.5 * Phaser.Timer.SECOND;
