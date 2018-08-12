@@ -96,7 +96,7 @@ export default class Play extends Phaser.State
         const leftCameraMargin = this.game.add.tileSprite(0, 0, sideMarginWidth, 800, 'Side', 0, interfaceLayer);
         leftCameraMargin.fixedToCamera = true;
 
-        this.leftBoundMargin = this.game.add.tileSprite(-sideMarginWidth, 0, sideMarginWidth, 800, 'Side', 0, interfaceLayer);
+        this.leftBoundMargin = this.game.add.tileSprite(0, 0, 1, 800, 'Side', 0, interfaceLayer);
         this.game.physics.enable(this.leftBoundMargin, Phaser.Physics.ARCADE);
         this.leftBoundMargin.body.immovable = true;
         this.leftBoundMargin.body.allowGravity = false;
@@ -212,6 +212,7 @@ export default class Play extends Phaser.State
             radiusMin: 60,
         };
         const littleWallOfDeath = {
+            //startingTime: 0 * measureTime * Phaser.Timer.SECOND,
             startingTime: 13 * measureTime * Phaser.Timer.SECOND,
             waitDuration: 2 * measureTime * Phaser.Timer.SECOND,
             fightDuration: 2 * measureTime * Phaser.Timer.SECOND,

@@ -90,11 +90,13 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         if (angryCount > 2) {
             this.body.checkCollision.none = !this.movingToTheRight();
             this.x -= 1;
-            this.y += Math.random() - 0.5;
+            this.y += (Math.random() - 0.5) * 2;
         }
         else {
             this.body.checkCollision.none = false;
         }
+
+        this.mirrorIfNeeded();
     }
 
     equippedGun()
@@ -215,9 +217,9 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
     private shot()
     {
         //this.animations.play('sorry');
-        this.currentGun.fire();
-        this.shotCameraEffects();
-        this.agressivenessGauge.increase();
+        //this.currentGun.fire();
+        //this.shotCameraEffects();
+        //this.agressivenessGauge.increase();
     }
 
     private shotCameraEffects()
@@ -236,6 +238,22 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
             this.body.velocity.y = 0;
             this.animations.play('die');
             this.gameEvents.register(new HeroKilled(this.game.time.now));
+        }
+    }
+
+    private mirrorIfNeeded() {
+        if (this.body.velocity.x < 0) {
+            if (this.scale.x < 0) {
+                this.scale.x = - this.scale.x;
+            }
+        } else if (this.body.velocity.x > 0) {
+            if (this.scale.x > 0) {
+                this.scale.x = - this.scale.x;
+            }
+        } else {
+            if (this.scale.x > 0) {
+                this.scale.x = - this.scale.x;
+            }
         }
     }
 }

@@ -140,6 +140,10 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         if (this.wallOfDeathY) {
             this.rapprocheToiDe(new PIXI.Point(this.x, this.wallOfDeathY));
 
+            if (this.animations.currentAnim.name !== 'hell' && Phaser.Math.distance(this.x, this.y, this.x, this.wallOfDeathY) < 2) {
+                this.animations.play('hell');
+            }
+
             this.mirrorIfNeeded(previousX);
 
             return;
@@ -192,10 +196,20 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         if (Math.random() > 0.999) {
             // Random move
             const max = 30;
-            this.startingPosition = new PIXI.Point(
+            const newStartingPosition = new PIXI.Point(
                 this.startingPosition.x + Math.random() * max - max / 2,
                 this.startingPosition.y + Math.random() * max - max / 2
             );
+
+            const yolo = this.street.citizens().all().find((citizen) => {
+                const distance = Phaser.Math.distance(newStartingPosition.x, newStartingPosition.y, citizen.x, citizen.y) < 20;
+                const c_est_moi = citizen === this;
+                return distance && !c_est_moi;
+            });
+
+            if (!yolo) {
+                this.startingPosition = newStartingPosition;
+            }
         }
 
         this.mirrorIfNeeded(previousX);
