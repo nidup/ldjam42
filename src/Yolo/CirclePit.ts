@@ -37,4 +37,10 @@ export class CirclePit extends MetalMovement {
         graphics.lineStyle(this.radiusMax - this.radiusMin, BLINKCOLOR);
         graphics.drawCircle(this.center.x, this.center.y, (this.radiusMin + this.radiusMax));
     }
+
+    isIn(position: Phaser.Point) {
+        const distFromCenter = Phaser.Math.distance(this.center.x, this.center.y, position.x, position.y);
+
+        return distFromCenter < this.radiusMax && distFromCenter > this.radiusMin;
+    }
 }

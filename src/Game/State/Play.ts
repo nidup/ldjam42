@@ -35,6 +35,7 @@ export default class Play extends Phaser.State
     private pointsBackground: Phaser.Graphics;
     private graphics: Phaser.Graphics;
     private currentMetalMovement: MetalMovement;
+    private beginningIsIn = null;
 
     public init (
         controllerType: string,
@@ -272,15 +273,15 @@ export default class Play extends Phaser.State
             });
         }
 
-        const pointsPosition = new PIXI.Point(1000, 700);
+        const pointsPosition = new PIXI.Point(900, 680);
 
         this.pointsBackground = this.game.add.graphics(pointsPosition.x, pointsPosition.y);
         this.pointsBackground.beginFill(0x000000);
         this.pointsBackground.lineStyle(4, 0xFFFFFF);
-        this.pointsBackground.drawRect(0, 0, 142, 40);
+        this.pointsBackground.drawRect(0, 0, 240, 54);
         this.pointsDisplay = this.game.add.text(pointsPosition.x + 10, pointsPosition.y + 10, this.points + '', TEXT_STYLE_BIG);
 
-        this.game.time.events.loop(0.5 * Phaser.Timer.SECOND, () => {
+        this.game.time.events.loop(0.25 * Phaser.Timer.SECOND, () => {
             if (this.graphics) {
                 if (this.graphics.alpha > 0) {
                     this.graphics.alpha = 0;
@@ -292,6 +293,16 @@ export default class Play extends Phaser.State
 
         const music = this.game.add.audio('music');
         music.loopFull();
+
+        const blinkScoreEvent = this.game.time.events.loop(0.1 * Phaser.Timer.SECOND, () => {
+            if (this.pointsDisplay.fill === '#fff') {
+                if (this.getPointsDiff() > 5) {
+                    this.pointsDisplay.fill = '#ff0000';
+                }
+            } else {
+                this.pointsDisplay.fill = '#fff';
+            }
+        });
     }
 
     private draw() {
@@ -304,22 +315,26 @@ export default class Play extends Phaser.State
 
     public update()
     {
-        this.points += Math.random();
-
         let prout = (Math.ceil(this.points) + '');
         while (prout.length < 8) {
             prout = '.' + prout;
         }
         this.pointsDisplay.text = prout;
 
+        if (this.currentMetalMovement) {
+            if (this.currentMetalMovement.isIn(this.street.player().position)) {
+                if (this.beginningIsIn === null) {
+                    this.beginningIsIn = window.performance.now();
+                }
+                this.increasePoints();
+            } else {
+                this.beginningIsIn = null;
+            }
+        }
+
         this.game.physics.arcade.collide(this.street.player(), this.street.citizens().all());
 
         this.game.physics.arcade.collide(this.street.citizens().all(), this.street.citizens().all());
-
-        //this.street.citizens().all().forEach(citizen => this.game.debug.body(citizen));
-
-//        this.game.physics.arcade.checkCollision.down = false;
-//        this.game.physics.arcade.checkCollision.up = false;
 
         this.game.physics.arcade.collide(this.topBoundMargin, this.street.player());
         this.game.physics.arcade.collide(this.topBoundMargin, this.street.citizens().all());
@@ -336,51 +351,7 @@ export default class Play extends Phaser.State
         this.game.physics.arcade.collide(this.rightBoundMargin, this.street.cops().all());
         this.game.physics.arcade.collide(this.rightBoundMargin, this.street.swats().all());
 
-        /*
-        const skyParallaxSpeed = 0.03;
-        this.sky.tilePosition.x -= skyParallaxSpeed;
-
-        const backgroundParallaxSpeed = 0.05;
-        if (this.street.player().movingToTheRight()) {
-            this.background.tilePosition.x -= backgroundParallaxSpeed;
-        } else if (this.street.player().movingToTheLeft()) {
-            this.background.tilePosition.x += backgroundParallaxSpeed;
-        }*/
-
         this.characterLayer.sort('y', Phaser.Group.SORT_ASCENDING);
-
-        /*
-        if (this.street.player().isDead()) {
-            const hospital = this.buildings.hospital();
-            if (hospital && this.street.player().money() >= hospital.nurseCost()) {
-                this.street.player().nurse(hospital);
-                this.game.time.events.add(Phaser.Timer.SECOND * 4, function () {
-                    this.game.state.start(
-                        'Play',
-                        true,
-                        false,
-                        this.controllerType,
-                        this.levelNumber,
-                        this.buildInventory(),
-                        this.street.player().equippedGun().identifier(),
-                        new Phaser.Point(hospital.entranceX(), hospital.entranceY())
-                    );
-                    this.street.player().pastGameEvents().register(new HeroNursed(this.game.time.now));
-                }, this);
-            } else {
-                this.game.time.events.add(Phaser.Timer.SECOND * 4, function () {
-                    this.game.state.start(
-                        'Play',
-                        true,
-                        false,
-                        this.controllerType,
-                        this.levelNumber,
-                        this.buildInventory(),
-                        this.street.player().equippedGun().identifier()
-                    );
-                }, this);
-            }
-        }*/
     }
 
     public render()
@@ -396,13 +367,6 @@ export default class Play extends Phaser.State
             this.game.debug.body(this.street.player());
             this.game.debug.cameraInfo(this.game.camera, 32, 32);
             this.game.debug.spriteInfo(this.street.player(), 32, 200);
-
-            //this.game.debug.body(this.alienQueen);
-            //this.game.debug.body(this.street.citizens().all()[0]);
-            //this.game.debug.spriteInfo(this.street.citizens().all()[0], 32, 300);
-            //this.game.debug.bodyInfo(this.street.citizens().all()[0], 32, 300);
-
-            //this.street.citizens().all().forEach(citizen => this.game.debug.body(citizen));
         }
     }
 
@@ -449,5 +413,17 @@ export default class Play extends Phaser.State
             'machinegunAmno': 0,//this.street.player().machinegunAmno(),
             'money': this.street.player().money(),
         };
+    }
+
+    private increasePoints() {
+        this.points += this.getPointsDiff();
+    }
+
+    private getPointsDiff() {
+        if (this.beginningIsIn === null) {
+            return 0;
+        }
+        const now = window.performance.now();
+        return (now - this.beginningIsIn) / 1000;
     }
 }

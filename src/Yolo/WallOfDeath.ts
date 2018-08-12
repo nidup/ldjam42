@@ -64,4 +64,8 @@ export class WallOfDeath extends MetalMovement {
         graphics.beginFill(BLINKCOLOR);
         graphics.drawRect(this.left, 400 - this.gap, this.right - this.left, this.gap * 2);
     }
+
+    isIn(position: Phaser.Point) {
+        return position.x > this.left && position.x < this.right && position.y > 400 - this.gap && position.y < 400 + this.gap;
+    }
 }

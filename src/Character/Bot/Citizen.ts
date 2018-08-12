@@ -51,7 +51,7 @@ export const TEXT_STYLE = {
 export const TEXT_STYLE_BIG = {
     align: 'center',
     fill: '#fff',
-    font: '16px PICO-8'
+    font: '28px PICO-8'
 };
 
 export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplicant
