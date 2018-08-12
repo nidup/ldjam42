@@ -62,6 +62,7 @@ export default class Preload extends Phaser.State
         this.load.spritesheet('AlienQueen', 'assets/sprites/alien-queen.png', 128, 128);
 
         this.load.spritesheet('main', 'assets/sprites/main.png', 600, 400);
+        this.load.spritesheet('scene', 'assets/sprites/scene.png', 106, 291);
     }
 
     private loadFonts()

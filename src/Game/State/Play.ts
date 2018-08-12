@@ -58,7 +58,7 @@ export default class Play extends Phaser.State
 
     public create()
     {
-        beepbox;
+        //beepbox;
 
         if (Config.debug()) {
             this.game.time.advancedTiming = true
@@ -176,6 +176,11 @@ export default class Play extends Phaser.State
 
         this.game.camera.follow(this.street.player());
 
+        const musicians = this.game.add.tileSprite(1200 - 106 * 2, 56, 106, 291, 'scene', 0, backgroundLayer);
+        musicians.scale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
+        musicians.animations.add('play', [0, 1], 10, true);
+        musicians.animations.play('play');
+
         this.game.time.events.add(20 * Phaser.Timer.SECOND, () => {
             const circlePit = new CirclePit(this.game, this.street.citizens());
             circlePit.start();
@@ -184,10 +189,6 @@ export default class Play extends Phaser.State
         this.game.time.events.add(40 * Phaser.Timer.SECOND, () => {
             const wallOfDeath = new WallOfDeath(this.game, this.street.citizens());
             wallOfDeath.start();
-        });
-
-        this.game.time.events.add(5 * Phaser.Timer.SECOND, () => {
-           // beepbox;
         });
     }
 
