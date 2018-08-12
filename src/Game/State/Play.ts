@@ -1,6 +1,6 @@
 
 import {Street} from "../Street";
-import {Citizen, TEXT_STYLE, TEXT_STYLE_BIG} from "../../Character/Bot/Citizen";
+import {Citizen, TEXT_STYLE, TEXT_STYLE_BIG, TEXT_STYLE_MIDDLE} from "../../Character/Bot/Citizen";
 import {Cop} from "../../Character/Bot/Cop";
 import {BackBag} from "../../Character/Player/BackBag";
 import {Config} from "../../Config";
@@ -13,6 +13,14 @@ import {CirclePit} from "../../Yolo/CirclePit";
 import {WallOfDeath} from "../../Yolo/WallOfDeath";
 import {BLINKCOLOR, MetalMovement} from "../../Yolo/MetalMovement";
 import {Nothing} from "../../Yolo/Nothing";
+
+const SINGER_TEXTS = [
+    "You're awesome!",
+    'You rock!!!',
+    "Amazing!!!",
+    "Motherfuckers!",
+    "Come onnnnn!"
+];
 
 export default class Play extends Phaser.State
 {
@@ -37,6 +45,8 @@ export default class Play extends Phaser.State
     private graphics: Phaser.Graphics;
     private currentMetalMovement: MetalMovement;
     private beginningIsIn = null;
+    private singerText: Phaser.Text = null;
+    private singerTextShadow: Phaser.Text = null;
 
     public init (
         controllerType: string,
@@ -305,13 +315,18 @@ export default class Play extends Phaser.State
 
         const blinkScoreEvent = this.game.time.events.loop(0.1 * Phaser.Timer.SECOND, () => {
             if (this.pointsDisplay.fill === '#fff') {
-                if (this.getPointsDiff() > 5) {
+                if (this.isInFuryMode()) {
                     this.pointsDisplay.fill = '#ff0000';
                 }
             } else {
                 this.pointsDisplay.fill = '#fff';
             }
         });
+
+        const textPos = new PIXI.Point(950, 262);
+        this.singerTextShadow = this.game.add.text(textPos.x + 2, textPos.y + 2, '', TEXT_STYLE_MIDDLE);
+        this.singerTextShadow.fill = '#000';
+        this.singerText = this.game.add.text(textPos.x, textPos.y, '', TEXT_STYLE_MIDDLE);
     }
 
     private draw() {
@@ -337,6 +352,19 @@ export default class Play extends Phaser.State
                 this.increasePoints();
             } else {
                 this.beginningIsIn = null;
+            }
+        }
+
+        if (this.isInFuryMode()) {
+            if (this.singerText.text === '') {
+                const text = SINGER_TEXTS[Math.ceil(Math.random() * SINGER_TEXTS.length)];
+                this.singerText.setText(text);
+                this.singerTextShadow.setText(text);
+
+                this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
+                    this.singerText.setText('');
+                    this.singerTextShadow.setText('');
+                });
             }
         }
 
@@ -427,5 +455,9 @@ export default class Play extends Phaser.State
         }
         const now = window.performance.now();
         return (now - this.beginningIsIn) / 1000;
+    }
+
+    private isInFuryMode() {
+        return this.getPointsDiff() > 5
     }
 }
