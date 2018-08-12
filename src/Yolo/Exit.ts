@@ -14,12 +14,12 @@ export class Exit extends MetalMovement {
 
     public start(graphics: Phaser.Graphics) {
         graphics.beginFill(BLINKCOLOR);
-        graphics.drawRect(100, 300, 70, 150);
+        graphics.drawRect(0, 300, 70, 150);
         this.citizens.all().forEach(citizen => citizen.exit(this));
         this.player.exit(this);
     }
 
     isIn(position: Phaser.Point) {
-        return position.x > 100 && position.x < 100 + 70 && position.y > 300 && position.y < 300+150;
+        return position.x > 0 && position.x < 0 + 70 && position.y > 300 && position.y < 300+150;
     }
 }

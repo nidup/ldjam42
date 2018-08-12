@@ -50,6 +50,7 @@ export default class Play extends Phaser.State
     private finishText: Phaser.Text = null;
     private singerTextShadow: Phaser.Text = null;
     private lamps: Phaser.Sprite[];
+    private musicians;
 
     public init (
         controllerType: string,
@@ -192,11 +193,11 @@ export default class Play extends Phaser.State
 
         const measureTime = 130 / 30;
 
-        const musicians = this.game.add.tileSprite(1200 - 106 * 2, 56, 106, 291, 'scene', 0, backgroundLayer);
-        musicians.scale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
-        musicians.animations.add('play', [0, 1], 16/measureTime, true);
-        musicians.animations.add('play-hard', [0, 1], 32/measureTime, true);
-        musicians.animations.play('play');
+        this.musicians = this.game.add.tileSprite(1200 - 106 * 2, 56, 106, 291, 'scene', 0, backgroundLayer);
+        this.musicians.scale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
+        this.musicians.animations.add('play', [0, 1], 16/measureTime, true);
+        this.musicians.animations.add('play-hard', [0, 1], 32/measureTime, true);
+        this.musicians.animations.play('play');
 
         const startingPeople = 100;
         const finalPeople = 270;
@@ -207,13 +208,13 @@ export default class Play extends Phaser.State
 
         begginingSlow.forEach((measure) => {
             this.game.time.events.add(measure * measureTime * Phaser.Timer.SECOND, () => {
-                musicians.animations.play('play');
+                this.musicians.animations.play('play');
             });
         });
 
         beginningHard.forEach((measure) => {
             this.game.time.events.add(measure * measureTime * Phaser.Timer.SECOND, () => {
-                musicians.animations.play('play-hard');
+                this.musicians.animations.play('play-hard');
             });
         });
 
@@ -345,6 +346,8 @@ export default class Play extends Phaser.State
         this.game.time.events.add(40 * measureTime * Phaser.Timer.SECOND, () => {
             this.currentMetalMovement = new Exit(this.street.citizens(), this.street.player());
             this.currentMetalMovement.start(this.draw());
+            this.musicians.animations.stop();
+            this.lamps.forEach(lamp => lamp.destroy());
         });
 
         this.street.addPeople(startingPeople);
