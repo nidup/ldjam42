@@ -30,9 +30,10 @@ export default class Play extends Phaser.State
     private rightBoundMargin: Phaser.TileSprite;
     private topBoundMargin: Phaser.TileSprite;
     private isFinalLevel: boolean = false;
-    private points: number = 0;
     private pointsDisplay: Phaser.Text;
     private pointsBackground: Phaser.Graphics;
+    private energyDisplay: Phaser.Text;
+    private energyBackground: Phaser.Graphics;
     private graphics: Phaser.Graphics;
     private currentMetalMovement: MetalMovement;
 
@@ -278,7 +279,15 @@ export default class Play extends Phaser.State
         this.pointsBackground.beginFill(0x000000);
         this.pointsBackground.lineStyle(4, 0xFFFFFF);
         this.pointsBackground.drawRect(0, 0, 142, 40);
-        this.pointsDisplay = this.game.add.text(pointsPosition.x + 10, pointsPosition.y + 10, this.points + '', TEXT_STYLE_BIG);
+        this.pointsDisplay = this.game.add.text(pointsPosition.x + 10, pointsPosition.y + 10, '', TEXT_STYLE_BIG);
+
+        const energyPosition = new PIXI.Point(1000, 650);
+
+        this.energyBackground = this.game.add.graphics(energyPosition.x, energyPosition.y);
+        this.energyBackground.beginFill(0x000000);
+        this.energyBackground.lineStyle(4, 0xFFFFFF);
+        this.energyBackground.drawRect(0, 0, 142, 40);
+        this.energyDisplay = this.game.add.text(energyPosition.x + 10, energyPosition.y + 10, '', TEXT_STYLE_BIG);
 
         this.game.time.events.loop(0.5 * Phaser.Timer.SECOND, () => {
             if (this.graphics) {
@@ -304,15 +313,12 @@ export default class Play extends Phaser.State
 
     public update()
     {
-        this.points += Math.random();
+        let player = this.street.player();
 
-        let prout = (Math.ceil(this.points) + '');
-        while (prout.length < 8) {
-            prout = '.' + prout;
-        }
-        this.pointsDisplay.text = prout;
+        this.energyDisplay.text = Math.ceil(player.energy).toString()['padStart'](7, '.')+'%';
+        this.pointsDisplay.text = Math.ceil(player.points).toString()['padStart'](8, '.');
 
-        this.game.physics.arcade.collide(this.street.player(), this.street.citizens().all());
+        this.game.physics.arcade.collide(player, this.street.citizens().all());
 
         this.game.physics.arcade.collide(this.street.citizens().all(), this.street.citizens().all());
 
@@ -321,20 +327,14 @@ export default class Play extends Phaser.State
 //        this.game.physics.arcade.checkCollision.down = false;
 //        this.game.physics.arcade.checkCollision.up = false;
 
-        this.game.physics.arcade.collide(this.topBoundMargin, this.street.player());
+        this.game.physics.arcade.collide(this.topBoundMargin, player);
         this.game.physics.arcade.collide(this.topBoundMargin, this.street.citizens().all());
-        this.game.physics.arcade.collide(this.topBoundMargin, this.street.cops().all());
-        this.game.physics.arcade.collide(this.topBoundMargin, this.street.swats().all());
 
-        this.game.physics.arcade.collide(this.leftBoundMargin, this.street.player());
+        this.game.physics.arcade.collide(this.leftBoundMargin, player);
         this.game.physics.arcade.collide(this.leftBoundMargin, this.street.citizens().all());
-        this.game.physics.arcade.collide(this.leftBoundMargin, this.street.cops().all());
-        this.game.physics.arcade.collide(this.leftBoundMargin, this.street.swats().all());
 
-        this.game.physics.arcade.collide(this.rightBoundMargin, this.street.player());
+        this.game.physics.arcade.collide(this.rightBoundMargin, player);
         this.game.physics.arcade.collide(this.rightBoundMargin, this.street.citizens().all());
-        this.game.physics.arcade.collide(this.rightBoundMargin, this.street.cops().all());
-        this.game.physics.arcade.collide(this.rightBoundMargin, this.street.swats().all());
 
         /*
         const skyParallaxSpeed = 0.03;
