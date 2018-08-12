@@ -118,6 +118,8 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
     update()
     {
+        const previousX = this.x;
+
         if (this.circlePitCenter) {
             const y = this.y - this.circlePitCenter.y;
             const x = this.x - this.circlePitCenter.x;
@@ -130,17 +132,23 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
             this.x = this.circlePitCenter.x + Math.cos(newAngle) * dist;
             this.y = this.circlePitCenter.y + Math.sin(newAngle) * dist;
 
+            this.mirrorIfNeeded(previousX);
+
             return;
         }
 
         if (this.wallOfDeathY) {
             this.rapprocheToiDe(new PIXI.Point(this.x, this.wallOfDeathY));
 
+            this.mirrorIfNeeded(previousX);
+
             return;
         }
 
         if (this.fightY) {
             this.rapprocheToiDe(new PIXI.Point(this.x, this.fightY), 3);
+
+            this.mirrorIfNeeded(previousX);
 
             return;
         }
@@ -186,6 +194,8 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
                 this.startingPosition.y + Math.random() * max - max / 2
             );
         }
+
+        this.mirrorIfNeeded(previousX);
     }
 
     die()
@@ -283,5 +293,21 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
     stopFight() {
         this.fightY = null;
+    }
+
+    private mirrorIfNeeded(previousX: number) {
+        if (this.x < previousX) {
+            if (this.scale.x < 0) {
+                this.scale.x = - this.scale.x;
+            }
+        } else if (this.x > previousX) {
+            if (this.scale.x > 0) {
+                this.scale.x = - this.scale.x;
+            }
+        } else {
+            if (this.scale.x > 0) {
+                this.scale.x = - this.scale.x;
+            }
+        }
     }
 }

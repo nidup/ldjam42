@@ -84,7 +84,7 @@ export default class Play extends Phaser.State
         interfaceLayer.name = 'Interface';
 
         let streetPositionX = 0;
-        let sideMarginWidth = 1;
+        let sideMarginWidth = 100;
         let rightCameraMarginX = this.game.width;
         const detector = new DeviceDetector(this.game.device);
         if (detector.isMobile()) {
@@ -96,10 +96,11 @@ export default class Play extends Phaser.State
         const leftCameraMargin = this.game.add.tileSprite(0, 0, sideMarginWidth, 800, 'Side', 0, interfaceLayer);
         leftCameraMargin.fixedToCamera = true;
 
-        this.leftBoundMargin = this.game.add.tileSprite(-1, 0, sideMarginWidth, 800, 'Side', 0, interfaceLayer);
+        this.leftBoundMargin = this.game.add.tileSprite(-sideMarginWidth, 0, sideMarginWidth, 800, 'Side', 0, interfaceLayer);
         this.game.physics.enable(this.leftBoundMargin, Phaser.Physics.ARCADE);
         this.leftBoundMargin.body.immovable = true;
         this.leftBoundMargin.body.allowGravity = false;
+        this.leftBoundMargin.alpha = 0;
 
         const rightCameraMargin = this.game.add.tileSprite(rightCameraMarginX, 0, sideMarginWidth, 800, 'Side', 0, interfaceLayer);
         rightCameraMargin.fixedToCamera = true;
@@ -116,6 +117,7 @@ export default class Play extends Phaser.State
         this.game.physics.enable(this.rightBoundMargin, Phaser.Physics.ARCADE);
         this.rightBoundMargin.body.immovable = true;
         this.rightBoundMargin.body.allowGravity = false;
+        this.rightBoundMargin.alpha = 0;
 
         const streetPositionY = 20;
         let topBoundMarginY = streetPositionY - 40;
@@ -181,31 +183,38 @@ export default class Play extends Phaser.State
         musicians.animations.add('play', [0, 1], 10, true);
         musicians.animations.play('play');
 
+        const startingPeople = 100;
+        const finalPeople = 300;
+        const totalDuration = 180 * Phaser.Timer.SECOND;
+
+        //const measureTime = 4.25;
+        const measureTime = 130 / 30;
+        //const measureTime = 4.666666667;
         const littleCirclePitInfo = {
-            startingTime: 30 * Phaser.Timer.SECOND,
-            duration: 20 * Phaser.Timer.SECOND,
+            startingTime: 5 * measureTime * Phaser.Timer.SECOND,
+            duration: 4 * measureTime * Phaser.Timer.SECOND,
             radiusMax: 150,
             radiusMin: 60,
         };
         const littleWallOfDeath = {
-            startingTime: 70 * Phaser.Timer.SECOND,
-            waitDuration: 10 * Phaser.Timer.SECOND,
-            fightDuration: 10 * Phaser.Timer.SECOND,
+            startingTime: 13 * measureTime * Phaser.Timer.SECOND,
+            waitDuration: 2 * measureTime * Phaser.Timer.SECOND,
+            fightDuration: 2 * measureTime * Phaser.Timer.SECOND,
             length: 400,
             height: 200,
         };
         const bigCirclePitInfo = {
-            startingTime: 110 * Phaser.Timer.SECOND,
-            duration: 20 * Phaser.Timer.SECOND,
+            startingTime: 20 * measureTime * Phaser.Timer.SECOND,
+            duration: 4 * measureTime * Phaser.Timer.SECOND,
             radiusMax: 300,
             radiusMin: 100,
         };
         const bigWallOfDeath = {
-            startingTime: 150 * Phaser.Timer.SECOND,
-            waitDuration: 10 * Phaser.Timer.SECOND,
-            fightDuration: 10 * Phaser.Timer.SECOND,
+            startingTime: 28 * measureTime * Phaser.Timer.SECOND,
+            waitDuration: 2 * measureTime * Phaser.Timer.SECOND,
+            fightDuration: 4 * measureTime * Phaser.Timer.SECOND,
             length: 600,
-            height: 300,
+            height: 250,
         };
 
         this.game.time.events.add(littleCirclePitInfo.startingTime, () => {
@@ -228,11 +237,13 @@ export default class Play extends Phaser.State
             wallOfDeath.start();
         });
 
-        this.game.time.events.loop(2 * Phaser.Timer.SECOND, () => {
-            if (this.street.citizens().all().length < 400) {
-                this.street.addPeople(10, true);
-            }
-        });
+        this.street.addPeople(startingPeople);
+
+        for (let i = 0; i < (finalPeople - -startingPeople); i++) {
+            this.game.time.events.add(totalDuration * Math.random(), () => {
+                this.street.addPeople(1, true);
+            });
+        }
     }
 
     public update()
