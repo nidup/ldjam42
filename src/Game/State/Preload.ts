@@ -36,7 +36,7 @@ export default class Preload extends Phaser.State
         this.load.audio('fuckyou1', 'assets/sounds/fuckyou.ogg');
         this.load.audio('gueulage', 'assets/sounds/gueulage.ogg');
         this.load.audio('huuuuum', 'assets/sounds/huuuuum.ogg');
-        this.load.audio('i-want-a-cirxlepit', 'assets/sounds/i-want-a-cirxlepit.ogg');
+        this.load.audio('i-want-a-circlepit', 'assets/sounds/i-want-a-cirxlepit.ogg');
         this.load.audio('oups-sorry', 'assets/sounds/oups-sorry.ogg');
         this.load.audio('stap-go-away', 'assets/sounds/stap-go-away.ogg');
         this.load.audio('what-de', 'assets/sounds/what-de.ogg');
@@ -58,7 +58,7 @@ export default class Preload extends Phaser.State
         this.load.audio('i-want-a-circle-pif', 'assets/sounds/i-want-a-circle-pif.ogg');
         this.load.audio('ouaouaouaoua', 'assets/sounds/ouaouaouaoua.ogg');
         this.load.audio('sorry-o-sorry', 'assets/sounds/sorry-o-sorry.ogg');
-        this.load.audio('the-whale-of-dearh', 'assets/sounds/the-whale-of-dearh.ogg');
+        this.load.audio('the-wall-of-death', 'assets/sounds/the-whale-of-dearh.ogg');
         this.load.audio('youwannadance', 'assets/sounds/youwannadance.ogg');
         this.load.audio('music', 'assets/sounds/BeepBox-Song.ogg');
     }
