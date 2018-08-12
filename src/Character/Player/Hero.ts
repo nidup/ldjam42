@@ -53,7 +53,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         this.group = group;
 
         this.inputEnabled = true;
-        this.scale.setTo(Config.pixelScaleRatio(), Config.pixelScaleRatio());
+        this.scale.setTo(-Config.pixelScaleRatio(), Config.pixelScaleRatio());
         this.anchor.setTo(0.5, 0.5);
         this.body.setCircle(10, 0, 14);
         this.body.allowGravity = false;
@@ -63,10 +63,10 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         this.currentGun = this.gun;
         this.moneyAmount = backbag.money();
 
-        this.animations.add('idle', [6, 7, 8], 4, true);
-        this.animations.add('walk', [5, 4, 3, 2, 1, 0], 12, true);
+        this.animations.add('idle', [100, 101, 102], 10, true);
+        this.animations.add('walk', [94, 95, 96, 97, 98, 99], 12, true);
         this.animations.add('die', [0], 12, false);
-        this.animations.add('shot', [0], 12, false);
+        this.animations.add('sorry', [103, 104, 105, 106, 107, 108], 12, false);
 
         this.controller = controller;
 
@@ -166,7 +166,14 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
 
+        let angryCount = this.citizens.all().filter(citizen => citizen.text).length;
+        let walkAnimName = 'walk';
+        if (angryCount > 0) {
+            walkAnimName = 'sorry';
+        }
+
         if (this.controller.shooting()) {
+            this.animations.play(walkAnimName);
             const change = 0.5;
             const minRadius = 3;
             const radius = this.body.radius - change;
@@ -178,24 +185,25 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
             }
 
         } else {
-            this.scale.x = Config.pixelScaleRatio();
-            this.animations.play('walk');
+            this.scale.x = -Config.pixelScaleRatio();
             if (this.controller.goingLeft()) {
                 this.body.velocity.x = -this.speed;
                 this.gun.turnToTheLeft();
+                this.animations.play(walkAnimName);
 
             } else if (this.controller.goingRight()) {
                 this.body.velocity.x = this.speed;
                 this.gun.turnToTheRight();
+                this.animations.play(walkAnimName);
             }
 
             if (this.controller.goingUp()) {
                 this.body.velocity.y = -this.speed;
-                this.animations.play('walk');
+                this.animations.play(walkAnimName);
 
             } else if (this.controller.goingDown()) {
                 this.body.velocity.y = this.speed;
-                this.animations.play('walk');
+                this.animations.play(walkAnimName);
             }
 
             if (!this.controller.goingLeft() && !this.controller.goingRight() && !this.controller.goingDown() && !this.controller.goingUp()) {
@@ -206,7 +214,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
 
     private shot()
     {
-        this.animations.play('shot');
+        //this.animations.play('sorry');
         this.currentGun.fire();
         this.shotCameraEffects();
         this.agressivenessGauge.increase();
