@@ -65,10 +65,10 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         this.currentGun = this.gun;
         this.moneyAmount = backbag.money();
 
-        this.animations.add('idle', [100, 101, 102], 10, true);
-        this.animations.add('walk', [94, 95, 96, 97, 98, 99], 12, true);
+        this.animations.add('idle', [100, 101, 102], 8, true);
+        this.animations.add('walk', [94, 95, 96, 97, 98, 99], 8, true);
         this.animations.add('die', [0], 12, false);
-        this.animations.add('sorry', [103, 104, 105, 106, 107, 108], 12, false);
+        this.animations.add('sorry', [103, 104, 105, 106, 107, 108], 8, false);
 
         this.controller = controller;
 
