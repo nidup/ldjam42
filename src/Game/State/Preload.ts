@@ -29,6 +29,37 @@ export default class Preload extends Phaser.State
         //this.load.audio('pick-weapon', 'assets/sounds/pick-weapon.ogg');
         //this.load.audio('alien-dying', 'assets/sounds/alien-dying.ogg');
         //this.load.audio('human-dying', 'assets/sounds/human-dying.ogg');
+
+        this.load.audio('allezla', 'assets/sounds/allezla.ogg');
+        this.load.audio('clapclap', 'assets/sounds/clapclap.ogg');
+        this.load.audio('fuckyou2', 'assets/sounds/fuckyou2.ogg');
+        this.load.audio('fuckyou', 'assets/sounds/fuckyou.ogg');
+        this.load.audio('gueulage', 'assets/sounds/gueulage.ogg');
+        this.load.audio('huuuuum', 'assets/sounds/huuuuum.ogg');
+        this.load.audio('i-want-a-cirxlepit', 'assets/sounds/i-want-a-cirxlepit.ogg');
+        this.load.audio('oups-sorry', 'assets/sounds/oups-sorry.ogg');
+        this.load.audio('stap-go-away', 'assets/sounds/stap-go-away.ogg');
+        this.load.audio('what-de', 'assets/sounds/what-de.ogg');
+        this.load.audio('a-poil', 'assets/sounds/a-poil.ogg');
+        this.load.audio('dont-touch-my-boobs', 'assets/sounds/dont-touch-my-boobs.ogg');
+        this.load.audio('fuckyou4', 'assets/sounds/fuckyou4.ogg');
+        this.load.audio('fuxkyou3', 'assets/sounds/fuxkyou3.ogg');
+        this.load.audio('heyman-want-some', 'assets/sounds/heyman-want-some.ogg');
+        this.load.audio('iaaaam-so-sorry', 'assets/sounds/iaaaam-so-sorry.ogg');
+        this.load.audio('no-worries-mates', 'assets/sounds/no-worries-mates.ogg');
+        this.load.audio('ouuuufffw', 'assets/sounds/ouuuufffw.ogg');
+        this.load.audio('tchin', 'assets/sounds/tchin.ogg');
+        this.load.audio('wwwwwwwoooooooww', 'assets/sounds/wwwwwwwoooooooww.ogg');
+        this.load.audio('calm-down', 'assets/sounds/calm-down.ogg');
+        this.load.audio('dude', 'assets/sounds/dude.ogg');
+        this.load.audio('fuckyou5', 'assets/sounds/fuckyou5.ogg');
+        this.load.audio('gueulage2', 'assets/sounds/gueulage2.ogg');
+        this.load.audio('hey', 'assets/sounds/hey.ogg');
+        this.load.audio('i-want-a-circle-pif', 'assets/sounds/i-want-a-circle-pif.ogg');
+        this.load.audio('ouaouaouaoua', 'assets/sounds/ouaouaouaoua.ogg');
+        this.load.audio('sorry-o-sorry', 'assets/sounds/sorry-o-sorry.ogg');
+        this.load.audio('the-whale-of-dearh', 'assets/sounds/the-whale-of-dearh.ogg');
+        this.load.audio('youwannadance', 'assets/sounds/youwannadance.ogg');
     }
 
     private loadLevels()
