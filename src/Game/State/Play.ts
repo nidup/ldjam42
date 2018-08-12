@@ -18,7 +18,7 @@ import {AlienQueen} from "../../Character/Bot/AlienQueen";
 import {CirclePit} from "../../Yolo/CirclePit";
 import {WallOfDeath} from "../../Yolo/WallOfDeath";
 
-import beepbox from '../../../lib/beepbox_synth';
+//import beepbox from '../../../lib/beepbox_synth';
 
 export default class Play extends Phaser.State
 {
