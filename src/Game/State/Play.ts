@@ -343,7 +343,7 @@ export default class Play extends Phaser.State
             });
         });
 
-        this.game.time.events.add(40 * measureTime * Phaser.Timer.SECOND, () => {
+        this.game.time.events.add(45 * measureTime * Phaser.Timer.SECOND, () => {
             this.currentMetalMovement = new Exit(this.street.citizens(), this.street.player());
             this.currentMetalMovement.start(this.draw());
             this.musicians.animations.stop();
