@@ -36,6 +36,8 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
     private controller: Controller;
     private agressivenessGauge: AggressivenessGauge;
     private citizens;
+    public points = 0;
+    public energy = 100;
 
     constructor(
         group: Phaser.Group,
@@ -179,15 +181,18 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         }
 
         if (this.controller.shooting()) {
+            this.energy = Math.max(0, this.energy - 1);
             this.animations.play(walkAnimName);
-            const change = 0.5;
-            const minRadius = 3;
-            const radius = this.body.radius - change;
-            if (radius > minRadius) {
-                this.body.setCircle(radius, 10 - radius, 14);
-                this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
-                    this.body.setCircle(this.body.radius + change, 10 - this.body.radius, 14);
-                });
+            if (this.energy)  {
+                const change = 0.5;
+                const minRadius = 3;
+                const radius = this.body.radius - change;
+                if (radius > minRadius) {
+                    this.body.setCircle(radius, 10 - radius, 14);
+                    this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
+                        this.body.setCircle(this.body.radius + change, 10 - this.body.radius, 14);
+                    });
+                }
             }
 
         } else {

@@ -9,23 +9,6 @@ import {FearStatus} from "./FearStatus";
 import {CouldBeAReplicant} from "./CouldBeAReplicant";
 import {Hero} from "../Player/Hero";
 
-/*
-const reactions = [
-    'hey!',
-    'dude...',
-    'no worries mate',
-    'want some?',
-    'STAHP',
-    'what the.',
-    ':|',
-    'FU',
-    'don\'t touch my boobs',
-    'you wanna dance?',
-    'sorry, oh sorry',
-    'calm down',
-    'fuck you'
-];*/
-
 const reactionsWithSounds = {
     'hey!': ['hey'],
     'dude...': ['dude'],
@@ -33,14 +16,15 @@ const reactionsWithSounds = {
     'want some?': ['heyman-want-some'],
     'STAHP': ['stap-go-away'],
     'what the.': ['what-de'],
-    ':|': ['huuuuum'],
+    ':|': ['ouuuufffw'],
     'FU': ['huuuuum'],
     'don\'t touch my boobs': ['dont-touch-my-boobs'],
     'you wanna dance?': ['youwannadance'],
-    'sorry, oh sorry': ['sorry-o-sorry'],
     'calm down': ['calm-down'],
     'fuck you': ['fuckyou1', 'fuckyou2', 'fuckyou3', 'fuckyou4', 'fuckyou5']
 };
+
+const playerApologizes = ['sorry-o-sorry', 'oups-sorry', 'iaaaam-so-sorry'];
 
 export const TEXT_STYLE = {
     align: 'center',
@@ -203,8 +187,14 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
                     let possibleSounds = reactionsWithSounds[text];
                     let soundName = possibleSounds[Math.floor(Math.random()*possibleSounds.length)];
-                    const veneretAudio = this.game.add.audio(soundName, 0.7, false);
-                    veneretAudio.play();
+                    const venereAudio = this.game.add.audio(soundName, 0.6, false);
+                    venereAudio.play();
+
+                    this.game.time.events.add(Phaser.Timer.SECOND * 1, () => {
+                        let sorryName = playerApologizes[Math.floor(Math.random()*playerApologizes.length)];
+                        const sorryAudio = this.game.add.audio(sorryName, 0.9, false);
+                        sorryAudio.play();
+                    }, this);
 
                     let ref = this.text;
                     this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {

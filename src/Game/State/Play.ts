@@ -30,9 +30,10 @@ export default class Play extends Phaser.State
     private rightBoundMargin: Phaser.TileSprite;
     private topBoundMargin: Phaser.TileSprite;
     private isFinalLevel: boolean = false;
-    private points: number = 0;
     private pointsDisplay: Phaser.Text;
     private pointsBackground: Phaser.Graphics;
+    private energyDisplay: Phaser.Text;
+    private energyBackground: Phaser.Graphics;
     private graphics: Phaser.Graphics;
     private currentMetalMovement: MetalMovement;
     private beginningIsIn = null;
@@ -279,7 +280,15 @@ export default class Play extends Phaser.State
         this.pointsBackground.beginFill(0x000000);
         this.pointsBackground.lineStyle(4, 0xFFFFFF);
         this.pointsBackground.drawRect(0, 0, 240, 54);
-        this.pointsDisplay = this.game.add.text(pointsPosition.x + 10, pointsPosition.y + 10, this.points + '', TEXT_STYLE_BIG);
+        this.pointsDisplay = this.game.add.text(pointsPosition.x + 10, pointsPosition.y + 10, '', TEXT_STYLE_BIG);
+
+        const energyPosition = new PIXI.Point(600, 680);
+
+        this.energyBackground = this.game.add.graphics(energyPosition.x, energyPosition.y);
+        this.energyBackground.beginFill(0x000000);
+        this.energyBackground.lineStyle(4, 0xFFFFFF);
+        this.energyBackground.drawRect(0, 0, 240, 54);
+        this.energyDisplay = this.game.add.text(energyPosition.x + 10, energyPosition.y + 10, '', TEXT_STYLE_BIG);
 
         this.game.time.events.loop(0.25 * Phaser.Timer.SECOND, () => {
             if (this.graphics) {
@@ -315,11 +324,10 @@ export default class Play extends Phaser.State
 
     public update()
     {
-        let prout = (Math.ceil(this.points) + '');
-        while (prout.length < 8) {
-            prout = '.' + prout;
-        }
-        this.pointsDisplay.text = prout;
+        let player = this.street.player();
+
+        this.energyDisplay.text = Math.ceil(player.energy).toString()['padStart'](7, '.')+'%';
+        this.pointsDisplay.text = Math.ceil(player.points).toString()['padStart'](8, '.');
 
         if (this.currentMetalMovement) {
             if (this.currentMetalMovement.isIn(this.street.player().position)) {
@@ -338,18 +346,12 @@ export default class Play extends Phaser.State
 
         this.game.physics.arcade.collide(this.topBoundMargin, this.street.player());
         this.game.physics.arcade.collide(this.topBoundMargin, this.street.citizens().all());
-        this.game.physics.arcade.collide(this.topBoundMargin, this.street.cops().all());
-        this.game.physics.arcade.collide(this.topBoundMargin, this.street.swats().all());
 
-        this.game.physics.arcade.collide(this.leftBoundMargin, this.street.player());
+        this.game.physics.arcade.collide(this.leftBoundMargin, player);
         this.game.physics.arcade.collide(this.leftBoundMargin, this.street.citizens().all());
-        this.game.physics.arcade.collide(this.leftBoundMargin, this.street.cops().all());
-        this.game.physics.arcade.collide(this.leftBoundMargin, this.street.swats().all());
 
-        this.game.physics.arcade.collide(this.rightBoundMargin, this.street.player());
+        this.game.physics.arcade.collide(this.rightBoundMargin, player);
         this.game.physics.arcade.collide(this.rightBoundMargin, this.street.citizens().all());
-        this.game.physics.arcade.collide(this.rightBoundMargin, this.street.cops().all());
-        this.game.physics.arcade.collide(this.rightBoundMargin, this.street.swats().all());
 
         this.characterLayer.sort('y', Phaser.Group.SORT_ASCENDING);
     }
@@ -416,7 +418,7 @@ export default class Play extends Phaser.State
     }
 
     private increasePoints() {
-        this.points += this.getPointsDiff();
+        this.street.player().points += this.getPointsDiff();
     }
 
     private getPointsDiff() {
