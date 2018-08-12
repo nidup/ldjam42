@@ -60,6 +60,7 @@ export default class Preload extends Phaser.State
         this.load.audio('sorry-o-sorry', 'assets/sounds/sorry-o-sorry.ogg');
         this.load.audio('the-whale-of-dearh', 'assets/sounds/the-whale-of-dearh.ogg');
         this.load.audio('youwannadance', 'assets/sounds/youwannadance.ogg');
+        this.load.audio('music', 'assets/sounds/BeepBox-Song.ogg');
     }
 
     private loadLevels()

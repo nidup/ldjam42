@@ -2,30 +2,21 @@
 import {Street} from "../Street";
 import {Citizen} from "../../Character/Bot/Citizen";
 import {Cop} from "../../Character/Bot/Cop";
-import {Inventory} from "../../Widget/Inventory";
 import {BackBag} from "../../Character/Player/BackBag";
-import {LevelInstructions} from "../../Widget/LevelInstructions";
-import {FlashMessages} from "../../Widget/FlashMessages";
 import {Config} from "../../Config";
 import {LevelLoader} from "../LevelLoader";
 import {GamePadController, KeyBoardController, VirtualPadController} from "../Controller";
 import {DeviceDetector} from "../DeviceDetector";
 import {StreetLimits} from "../StreetLimits";
 import {CharactersGenerator} from "../../Character/CharactersGenerator";
-import {Buildings} from "../../Building/Buildings";
-import {HeroNursed} from "../../Character/Player/Events";
-import {AlienQueen} from "../../Character/Bot/AlienQueen";
 import {CirclePit} from "../../Yolo/CirclePit";
 import {WallOfDeath} from "../../Yolo/WallOfDeath";
-
-//import beepbox from '../../../lib/beepbox_synth';
 
 export default class Play extends Phaser.State
 {
     private sky: Phaser.TileSprite;
     private background: Phaser.TileSprite;
     private street: Street;
-    private buildings: Buildings;
     private characterLayer: Phaser.Group;
     private levelNumber: number = 1;
     private switchingLevel: boolean = false;
@@ -59,8 +50,6 @@ export default class Play extends Phaser.State
 
     public create()
     {
-        //beepbox;
-
         if (Config.debug()) {
             this.game.time.advancedTiming = true
         }
@@ -268,6 +257,9 @@ export default class Play extends Phaser.State
         }
 
         this.draw().drawRect(840, 350, 70, 150);
+
+        const music = this.game.add.audio('music');
+        music.loopFull();
     }
 
     private draw() {
