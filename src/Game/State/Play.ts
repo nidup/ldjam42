@@ -178,18 +178,33 @@ export default class Play extends Phaser.State
 
         this.game.camera.follow(this.street.player());
 
+        const measureTime = 130 / 30;
+
         const musicians = this.game.add.tileSprite(1200 - 106 * 2, 56, 106, 291, 'scene', 0, backgroundLayer);
         musicians.scale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
-        musicians.animations.add('play', [0, 1], 10, true);
+        musicians.animations.add('play', [0, 1], 16/measureTime, true);
+        musicians.animations.add('play-hard', [0, 1], 32/measureTime, true);
         musicians.animations.play('play');
 
         const startingPeople = 100;
         const finalPeople = 300;
         const totalDuration = 180 * Phaser.Timer.SECOND;
 
-        //const measureTime = 4.25;
-        const measureTime = 130 / 30;
-        //const measureTime = 4.666666667;
+        const begginingSlow = [0, 9, 17, 24, 34, 40];
+        const beginningHard = [5, 15, 20, 30, 38];
+
+        begginingSlow.forEach((measure) => {
+            this.game.time.events.add(measure * measureTime * Phaser.Timer.SECOND, () => {
+                musicians.animations.play('play');
+            });
+        });
+
+        beginningHard.forEach((measure) => {
+            this.game.time.events.add(measure * measureTime * Phaser.Timer.SECOND, () => {
+                musicians.animations.play('play-hard');
+            });
+        });
+
         const littleCirclePitInfo = {
             startingTime: 5 * measureTime * Phaser.Timer.SECOND,
             duration: 4 * measureTime * Phaser.Timer.SECOND,
