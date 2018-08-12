@@ -1,11 +1,8 @@
 
 import {Street} from "../Street";
-import {Citizen} from "../../Character/Bot/Citizen";
+import {Citizen, TEXT_STYLE, TEXT_STYLE_BIG} from "../../Character/Bot/Citizen";
 import {Cop} from "../../Character/Bot/Cop";
-import {Inventory} from "../../Widget/Inventory";
 import {BackBag} from "../../Character/Player/BackBag";
-import {LevelInstructions} from "../../Widget/LevelInstructions";
-import {FlashMessages} from "../../Widget/FlashMessages";
 import {Config} from "../../Config";
 import {LevelLoader} from "../LevelLoader";
 import {GamePadController, KeyBoardController, VirtualPadController} from "../Controller";
@@ -13,8 +10,6 @@ import {DeviceDetector} from "../DeviceDetector";
 import {StreetLimits} from "../StreetLimits";
 import {CharactersGenerator} from "../../Character/CharactersGenerator";
 import {Buildings} from "../../Building/Buildings";
-import {HeroNursed} from "../../Character/Player/Events";
-import {AlienQueen} from "../../Character/Bot/AlienQueen";
 import {CirclePit} from "../../Yolo/CirclePit";
 import {WallOfDeath} from "../../Yolo/WallOfDeath";
 
@@ -25,7 +20,6 @@ export default class Play extends Phaser.State
     private sky: Phaser.TileSprite;
     private background: Phaser.TileSprite;
     private street: Street;
-    private buildings: Buildings;
     private characterLayer: Phaser.Group;
     private levelNumber: number = 1;
     private switchingLevel: boolean = false;
@@ -37,6 +31,9 @@ export default class Play extends Phaser.State
     private rightBoundMargin: Phaser.TileSprite;
     private topBoundMargin: Phaser.TileSprite;
     private isFinalLevel: boolean = false;
+    private points: number = 0;
+    private pointsDisplay: Phaser.Text;
+    private pointsBackground: Phaser.Graphics;
 
     public init (
         controllerType: string,
@@ -260,29 +257,25 @@ export default class Play extends Phaser.State
                 this.street.addPeople(1, true);
             });
         }
+
+        const pointsPosition = new PIXI.Point(1000, 700);
+
+        this.pointsBackground = this.game.add.graphics(pointsPosition.x, pointsPosition.y);
+        this.pointsBackground.beginFill(0x000000);
+        this.pointsBackground.lineStyle(4, 0xFFFFFF);
+        this.pointsBackground.drawRect(0, 0, 142, 40);
+        this.pointsDisplay = this.game.add.text(pointsPosition.x + 10, pointsPosition.y + 10, this.points + '', TEXT_STYLE_BIG);
     }
 
     public update()
     {
-        /*
-        if (this.isFinalLevel) {
-            if (this.street.alienQueen().isDead()) {
-                const levelText = this.game.add.bitmapText(100, 300, 'cowboy','Congratz, you defeat the aliens!', 30);
-                levelText.alpha = 1;
-                const tweenAlpha = this.game.add.tween(levelText).to( { alpha: 0 }, 0, "Linear", true);
-                this.game.time.events.add(
-                    Phaser.Timer.SECOND * 10,
-                    function(){
-                        this.nextLevel();
-                    },
-                    this
-                );
-            }
-        } else {
-            if (this.street.isEmpty()) {
-                this.nextLevel();
-            }
-        }*/
+        this.points += Math.random();
+
+        let prout = (Math.ceil(this.points) + '');
+        while (prout.length < 8) {
+            prout = '.' + prout;
+        }
+        this.pointsDisplay.text = prout;
 
         this.game.physics.arcade.collide(this.street.player(), this.street.citizens().all());
 

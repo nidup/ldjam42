@@ -97,6 +97,10 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         }
 
         this.mirrorIfNeeded();
+
+        if (this.x < 120) {
+            this.x = 120;
+        }
     }
 
     equippedGun()
