@@ -1,7 +1,8 @@
 import {Citizen} from "../Character/Bot/Citizen";
 import {Citizens} from "../Character/Bot/Citizens";
+import {BLINKCOLOR, MetalMovement} from "./MetalMovement";
 
-export class WallOfDeath {
+export class WallOfDeath extends MetalMovement {
     private game: Phaser.Game;
     private citizenTop: Citizen[];
     private citizenBottom: Citizen[];
@@ -10,8 +11,10 @@ export class WallOfDeath {
     private height: number;
     private waitDuration: number;
     private fightDuration: number;
+    private gap: number;
 
     constructor(game: Phaser.Game, citizens: Citizens, waitDuration: number, fightDuration: number, length: number, height: number) {
+        super();
         this.game = game;
         this.right = 830;
         this.left = 830 - length;
@@ -19,18 +22,18 @@ export class WallOfDeath {
         this.waitDuration = waitDuration;
         this.fightDuration = fightDuration;
         const middle = 400;
-        const gap = 20;
+        this.gap = 20;
         this.citizenTop = citizens.all().filter((citizen: Citizen) => {
             return citizen.x > this.left && citizen.x < this.right
-                && citizen.y < middle - gap && citizen.y > (middle - this.height);
+                && citizen.y < middle - this.gap && citizen.y > (middle - this.height);
         });
         this.citizenBottom = citizens.all().filter((citizen: Citizen) => {
             return citizen.x > this.left && citizen.x < this.right
-                && citizen.y > middle + gap && citizen.y < (middle + this.height);
+                && citizen.y > middle + this.gap && citizen.y < (middle + this.height);
         });
     }
 
-    public start() {
+    public start(graphics: Phaser.Graphics) {
         this.citizenTop.forEach((citizen: Citizen) => {
             citizen.goTopForWallOfDeath(this.height);
         });
@@ -57,5 +60,8 @@ export class WallOfDeath {
                 });
             });
         });
+
+        graphics.beginFill(BLINKCOLOR);
+        graphics.drawRect(this.left, 400 - this.gap, this.right - this.left, this.gap * 2);
     }
 }

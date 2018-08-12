@@ -12,6 +12,8 @@ import {CharactersGenerator} from "../../Character/CharactersGenerator";
 import {Buildings} from "../../Building/Buildings";
 import {CirclePit} from "../../Yolo/CirclePit";
 import {WallOfDeath} from "../../Yolo/WallOfDeath";
+import {BLINKCOLOR, MetalMovement} from "../../Yolo/MetalMovement";
+import {Nothing} from "../../Yolo/Nothing";
 
 //import beepbox from '../../../lib/beepbox_synth';
 
@@ -34,7 +36,8 @@ export default class Play extends Phaser.State
     private points: number = 0;
     private pointsDisplay: Phaser.Text;
     private pointsBackground: Phaser.Graphics;
-    private graphics;
+    private graphics: Phaser.Graphics;
+    private currentMetalMovement: MetalMovement;
 
     public init (
         controllerType: string,
@@ -161,13 +164,6 @@ export default class Play extends Phaser.State
             this.playerPosition
         );
         this.street = new Street(generator, this.isFinalLevel);
-        //this.buildings = [];
-
-        /*
-        new LevelInstructions(interfaceLayer, streetPositionX, 0, 'LevelInstructions', level);
-        new Inventory(interfaceLayer, streetPositionX + 600, 0, 'Inventory', this.street.player());
-        new FlashMessages(interfaceLayer, this.street.player().pastGameEvents(), this.street.player());
-        */
 
         const worldBoundX = 0;
         const worldBoundY = 0;
@@ -204,6 +200,7 @@ export default class Play extends Phaser.State
         });
 
         const littleCirclePitInfo = {
+            //startingTime: 0 * measureTime * Phaser.Timer.SECOND,
             startingTime: 5 * measureTime * Phaser.Timer.SECOND,
             duration: 4 * measureTime * Phaser.Timer.SECOND,
             radiusMax: 150,
@@ -218,12 +215,14 @@ export default class Play extends Phaser.State
             height: 200,
         };
         const bigCirclePitInfo = {
+            //startingTime: 0 * measureTime * Phaser.Timer.SECOND,
             startingTime: 20 * measureTime * Phaser.Timer.SECOND,
             duration: 4 * measureTime * Phaser.Timer.SECOND,
             radiusMax: 300,
             radiusMin: 100,
         };
         const bigWallOfDeath = {
+            //startingTime: 28 * measureTime * Phaser.Timer.SECOND,
             startingTime: 28 * measureTime * Phaser.Timer.SECOND,
             waitDuration: 2 * measureTime * Phaser.Timer.SECOND,
             fightDuration: 4 * measureTime * Phaser.Timer.SECOND,
@@ -231,29 +230,43 @@ export default class Play extends Phaser.State
             height: 250,
         };
 
+        this.currentMetalMovement = new Nothing();
+        this.currentMetalMovement.start(this.draw());
+
         this.game.time.events.add(littleCirclePitInfo.startingTime, () => {
-            const circlePit = new CirclePit(this.game, this.street.citizens(), littleCirclePitInfo.duration, littleCirclePitInfo.radiusMin, littleCirclePitInfo.radiusMax);
-            circlePit.start();
-            this.draw().drawCircle(700, 400, 300);
+            this.currentMetalMovement = new CirclePit(this.game, this.street.citizens(), littleCirclePitInfo.duration, littleCirclePitInfo.radiusMin, littleCirclePitInfo.radiusMax);
+            this.currentMetalMovement.start(this.draw());
+            this.game.time.events.add(littleCirclePitInfo.duration, () => {
+                this.currentMetalMovement = new Nothing();
+                this.currentMetalMovement.start(this.draw());
+            });
         });
 
         this.game.time.events.add(littleWallOfDeath.startingTime, () => {
-            const wallOfDeath = new WallOfDeath(this.game, this.street.citizens(), littleWallOfDeath.waitDuration, littleWallOfDeath.fightDuration, littleWallOfDeath.length, littleWallOfDeath.height);
-            wallOfDeath.start();
-            this.draw().drawRect(340, 380, 400, 50);
+            this.currentMetalMovement = new WallOfDeath(this.game, this.street.citizens(), littleWallOfDeath.waitDuration, littleWallOfDeath.fightDuration, littleWallOfDeath.length, littleWallOfDeath.height);
+            this.currentMetalMovement.start(this.draw());
+            this.game.time.events.add(littleWallOfDeath.waitDuration + littleWallOfDeath.fightDuration, () => {
+                this.currentMetalMovement = new Nothing();
+                this.currentMetalMovement.start(this.draw());
+            });
         });
 
         this.game.time.events.add(bigCirclePitInfo.startingTime, () => {
-            const circlePit = new CirclePit(this.game, this.street.citizens(), bigCirclePitInfo.duration, bigCirclePitInfo.radiusMin, bigCirclePitInfo.radiusMax);
-            circlePit.start();
-            this.draw().drawCircle(700, 400, 300);
+            this.currentMetalMovement = new CirclePit(this.game, this.street.citizens(), bigCirclePitInfo.duration, bigCirclePitInfo.radiusMin, bigCirclePitInfo.radiusMax);
+            this.currentMetalMovement.start(this.draw());
+            this.game.time.events.add(bigCirclePitInfo.duration, () => {
+                this.currentMetalMovement = new Nothing();
+                this.currentMetalMovement.start(this.draw());
+            });
         });
 
-
         this.game.time.events.add(bigWallOfDeath.startingTime, () => {
-            const wallOfDeath = new WallOfDeath(this.game, this.street.citizens(), bigWallOfDeath.waitDuration, bigWallOfDeath.fightDuration, bigWallOfDeath.length, bigWallOfDeath.height);
-            wallOfDeath.start();
-            this.draw().drawRect(340, 380, 400, 50);
+            this.currentMetalMovement = new WallOfDeath(this.game, this.street.citizens(), bigWallOfDeath.waitDuration, bigWallOfDeath.fightDuration, bigWallOfDeath.length, bigWallOfDeath.height);
+            this.currentMetalMovement.start(this.draw());
+            this.game.time.events.add(bigWallOfDeath.waitDuration + bigWallOfDeath.fightDuration, () => {
+                this.currentMetalMovement = new Nothing();
+                this.currentMetalMovement.start(this.draw());
+            });
         });
 
         this.street.addPeople(startingPeople);
@@ -272,14 +285,22 @@ export default class Play extends Phaser.State
         this.pointsBackground.drawRect(0, 0, 142, 40);
         this.pointsDisplay = this.game.add.text(pointsPosition.x + 10, pointsPosition.y + 10, this.points + '', TEXT_STYLE_BIG);
 
-
-        this.draw().drawRect(840, 350, 70, 150);
+        this.game.time.events.loop(0.5 * Phaser.Timer.SECOND, () => {
+            if (this.graphics) {
+                if (this.graphics.alpha > 0) {
+                    this.graphics.alpha = 0;
+                } else {
+                    this.graphics.alpha = 0.2;
+                }
+            }
+        });
     }
 
     private draw() {
         this.graphics && this.graphics.destroy();
         this.graphics = this.game.add.graphics(0, 0);
-        this.graphics.lineStyle(5, 0xFF0000, 1);
+        this.graphics.alpha = 0;
+        this.graphics.lineStyle(5, BLINKCOLOR);
         return this.graphics;
     }
 

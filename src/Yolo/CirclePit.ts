@@ -1,7 +1,8 @@
 import {Citizens} from "../Character/Bot/Citizens";
 import {Citizen} from "../Character/Bot/Citizen";
+import {BLINKCOLOR, MetalMovement} from "./MetalMovement";
 
-export class CirclePit {
+export class CirclePit extends MetalMovement {
     private citizens: Citizen[];
     private center: PIXI.Point;
     private radiusMin: number;
@@ -10,6 +11,7 @@ export class CirclePit {
     private game: Phaser.Game;
 
     constructor(game: Phaser.Game, citizens: Citizens, duration: number, radiusMin: number, radiusMax: number) {
+        super();
         this.game = game;
         this.center = new PIXI.Point(900 - radiusMax / 2 - 130, 400);
         this.radiusMin = radiusMin;
@@ -21,7 +23,7 @@ export class CirclePit {
         this.time = duration;
     }
 
-    public start() {
+    public start(graphics: Phaser.Graphics) {
         this.citizens.forEach((citizen) => {
             citizen.setCirclePitCenter(this.center);
         });
@@ -31,5 +33,8 @@ export class CirclePit {
                 citizen.setCirclePitCenter(null);
             });
         });
+
+        graphics.lineStyle(this.radiusMax - this.radiusMin, BLINKCOLOR);
+        graphics.drawCircle(this.center.x, this.center.y, (this.radiusMin + this.radiusMax));
     }
 }
