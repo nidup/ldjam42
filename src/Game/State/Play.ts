@@ -9,13 +9,10 @@ import {GamePadController, KeyBoardController, VirtualPadController} from "../Co
 import {DeviceDetector} from "../DeviceDetector";
 import {StreetLimits} from "../StreetLimits";
 import {CharactersGenerator} from "../../Character/CharactersGenerator";
-import {Buildings} from "../../Building/Buildings";
 import {CirclePit} from "../../Yolo/CirclePit";
 import {WallOfDeath} from "../../Yolo/WallOfDeath";
 import {BLINKCOLOR, MetalMovement} from "../../Yolo/MetalMovement";
 import {Nothing} from "../../Yolo/Nothing";
-
-//import beepbox from '../../../lib/beepbox_synth';
 
 export default class Play extends Phaser.State
 {
@@ -59,8 +56,6 @@ export default class Play extends Phaser.State
 
     public create()
     {
-        //beepbox;
-
         if (Config.debug()) {
             this.game.time.advancedTiming = true
         }
@@ -294,6 +289,9 @@ export default class Play extends Phaser.State
                 }
             }
         });
+
+        const music = this.game.add.audio('music');
+        music.loopFull();
     }
 
     private draw() {
