@@ -77,13 +77,14 @@ export class Cop extends Phaser.Sprite implements CanBeHurt, CouldBeAReplicant
 
     die()
     {
+        /*
         if (this.isReplicant) {
             const audio = this.game.add.audio('alien-dying', 1, false);
             audio.play();
         } else {
             const audio = this.game.add.audio('human-dying', 0.5, false);
             audio.play();
-        }
+        }*/
         this.animations.play('die');
         if (this.key === 'cop') {
             new PickableItem(this.group, this.x, this.y, 'Gun', this.street.player());

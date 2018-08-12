@@ -53,8 +53,9 @@ export class AlienQueen extends Phaser.Sprite implements CanBeHurt
 
     hurt(damage: number, fromDirection: HorizontalDirection)
     {
+        /*
         const audio = this.game.add.audio('alien-dying', 1, false);
-        audio.play();
+        audio.play();*/
         this.health -= damage;
         const fx = new CharacterHurt();
         fx.blinkHumanOrReplicant(this, fromDirection, false);

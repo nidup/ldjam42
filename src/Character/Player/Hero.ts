@@ -147,8 +147,8 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
     pick(item: PickableItem)
     {
         if (item.key === 'Money') {
-            const audio = this.game.add.audio('pick-money', 0.5, false);
-            audio.play();
+            //const audio = this.game.add.audio('pick-money', 0.5, false);
+            //audio.play();
             const randAmount = this.game.rnd.integerInRange(2, 50);
             this.moneyAmount = this.moneyAmount + randAmount;
             this.gameEvents.register(new MoneyPicked(this.game.time.now, randAmount, this.moneyAmount));
@@ -228,8 +228,9 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
     private die()
     {
         if (!this.dead) {
+            /*
             const audio = this.game.add.audio('human-dying', 0.5, false);
-            audio.play();
+            audio.play();*/
             this.dead = true;
             this.body.velocity.x = 0;
             this.body.velocity.y = 0;

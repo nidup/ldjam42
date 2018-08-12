@@ -23,12 +23,12 @@ export default class Preload extends Phaser.State
 
     private loadAudio()
     {
-        this.load.audio('far-west', 'assets/sounds/far-west2.ogg');
-        this.load.audio('shoot', 'assets/sounds/single-shoot.ogg');
-        this.load.audio('pick-money', 'assets/sounds/pick-money.ogg');
-        this.load.audio('pick-weapon', 'assets/sounds/pick-weapon.ogg');
-        this.load.audio('alien-dying', 'assets/sounds/alien-dying.ogg');
-        this.load.audio('human-dying', 'assets/sounds/human-dying.ogg');
+        //this.load.audio('far-west', 'assets/sounds/far-west2.ogg');
+        //this.load.audio('shoot', 'assets/sounds/single-shoot.ogg');
+        //this.load.audio('pick-money', 'assets/sounds/pick-money.ogg');
+        //this.load.audio('pick-weapon', 'assets/sounds/pick-weapon.ogg');
+        //this.load.audio('alien-dying', 'assets/sounds/alien-dying.ogg');
+        //this.load.audio('human-dying', 'assets/sounds/human-dying.ogg');
     }
 
     private loadLevels()
