@@ -203,7 +203,7 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
                     let possibleSounds = reactionsWithSounds[text];
                     let soundName = possibleSounds[Math.floor(Math.random()*possibleSounds.length)];
-                    const veneretAudio = this.game.add.audio(soundName, 1, false);
+                    const veneretAudio = this.game.add.audio(soundName, 0.7, false);
                     veneretAudio.play();
 
                     let ref = this.text;
