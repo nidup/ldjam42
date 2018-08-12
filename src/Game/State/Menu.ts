@@ -1,10 +1,12 @@
 
 import {Config} from "../../Config";
 import {Controller, KeyBoardController} from "../Controller";
+import {TEXT_STYLE, TEXT_STYLE_BIG, TEXT_STYLE_MIDDLE} from "../../Character/Bot/Citizen";
 
 export default class Menu extends Phaser.State {
 
-    private startText : Phaser.BitmapText;
+    private startText : Phaser.Text;
+    private background;
     private keyboardController: KeyBoardController;
     private controlsKeyboardText: string;
     private controlsText: Phaser.BitmapText;
@@ -15,18 +17,26 @@ export default class Menu extends Phaser.State {
 
     public create ()
     {
+        this.keyboardController = new KeyBoardController(this.game);
+        this.chosenController = this.keyboardController;
+        this.game.stage.backgroundColor = '#050505';
+
+//        let pointsDisplay = this.game.add.text(10, 10, 'michel une chanson', TEXT_STYLE_BIG);
+
+
+        /*
         const verySmallFontSize = 10;
         const smallFontSize = 14;
         const mediumFontSize = 20;
         const largeFontSize = 34;
-        this.game.stage.backgroundColor = '#1b1128';
 
-        //this.background = this.game.add.sprite(0, 0, 'Menu');
-        //this.background.scale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
+*/
+        this.background = this.game.add.sprite(0, 0, 'splash');
+        this.background.scale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
 
         let titleX = 260;
         const titleY = 113;
-        this.game.add.bitmapText(titleX, titleY, 'cowboy','Cowboys vs Aliens', largeFontSize);
+  //      this.game.add.bitmapText(titleX, titleY, 'cowboy','Cowboys vs Aliens', largeFontSize);
 
         const storyX = titleX - 150;
         const storyY = titleY + 150;
@@ -35,19 +45,21 @@ export default class Menu extends Phaser.State {
             +"can't distinguish who is sane or contaminated.\n"
             +"You have only one option... kill them all to stop\n"
             +"this plague and save the far west.\n";
-        this.game.add.bitmapText(storyX, storyY, 'cowboy',storyText, mediumFontSize);
-
+ //       this.game.add.bitmapText(storyX, storyY, 'cowboy',storyText, mediumFontSize);
+/*
         const controlsChoiceX = storyX;
         const controlsChoiceY = storyY + 350;
         this.setupForComputer(controlsChoiceX, controlsChoiceY, smallFontSize);
+*/
 
         const startX = storyX + 250;
         const startY = storyY + 220;
-        this.startText = this.game.add.bitmapText(startX, startY, 'cowboy','', mediumFontSize);
+        this.startText = this.game.add.text(startX, startY, 'Press space key to start', TEXT_STYLE);
+        //this.startText = this.game.add.bitmapText(startX, startY, 'cowboy','', mediumFontSize);
         this.startText.alpha = 1;
-        //const tweenAlpha = this.game.add.tween(this.startText).to( { alpha: 0.3 }, 0, "Linear", true);
-        //tweenAlpha.repeat(10000, 400);
-
+        const tweenAlpha = this.game.add.tween(this.startText).to( { alpha: 0.3 }, 0, "Linear", true);
+        tweenAlpha.repeat(10000, 400);
+/*
         const gunSprite = this.game.add.sprite(startX - 50, startY , 'Gun', 1);
         gunSprite.scale.setTo(Config.pixelScaleRatio(), Config.pixelScaleRatio());
         gunSprite.animations.add('selected', [0, 1], 1, true);
@@ -68,11 +80,8 @@ export default class Menu extends Phaser.State {
         heroSprite.scale.x = -Config.pixelScaleRatio();
         heroSprite.animations.add('selected', [0, 1, 2, 3, 4], 4, true);
         heroSprite.play('selected')
+        */
 
-        //this.music = this.game.add.audio('far-west');
-        //this.music.loopFull();
-
-        //this.shootAudio = this.game.add.audio('shoot');
     }
 
     private setupForComputer(controlsChoiceX: number, controlsChoiceY:number, smallFontSize: number)
@@ -88,10 +97,12 @@ export default class Menu extends Phaser.State {
 
     public update()
     {
-        this.startText.setText('Press space key to start');
+
+        //this.startText.setText('Press space key to start');
 
         if (this.chosenController.shooting() && this.starting == false) {
             this.starting = true;
+            this.game.state.start('Play', true, false, this.chosenController.identifier());
             /*
             this.shootAudio.play('', 0, 0.5, false);
             this.shootAudio.onStop.addOnce(

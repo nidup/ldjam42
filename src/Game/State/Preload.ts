@@ -1,7 +1,7 @@
 
 export default class Preload extends Phaser.State
 {
-    private skipMenu = true;
+    private skipMenu = false;
     private skipToLevel = 1;
 
     public preload ()
@@ -95,6 +95,7 @@ export default class Preload extends Phaser.State
 
         this.load.spritesheet('main', 'assets/sprites/main.png', 600, 400);
         this.load.spritesheet('scene', 'assets/sprites/scene.png', 106, 291);
+        this.load.spritesheet('splash', 'assets/sprites/splash.png', 600, 400);
     }
 
     private loadFonts()
