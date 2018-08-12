@@ -38,6 +38,8 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
     private citizens;
     public points = 0;
     public energy = 100;
+    private exitZone;
+    public finished = false;
 
     constructor(
         group: Phaser.Group,
@@ -81,13 +83,11 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
 
     public update()
     {
-        if (this.health <= 0) {
-            this.die();
-
-        } else {
-            this.controls();
-            this.bulletHits.hit();
+        if (this.exitZone && this.exitZone.isIn(this.position)) {
+            return this.finished = true;
         }
+        this.controls();
+        this.bulletHits.hit();
         let angryCount = this.citizens.all().filter(citizen => citizen.text).length;
         if (angryCount > 2 && this.x > 0) {
             this.body.checkCollision.none = !this.movingToTheRight();
@@ -265,5 +265,10 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
                 this.scale.x = - this.scale.x;
             }
         }
+    }
+
+    exit(zone)
+    {
+        this.exitZone = zone;
     }
 }

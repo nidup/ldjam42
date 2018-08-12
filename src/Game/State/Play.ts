@@ -47,6 +47,7 @@ export default class Play extends Phaser.State
     private currentMetalMovement: MetalMovement;
     private beginningIsIn = null;
     private singerText: Phaser.Text = null;
+    private finishText: Phaser.Text = null;
     private singerTextShadow: Phaser.Text = null;
     private lamps: Phaser.Sprite[];
 
@@ -342,7 +343,8 @@ export default class Play extends Phaser.State
         });
 
         this.game.time.events.add(40 * measureTime * Phaser.Timer.SECOND, () => {
-            this.currentMetalMovement = new Exit();
+            this.currentMetalMovement = new Exit(this.street.citizens(), this.street.player());
+            this.currentMetalMovement.start(this.draw());
         });
 
         this.street.addPeople(startingPeople);
@@ -413,6 +415,11 @@ export default class Play extends Phaser.State
         this.singerTextShadow = this.game.add.text(textPos.x + 2, textPos.y + 2, '', TEXT_STYLE_MIDDLE);
         this.singerTextShadow.fill = '#000';
         this.singerText = this.game.add.text(textPos.x, textPos.y, '', TEXT_STYLE_MIDDLE);
+
+        this.finishText = this.game.add.text(textPos.x, textPos.y, '', TEXT_STYLE_BIG);
+
+        this.currentMetalMovement = new Nothing();
+        this.currentMetalMovement.start(this.draw());
     }
 
     private draw() {
@@ -426,6 +433,10 @@ export default class Play extends Phaser.State
     public update()
     {
         let player = this.street.player();
+
+        if (player.finished) {
+            this.finishText.text = 'BYE';
+        }
 
         this.energyForeground.clear();
         this.energyForeground.beginFill(player.energy > 50  ? 0x2dcd41 : player.energy  > 20 ? 0xffc80a : 0xf04b36 );
