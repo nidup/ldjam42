@@ -18,7 +18,7 @@ import {AlienQueen} from "../../Character/Bot/AlienQueen";
 import {CirclePit} from "../../Yolo/CirclePit";
 import {WallOfDeath} from "../../Yolo/WallOfDeath";
 
-import beepbox from '../../../lib/beepbox_synth';
+//import beepbox from '../../../lib/beepbox_synth';
 
 export default class Play extends Phaser.State
 {
@@ -226,6 +226,12 @@ export default class Play extends Phaser.State
         this.game.time.events.add(bigWallOfDeath.startingTime, () => {
             const wallOfDeath = new WallOfDeath(this.game, this.street.citizens(), bigWallOfDeath.waitDuration, bigWallOfDeath.fightDuration, bigWallOfDeath.length, bigWallOfDeath.height);
             wallOfDeath.start();
+        });
+
+        this.game.time.events.loop(2 * Phaser.Timer.SECOND, () => {
+            if (this.street.citizens().all().length < 400) {
+                this.street.addPeople(10, true);
+            }
         });
     }
 

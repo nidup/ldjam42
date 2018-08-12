@@ -24,11 +24,12 @@ export class ShotGun implements BaseGun
                 this.amnoAmount = this.amnoAmount - 0.25;
             },
             this
-        )
+        );
+        /*
         this.weapon.onFire.add(function(){
             const shootAudio = this.game.add.audio('shoot', 0.5, false);
             shootAudio.play();
-        }, this);
+        }, this);*/
     }
 
     fire()

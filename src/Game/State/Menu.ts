@@ -69,10 +69,10 @@ export default class Menu extends Phaser.State {
         heroSprite.animations.add('selected', [0, 1, 2, 3, 4], 4, true);
         heroSprite.play('selected')
 
-        this.music = this.game.add.audio('far-west');
-        this.music.loopFull();
+        //this.music = this.game.add.audio('far-west');
+        //this.music.loopFull();
 
-        this.shootAudio = this.game.add.audio('shoot');
+        //this.shootAudio = this.game.add.audio('shoot');
     }
 
     private setupForComputer(controlsChoiceX: number, controlsChoiceY:number, smallFontSize: number)
@@ -92,13 +92,14 @@ export default class Menu extends Phaser.State {
 
         if (this.chosenController.shooting() && this.starting == false) {
             this.starting = true;
+            /*
             this.shootAudio.play('', 0, 0.5, false);
             this.shootAudio.onStop.addOnce(
                 function() {
                     this.game.state.start('Play', true, false, this.chosenController.identifier());
                 },
                 this
-            );
+            );*/
         }
     }
 
