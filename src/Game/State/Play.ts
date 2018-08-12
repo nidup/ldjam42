@@ -200,8 +200,8 @@ export default class Play extends Phaser.State
         this.musicians.animations.play('play');
 
         const startingPeople = 100;
-        const finalPeople = 270;
-        const totalDuration = 180 * Phaser.Timer.SECOND;
+        const finalPeople = 240;
+        const totalDuration = 37 * measureTime * Phaser.Timer.SECOND;
 
         const begginingSlow = [0, 9, 17, 24, 34, 40];
         const beginningHard = [5, 15, 20, 30, 38];
@@ -444,7 +444,7 @@ export default class Play extends Phaser.State
         this.energyForeground.clear();
         this.energyForeground.beginFill(player.energy > 50  ? 0x2dcd41 : player.energy  > 20 ? 0xffc80a : 0xf04b36 );
         this.energyForeground.drawRect(0, 0, 240 * (player.energy / 100), 54);
-        this.pointsDisplay.text = Math.ceil(player.points).toString()['padStart'](8, '.');
+        this.pointsDisplay.text = Math.ceil(player.points * 20).toString()['padStart'](8, '.');
 
         if (this.currentMetalMovement) {
             if (this.currentMetalMovement.isIn(this.street.player().position)) {
