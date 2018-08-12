@@ -63,7 +63,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         this.currentGun = this.gun;
         this.moneyAmount = backbag.money();
 
-        this.animations.add('nothing', [100, 101, 102], 10, true);
+        this.animations.add('idle', [100, 101, 102], 10, true);
         this.animations.add('walk', [94, 95, 96, 97, 98, 99], 12, true);
         this.animations.add('die', [0], 12, false);
         this.animations.add('shot', [0], 12, false);
@@ -179,14 +179,15 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
 
         } else {
             this.scale.x = -Config.pixelScaleRatio();
-            this.animations.play('walk');
             if (this.controller.goingLeft()) {
                 this.body.velocity.x = -this.speed;
                 this.gun.turnToTheLeft();
+                this.animations.play('walk');
 
             } else if (this.controller.goingRight()) {
                 this.body.velocity.x = this.speed;
                 this.gun.turnToTheRight();
+                this.animations.play('walk');
             }
 
             if (this.controller.goingUp()) {
@@ -199,7 +200,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
             }
 
             if (!this.controller.goingLeft() && !this.controller.goingRight() && !this.controller.goingDown() && !this.controller.goingUp()) {
-                this.animations.play('nothing');
+                this.animations.play('idle');
             }
         }
     }
