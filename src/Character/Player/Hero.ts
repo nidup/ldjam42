@@ -84,7 +84,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
     public update()
     {
         if (this.exitZone && this.exitZone.isIn(this.position)) {
-            return this.finished = true;
+            this.finished = true;
         }
         this.controls();
         this.bulletHits.hit();
