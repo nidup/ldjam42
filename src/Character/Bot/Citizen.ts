@@ -128,6 +128,10 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
     update()
     {
+        if (this.body.offset.x < 5) {
+            this.body.setCircle(4, Math.min(this.body.offset.x + 0.3, 5), 18);
+        }
+
         if (this.exitZone) {
             if (this.exitZone.isIn(this.position)) {
                 this.visible = false;

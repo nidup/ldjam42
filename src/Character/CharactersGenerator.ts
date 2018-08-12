@@ -115,7 +115,8 @@ export class CharactersGenerator
                 let citizen = new Citizen(this.characterGroup, position.x, position.y, Math.random() > 0.5 ? 'citizen1' : 'citizen2', street, false);
                 citizens.add(citizen);
                 if (outOfBounds) {
-                    citizen.x = 0;
+                    citizen.x = -15;
+                    citizen.body.setCircle(4, -20, 18);
                     citizen.y = Math.random() * 800;
                 }
             }

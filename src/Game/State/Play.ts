@@ -493,6 +493,9 @@ export default class Play extends Phaser.State
             this.game.debug.body(this.street.player());
             this.game.debug.cameraInfo(this.game.camera, 32, 32);
             this.game.debug.spriteInfo(this.street.player(), 32, 200);
+            this.street.citizens().all().forEach((citizen) => {
+                this.game.debug.body(citizen);
+            });
         }
     }
 
