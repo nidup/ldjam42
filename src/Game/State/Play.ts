@@ -37,6 +37,7 @@ export default class Play extends Phaser.State
     private rightBoundMargin: Phaser.TileSprite;
     private topBoundMargin: Phaser.TileSprite;
     private isFinalLevel: boolean = false;
+    private graphics;
 
     public init (
         controllerType: string,
@@ -236,21 +237,26 @@ export default class Play extends Phaser.State
         this.game.time.events.add(littleCirclePitInfo.startingTime, () => {
             const circlePit = new CirclePit(this.game, this.street.citizens(), littleCirclePitInfo.duration, littleCirclePitInfo.radiusMin, littleCirclePitInfo.radiusMax);
             circlePit.start();
+            this.draw().drawCircle(700, 400, 300);
         });
 
         this.game.time.events.add(littleWallOfDeath.startingTime, () => {
             const wallOfDeath = new WallOfDeath(this.game, this.street.citizens(), littleWallOfDeath.waitDuration, littleWallOfDeath.fightDuration, littleWallOfDeath.length, littleWallOfDeath.height);
             wallOfDeath.start();
+            this.draw().drawRect(340, 380, 400, 50);
         });
 
         this.game.time.events.add(bigCirclePitInfo.startingTime, () => {
             const circlePit = new CirclePit(this.game, this.street.citizens(), bigCirclePitInfo.duration, bigCirclePitInfo.radiusMin, bigCirclePitInfo.radiusMax);
             circlePit.start();
+            this.draw().drawCircle(700, 400, 300);
         });
+
 
         this.game.time.events.add(bigWallOfDeath.startingTime, () => {
             const wallOfDeath = new WallOfDeath(this.game, this.street.citizens(), bigWallOfDeath.waitDuration, bigWallOfDeath.fightDuration, bigWallOfDeath.length, bigWallOfDeath.height);
             wallOfDeath.start();
+            this.draw().drawRect(340, 380, 400, 50);
         });
 
         this.street.addPeople(startingPeople);
@@ -260,6 +266,15 @@ export default class Play extends Phaser.State
                 this.street.addPeople(1, true);
             });
         }
+
+        this.draw().drawRect(840, 350, 70, 150);
+    }
+
+    private draw() {
+        this.graphics && this.graphics.destroy();
+        this.graphics = this.game.add.graphics(0, 0);
+        this.graphics.lineStyle(5, 0xFF0000, 1);
+        return this.graphics;
     }
 
     public update()
