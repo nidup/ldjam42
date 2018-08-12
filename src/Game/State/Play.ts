@@ -240,9 +240,16 @@ export default class Play extends Phaser.State
         this.currentMetalMovement = new Nothing();
         this.currentMetalMovement.start(this.draw());
 
-        this.game.time.events.add(littleCirclePitInfo.startingTime, () => {
+        const prepareTime = 1.5 * Phaser.Timer.SECOND;
+
+        // Circle pit 1
+        this.game.time.events.add(littleCirclePitInfo.startingTime - prepareTime, () => {
             const singerAudio = this.game.add.audio('i-want-a-circlepit', 1, false);
             singerAudio.play();
+            this.singerSay('CIRCLE PIT!')
+        });
+        this.game.time.events.add(littleCirclePitInfo.startingTime, () => {
+
             this.currentMetalMovement = new CirclePit(this.game, this.street.citizens(), littleCirclePitInfo.duration, littleCirclePitInfo.radiusMin, littleCirclePitInfo.radiusMax);
             this.currentMetalMovement.start(this.draw());
             this.game.time.events.add(littleCirclePitInfo.duration, () => {
@@ -251,9 +258,14 @@ export default class Play extends Phaser.State
             });
         });
 
-        this.game.time.events.add(littleWallOfDeath.startingTime, () => {
+        // Wall of death 1
+        this.game.time.events.add(littleWallOfDeath.startingTime - prepareTime, () => {
             const singerAudio = this.game.add.audio('the-wall-of-death', 1, false);
             singerAudio.play();
+            this.singerSay('WALL OF DEATH!');
+        });
+        this.game.time.events.add(littleWallOfDeath.startingTime, () => {
+
             this.currentMetalMovement = new WallOfDeath(this.game, this.street.citizens(), littleWallOfDeath.waitDuration, littleWallOfDeath.fightDuration, littleWallOfDeath.length, littleWallOfDeath.height);
             this.currentMetalMovement.start(this.draw());
             this.game.time.events.add(littleWallOfDeath.waitDuration + littleWallOfDeath.fightDuration, () => {
@@ -262,9 +274,13 @@ export default class Play extends Phaser.State
             });
         });
 
-        this.game.time.events.add(bigCirclePitInfo.startingTime, () => {
+        // Circle pit 2
+        this.game.time.events.add(bigCirclePitInfo.startingTime - prepareTime, () => {
             const singerAudio = this.game.add.audio('i-want-a-circlepit', 1, false);
             singerAudio.play();
+            this.singerSay('CIRCLE PIT!')
+        });
+        this.game.time.events.add(bigCirclePitInfo.startingTime, () => {
             this.currentMetalMovement = new CirclePit(this.game, this.street.citizens(), bigCirclePitInfo.duration, bigCirclePitInfo.radiusMin, bigCirclePitInfo.radiusMax);
             this.currentMetalMovement.start(this.draw());
             this.game.time.events.add(bigCirclePitInfo.duration, () => {
@@ -273,9 +289,13 @@ export default class Play extends Phaser.State
             });
         });
 
-        this.game.time.events.add(bigWallOfDeath.startingTime, () => {
+        // Wall of death 2
+        this.game.time.events.add(bigWallOfDeath.startingTime - prepareTime, () => {
             const singerAudio = this.game.add.audio('the-wall-of-death', 1, false);
             singerAudio.play();
+            this.singerSay('WALL OF DEATH!');
+        });
+        this.game.time.events.add(bigWallOfDeath.startingTime, () => {
             this.currentMetalMovement = new WallOfDeath(this.game, this.street.citizens(), bigWallOfDeath.waitDuration, bigWallOfDeath.fightDuration, bigWallOfDeath.length, bigWallOfDeath.height);
             this.currentMetalMovement.start(this.draw());
             this.game.time.events.add(bigWallOfDeath.waitDuration + bigWallOfDeath.fightDuration, () => {
@@ -365,14 +385,8 @@ export default class Play extends Phaser.State
 
         if (this.isInFuryMode()) {
             if (this.singerText.text === '') {
-                const text = SINGER_TEXTS[Math.ceil(Math.random() * SINGER_TEXTS.length)];
-                this.singerText.setText(text);
-                this.singerTextShadow.setText(text);
-
-                this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
-                    this.singerText.setText('');
-                    this.singerTextShadow.setText('');
-                });
+                const text = SINGER_TEXTS[Math.floor(Math.random() * SINGER_TEXTS.length)];
+                this.singerSay(text);
             }
         }
 
@@ -467,5 +481,15 @@ export default class Play extends Phaser.State
 
     private isInFuryMode() {
         return this.getPointsDiff() > 5
+    }
+
+    private singerSay(text: string) {
+        this.singerText.setText(text);
+        this.singerTextShadow.setText(text);
+
+        this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
+            this.singerText.setText('');
+            this.singerTextShadow.setText('');
+        });
     }
 }
