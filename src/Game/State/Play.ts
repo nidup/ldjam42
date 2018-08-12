@@ -1,6 +1,6 @@
 
 import {Street} from "../Street";
-import {Citizen} from "../../Character/Bot/Citizen";
+import {Citizen, TEXT_STYLE, TEXT_STYLE_BIG} from "../../Character/Bot/Citizen";
 import {Cop} from "../../Character/Bot/Cop";
 import {BackBag} from "../../Character/Player/BackBag";
 import {Config} from "../../Config";
@@ -28,6 +28,9 @@ export default class Play extends Phaser.State
     private rightBoundMargin: Phaser.TileSprite;
     private topBoundMargin: Phaser.TileSprite;
     private isFinalLevel: boolean = false;
+    private points: number = 0;
+    private pointsDisplay: Phaser.Text;
+    private pointsBackground: Phaser.Graphics;
     private graphics;
 
     public init (
@@ -256,6 +259,15 @@ export default class Play extends Phaser.State
             });
         }
 
+        const pointsPosition = new PIXI.Point(1000, 700);
+
+        this.pointsBackground = this.game.add.graphics(pointsPosition.x, pointsPosition.y);
+        this.pointsBackground.beginFill(0x000000);
+        this.pointsBackground.lineStyle(4, 0xFFFFFF);
+        this.pointsBackground.drawRect(0, 0, 142, 40);
+        this.pointsDisplay = this.game.add.text(pointsPosition.x + 10, pointsPosition.y + 10, this.points + '', TEXT_STYLE_BIG);
+
+
         this.draw().drawRect(840, 350, 70, 150);
 
         const music = this.game.add.audio('music');
@@ -271,25 +283,13 @@ export default class Play extends Phaser.State
 
     public update()
     {
-        /*
-        if (this.isFinalLevel) {
-            if (this.street.alienQueen().isDead()) {
-                const levelText = this.game.add.bitmapText(100, 300, 'cowboy','Congratz, you defeat the aliens!', 30);
-                levelText.alpha = 1;
-                const tweenAlpha = this.game.add.tween(levelText).to( { alpha: 0 }, 0, "Linear", true);
-                this.game.time.events.add(
-                    Phaser.Timer.SECOND * 10,
-                    function(){
-                        this.nextLevel();
-                    },
-                    this
-                );
-            }
-        } else {
-            if (this.street.isEmpty()) {
-                this.nextLevel();
-            }
-        }*/
+        this.points += Math.random();
+
+        let prout = (Math.ceil(this.points) + '');
+        while (prout.length < 8) {
+            prout = '.' + prout;
+        }
+        this.pointsDisplay.text = prout;
 
         this.game.physics.arcade.collide(this.street.player(), this.street.citizens().all());
 
