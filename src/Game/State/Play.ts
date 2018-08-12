@@ -127,7 +127,7 @@ export default class Play extends Phaser.State
             worldWidth += Config.mobileExtraSidePadding();
         }*/
 
-        this.rightBoundMargin = this.game.add.tileSprite(rightBoundMarginX, 0, sideMarginWidth, 800, 'Side', 0, interfaceLayer);
+        this.rightBoundMargin = this.game.add.tileSprite(rightBoundMarginX, 0, 100, 800, 'Side', 0, interfaceLayer);
         this.game.physics.enable(this.rightBoundMargin, Phaser.Physics.ARCADE);
         this.rightBoundMargin.body.immovable = true;
         this.rightBoundMargin.body.allowGravity = false;
@@ -200,7 +200,7 @@ export default class Play extends Phaser.State
         this.musicians.animations.play('play');
 
         const startingPeople = 100;
-        const finalPeople = 240;
+        const finalPeople = 300;
         const totalDuration = 37 * measureTime * Phaser.Timer.SECOND;
 
         const begginingSlow = [0, 9, 17, 24, 34, 40];
@@ -352,7 +352,7 @@ export default class Play extends Phaser.State
 
         this.street.addPeople(startingPeople);
 
-        for (let i = 0; i < (finalPeople - -startingPeople); i++) {
+        for (let i = 0; i < (finalPeople - startingPeople); i++) {
             this.game.time.events.add(totalDuration * Math.random(), () => {
                 this.street.addPeople(1, true);
             });
