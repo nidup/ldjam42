@@ -94,14 +94,15 @@ export default class Play extends Phaser.State
         interfaceLayer.name = 'Interface';
 
         let streetPositionX = 0;
-        let sideMarginWidth = 100;
+        let sideMarginWidth = 1;
         let rightCameraMarginX = this.game.width;
+        /*
         const detector = new DeviceDetector(this.game.device);
         if (detector.isMobile()) {
             streetPositionX += Config.mobileExtraSidePadding();
             sideMarginWidth = Config.mobileExtraSidePadding();
             rightCameraMarginX -= Config.mobileExtraSidePadding();
-        }
+        }*/
 
         const leftCameraMargin = this.game.add.tileSprite(0, 0, sideMarginWidth, 800, 'Side', 0, interfaceLayer);
         leftCameraMargin.fixedToCamera = true;
@@ -119,9 +120,10 @@ export default class Play extends Phaser.State
 
         let worldWidth = streetWidth;
         let rightBoundMarginX = streetWidth;
+        /*
         if (detector.isMobile()) {
             worldWidth += Config.mobileExtraSidePadding();
-        }
+        }*/
 
         this.rightBoundMargin = this.game.add.tileSprite(rightBoundMarginX, 0, sideMarginWidth, 800, 'Side', 0, interfaceLayer);
         this.game.physics.enable(this.rightBoundMargin, Phaser.Physics.ARCADE);
@@ -151,6 +153,12 @@ export default class Play extends Phaser.State
         //street.tileScale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
 
         let controller = null;
+        if (controller === null) {
+            controller = new KeyBoardController(this.game);
+        }
+
+        /*
+        let controller = null;
         if (this.controllerType === 'keyboard') {
             controller = new KeyBoardController(this.game);
         } else if (this.controllerType === 'gamepad') {
@@ -159,7 +167,7 @@ export default class Play extends Phaser.State
             controller = new VirtualPadController(this.game);
         } else {
             throw new Error('Unknown controller '+ this.controllerType);
-        }
+        }*/
 
         const backbag = new BackBag(this.previousInventory);
         const limits = new StreetLimits(streetPositionX, streetWidth);
