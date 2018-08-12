@@ -231,6 +231,8 @@ export default class Play extends Phaser.State
         this.currentMetalMovement.start(this.draw());
 
         this.game.time.events.add(littleCirclePitInfo.startingTime, () => {
+            const singerAudio = this.game.add.audio('i-want-a-circlepit', 1, false);
+            singerAudio.play();
             this.currentMetalMovement = new CirclePit(this.game, this.street.citizens(), littleCirclePitInfo.duration, littleCirclePitInfo.radiusMin, littleCirclePitInfo.radiusMax);
             this.currentMetalMovement.start(this.draw());
             this.game.time.events.add(littleCirclePitInfo.duration, () => {
@@ -240,6 +242,8 @@ export default class Play extends Phaser.State
         });
 
         this.game.time.events.add(littleWallOfDeath.startingTime, () => {
+            const singerAudio = this.game.add.audio('the-wall-of-death', 1, false);
+            singerAudio.play();
             this.currentMetalMovement = new WallOfDeath(this.game, this.street.citizens(), littleWallOfDeath.waitDuration, littleWallOfDeath.fightDuration, littleWallOfDeath.length, littleWallOfDeath.height);
             this.currentMetalMovement.start(this.draw());
             this.game.time.events.add(littleWallOfDeath.waitDuration + littleWallOfDeath.fightDuration, () => {
@@ -249,6 +253,8 @@ export default class Play extends Phaser.State
         });
 
         this.game.time.events.add(bigCirclePitInfo.startingTime, () => {
+            const singerAudio = this.game.add.audio('i-want-a-circlepit', 1, false);
+            singerAudio.play();
             this.currentMetalMovement = new CirclePit(this.game, this.street.citizens(), bigCirclePitInfo.duration, bigCirclePitInfo.radiusMin, bigCirclePitInfo.radiusMax);
             this.currentMetalMovement.start(this.draw());
             this.game.time.events.add(bigCirclePitInfo.duration, () => {
@@ -258,6 +264,8 @@ export default class Play extends Phaser.State
         });
 
         this.game.time.events.add(bigWallOfDeath.startingTime, () => {
+            const singerAudio = this.game.add.audio('the-wall-of-death', 1, false);
+            singerAudio.play();
             this.currentMetalMovement = new WallOfDeath(this.game, this.street.citizens(), bigWallOfDeath.waitDuration, bigWallOfDeath.fightDuration, bigWallOfDeath.length, bigWallOfDeath.height);
             this.currentMetalMovement.start(this.draw());
             this.game.time.events.add(bigWallOfDeath.waitDuration + bigWallOfDeath.fightDuration, () => {
