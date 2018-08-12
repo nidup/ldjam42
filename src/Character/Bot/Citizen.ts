@@ -92,8 +92,13 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
         this.animations.add('hell', [88, 89, 88, 89, 88, 89], 7, true);
 
-        const randAnim = Math.random();
+        this.street = street;
 
+        this.playRandomAnim();
+    }
+
+    private playRandomAnim() {
+        const randAnim = Math.random();
         if (randAnim < 0.2) {
             this.animations.play('idle');
         } else if (randAnim < 0.4) {
@@ -105,15 +110,6 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         } else {
             this.animations.play('drink');
         }
-
-
-
-        //this.fearStatus = new FearStatus();
-        //this.brain = new CitizenBrain(this, street, group, this.fearStatus);
-        //this.isReplicant = replicant;
-        this.street = street;
-
-        //new BrainStateMarker(group, this, this.brain, replicant);
     }
 
     update()
@@ -131,6 +127,10 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
             const newAngle = currentAngle + Math.PI * 2 * percentage;
             this.x = this.circlePitCenter.x + Math.cos(newAngle) * dist;
             this.y = this.circlePitCenter.y + Math.sin(newAngle) * dist;
+
+            if (this.animations.currentAnim.name !== 'walk') {
+                this.animations.play('walk');
+            }
 
             this.mirrorIfNeeded(previousX);
 
@@ -162,10 +162,9 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
             if (other instanceof Hero) {
                 if (this.venere == false) {
                     this.venere = true;
-                    const beforeVenerageAnim = this.animations.currentAnim.name;
                     this.animations.play('nervous');
                     this.game.time.events.add(Phaser.Timer.SECOND * 4, () => {
-                        this.animations.play(beforeVenerageAnim);
+                        this.playRandomAnim();
                         this.venere = false;
                     }, this);
                 }
@@ -185,6 +184,10 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
         if (this.isTooFarFromStartingPosition()) {
             this.rapprocheToiDeTaStartingPosition();
+        } else {
+            if (this.animations.currentAnim.name === 'walk') {
+                this.playRandomAnim();
+            }
         }
         if (Math.random() > 0.999) {
             // Random move
@@ -257,6 +260,10 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         );
         this.x = this.x - vector.x;
         this.y = this.y - vector.y;
+
+        if (this.animations.currentAnim.name !== 'walk' && this.animations.currentAnim.name !== 'nervous') {
+            this.animations.play('walk');
+        }
     }
 
     private rapprocheToiDeTaStartingPosition() {
