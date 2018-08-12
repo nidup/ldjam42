@@ -13,6 +13,7 @@ import {CirclePit} from "../../Yolo/CirclePit";
 import {WallOfDeath} from "../../Yolo/WallOfDeath";
 import {BLINKCOLOR, MetalMovement} from "../../Yolo/MetalMovement";
 import {Nothing} from "../../Yolo/Nothing";
+import {Exit} from "../../Yolo/Exit";
 
 const SINGER_TEXTS = [
     "You're awesome!",
@@ -40,7 +41,7 @@ export default class Play extends Phaser.State
     private isFinalLevel: boolean = false;
     private pointsDisplay: Phaser.Text;
     private pointsBackground: Phaser.Graphics;
-    private energyDisplay: Phaser.Text;
+    private energyForeground: Phaser.Graphics;
     private energyBackground: Phaser.Graphics;
     private graphics: Phaser.Graphics;
     private currentMetalMovement: MetalMovement;
@@ -320,6 +321,21 @@ export default class Play extends Phaser.State
             singerAudio2.play();
         });
 
+        this.game.time.events.add(bigWallOfDeath.startingTime, () => {
+            const singerAudio = this.game.add.audio('the-wall-of-death', 1, false);
+            singerAudio.play();
+            this.currentMetalMovement = new WallOfDeath(this.game, this.street.citizens(), bigWallOfDeath.waitDuration, bigWallOfDeath.fightDuration, bigWallOfDeath.length, bigWallOfDeath.height);
+            this.currentMetalMovement.start(this.draw());
+            this.game.time.events.add(bigWallOfDeath.waitDuration + bigWallOfDeath.fightDuration, () => {
+                this.currentMetalMovement = new Nothing();
+                this.currentMetalMovement.start(this.draw());
+            });
+        });
+
+        this.game.time.events.add(40 * measureTime * Phaser.Timer.SECOND, () => {
+            this.currentMetalMovement = new Exit();
+        });
+
         this.street.addPeople(startingPeople);
 
         for (let i = 0; i < (finalPeople - -startingPeople); i++) {
@@ -342,7 +358,11 @@ export default class Play extends Phaser.State
         this.energyBackground.beginFill(0x000000);
         this.energyBackground.lineStyle(4, 0xFFFFFF);
         this.energyBackground.drawRect(0, 0, 240, 54);
-        this.energyDisplay = this.game.add.text(energyPosition.x + 10, energyPosition.y + 10, '', TEXT_STYLE_BIG);
+
+        this.energyForeground = this.game.add.graphics(energyPosition.x, energyPosition.y);
+        this.energyForeground.beginFill(0x00FF00);
+        this.energyForeground.lineStyle(2, 0x000000);
+        this.energyForeground.drawRect(0, 0, 240, 52);
 
         this.game.time.events.loop(0.25 * Phaser.Timer.SECOND, () => {
             if (this.graphics) {
@@ -387,7 +407,9 @@ export default class Play extends Phaser.State
     {
         let player = this.street.player();
 
-        this.energyDisplay.text = Math.ceil(player.energy).toString()['padStart'](7, '.')+'%';
+        this.energyForeground.clear();
+        this.energyForeground.beginFill(player.energy > 50  ? 0x2dcd41 : player.energy  > 20 ? 0xffc80a : 0xf04b36 );
+        this.energyForeground.drawRect(0, 0, 240 * (player.energy / 100), 54);
         this.pointsDisplay.text = Math.ceil(player.points).toString()['padStart'](8, '.');
 
         if (this.currentMetalMovement) {
