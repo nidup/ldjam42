@@ -9,6 +9,7 @@ import {FearStatus} from "./FearStatus";
 import {CouldBeAReplicant} from "./CouldBeAReplicant";
 import {Hero} from "../Player/Hero";
 
+/*
 const reactions = [
     'hey!',
     'dude...',
@@ -23,7 +24,23 @@ const reactions = [
     'sorry, oh sorry',
     'calm down',
     'fuck you'
-];
+];*/
+
+const reactionsWithSounds = {
+    'hey!': ['hey'],
+    'dude...': ['dude'],
+    'no worries mate': ['no-worries-mates'],
+    'want some?': ['heyman-want-some'],
+    'STAHP': ['stap-go-away'],
+    'what the.': ['what-de'],
+    ':|': ['huuuuum'],
+    'FU': ['huuuuum'],
+    'don\'t touch my boobs': ['dont-touch-my-boobs'],
+    'you wanna dance?': ['youwannadance'],
+    'sorry, oh sorry': ['sorry-o-sorry'],
+    'calm down': ['calm-down'],
+    'fuck you': ['fuckyou1', 'fuckyou2', 'fuckyou3', 'fuckyou4', 'fuckyou5']
+};
 
 export const TEXT_STYLE = {
     align: 'center',
@@ -180,9 +197,15 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
                 }
                 this.animations.play('nervous');
 
-                let text = reactions[Math.floor(Math.random()*reactions.length)];
+                let text = Object.keys(reactionsWithSounds)[Math.floor(Math.random()*Object.keys(reactionsWithSounds).length)];
                 if (!this.text) {
                     this.text = this.game.add.text(this.x, this.y, text, TEXT_STYLE);
+
+                    let possibleSounds = reactionsWithSounds[text];
+                    let soundName = possibleSounds[Math.floor(Math.random()*possibleSounds.length)];
+                    const veneretAudio = this.game.add.audio(soundName, 1, false);
+                    veneretAudio.play();
+
                     let ref = this.text;
                     this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
                         ref.destroy();

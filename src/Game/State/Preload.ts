@@ -33,7 +33,7 @@ export default class Preload extends Phaser.State
         this.load.audio('allezla', 'assets/sounds/allezla.ogg');
         this.load.audio('clapclap', 'assets/sounds/clapclap.ogg');
         this.load.audio('fuckyou2', 'assets/sounds/fuckyou2.ogg');
-        this.load.audio('fuckyou', 'assets/sounds/fuckyou.ogg');
+        this.load.audio('fuckyou1', 'assets/sounds/fuckyou.ogg');
         this.load.audio('gueulage', 'assets/sounds/gueulage.ogg');
         this.load.audio('huuuuum', 'assets/sounds/huuuuum.ogg');
         this.load.audio('i-want-a-cirxlepit', 'assets/sounds/i-want-a-cirxlepit.ogg');
@@ -43,7 +43,7 @@ export default class Preload extends Phaser.State
         this.load.audio('a-poil', 'assets/sounds/a-poil.ogg');
         this.load.audio('dont-touch-my-boobs', 'assets/sounds/dont-touch-my-boobs.ogg');
         this.load.audio('fuckyou4', 'assets/sounds/fuckyou4.ogg');
-        this.load.audio('fuxkyou3', 'assets/sounds/fuxkyou3.ogg');
+        this.load.audio('fuckyou3', 'assets/sounds/fuxkyou3.ogg');
         this.load.audio('heyman-want-some', 'assets/sounds/heyman-want-some.ogg');
         this.load.audio('iaaaam-so-sorry', 'assets/sounds/iaaaam-so-sorry.ogg');
         this.load.audio('no-worries-mates', 'assets/sounds/no-worries-mates.ogg');
