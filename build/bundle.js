@@ -2203,7 +2203,7 @@ class Score extends Phaser.State {
         });
         this.tweetIt.events.onInputDown.add(() => {
             window.open('https://twitter.com/intent/tweet?text=I helped Johnny to survive a Metal Concert! ' +
-                'Try to beat my ' + this.score + ' points 🤘! %23LDJAM42 %23sorryohsorry ' + 'https://nidup.itch.io/sorry-oh-sorry');
+                'Try to beat my ' + this.score + ' points 🤘! %23LDJAM42 %23sorryohsorry ' + 'https://ldjam.com/events/ludum-dare/42/sorry-oh-sorry-hellfest-simulator');
         }, this);
     }
     update() {
