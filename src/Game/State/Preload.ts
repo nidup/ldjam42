@@ -97,30 +97,9 @@ export default class Preload extends Phaser.State
     }
 
     private loadGameImages() {
-        this.load.spritesheet('Top', 'assets/sprites/top.png', 1, 1);
-        this.load.spritesheet('Side', 'assets/sprites/side.png', 12, 12);
-        this.load.spritesheet('sky', 'assets/sprites/sky.png', 800, 600);
-        this.load.spritesheet('background', 'assets/sprites/background.png', 800, 600);
-        this.load.spritesheet('Inventory', 'assets/sprites/inventory.png', 300, 300);
-        this.load.spritesheet('LevelInstructions', 'assets/sprites/level.png', 400, 300);
         this.load.spritesheet('citizen1', 'assets/sprites/citizen4.png', 24, 24);
         this.load.spritesheet('citizen2', 'assets/sprites/citizen5.png', 24, 24);
-        this.load.spritesheet('cop', 'assets/sprites/cop.png', 32, 32);
-        this.load.spritesheet('cop-shotgun', 'assets/sprites/cop-shotgun.png', 32, 32);
-        this.load.spritesheet('enemy-machinegun', 'assets/sprites/enemy-machinegun.png', 32, 32);
         this.load.spritesheet('hero', 'assets/sprites/citizen4.png', 24, 24);
-        this.load.spritesheet('Bullet', 'assets/sprites/bullets.png', 10, 10);
-        this.load.spritesheet('Marker', 'assets/sprites/markers.png', 20, 20);
-        this.load.spritesheet('Gun', 'assets/sprites/gun.png', 20, 20);
-        this.load.spritesheet('ShotGun', 'assets/sprites/shotgun.png', 30, 20);
-        this.load.spritesheet('MachineGun', 'assets/sprites/machinegun.png', 30, 20);
-        this.load.spritesheet('Money', 'assets/sprites/money.png', 20, 20);
-        this.load.spritesheet('Menu', 'assets/sprites/menu.png', 800, 600);
-        this.load.spritesheet('Street', 'assets/sprites/street.png', 80, 110);
-        this.load.spritesheet('BuildingHostel', 'assets/sprites/building-hostel.png', 180, 240);
-        this.load.spritesheet('BuildingMedium', 'assets/sprites/building-medium.png', 180, 240);
-        this.load.spritesheet('BuildingSmall', 'assets/sprites/building-small.png', 120, 240);
-        this.load.spritesheet('AlienQueen', 'assets/sprites/alien-queen.png', 128, 128);
 
         this.load.spritesheet('main', 'assets/sprites/main.png', 600, 400);
         this.load.spritesheet('scene', 'assets/sprites/scene.png', 106, 291);
