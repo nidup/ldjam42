@@ -21,7 +21,7 @@ const reactionsWithSounds = {
     'you wanna dance?': ['youwannadance'],
     'calm down': ['calm-down'],
     'fuck you': ['fuckyou1', 'fuckyou2', 'fuckyou3', 'fuckyou4', 'fuckyou5'],
-    'burp': ['rototo2', 'rototo', 'bruitdegerbe3', 'bruitedegerb2', 'bruitdegerb']
+    'burp': ['rototo2', 'rototo', 'bruitdegerbe3', 'bruitedegerb2', 'bruitdegerb', 'ouuuufffw', 'ouuuuuffff2', 'huuuuum', 'ouuuufffw', 'ouuuuuffff2', 'huuuuum']
 };
 
 const playerApologizes = ['sorry-o-sorry', 'oups-sorry', 'iaaaam-so-sorry',
