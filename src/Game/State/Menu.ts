@@ -58,12 +58,12 @@ export default class Menu extends Phaser.State {
         const tweenAlpha = this.game.add.tween(this.startText).to( { alpha: 0.3 }, 0, "Linear", true);
         tweenAlpha.repeat(10000, 400);
 
-        const tutoX = controlX + 660;
+        const tutoX = controlX + 680;
         const tutoY = storyY + 150;
         const tuto = this.game.add.sprite(tutoX, tutoY, 'tuto');
         tuto.scale.set(0.5, 0.5);
 
-        const ldjamX = tutoX +90;
+        const ldjamX = tutoX +60;
         const ldjamY = tutoY + 280;
         const ldjamText = this.game.add.text(ldjamX, ldjamY, 'Hand-crafted with ❤️ for LDJAM 42'.toUpperCase(), LDJAM_TEXT_STYLE);
     }

@@ -1997,7 +1997,7 @@ class Preload extends Phaser.State {
         super(...arguments);
         this.skipMenu = false;
         this.skipToLevel = 1;
-        this.testScoreScreen = true;
+        this.testScoreScreen = false;
     }
     preload() {
         this.loadAudio();
