@@ -267,7 +267,7 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
                         this.game.time.events.add(Phaser.Timer.SECOND * 1, () => {
                             let sorryName = playerApologizes[Math.floor(Math.random() * playerApologizes.length)];
                             if (this.game) {
-                                const sorryAudio = this.game.add.audio(sorryName, 0.9, false);
+                                const sorryAudio = this.game.add.audio(sorryName, 1.0, false);
                                 sorryAudio.play();
                             }
                         }, this);
@@ -313,7 +313,7 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
 
     exit(zone)
     {
-        this.game.time.events.add(Math.random() * 10 * Phaser.Timer.SECOND, () => {
+        this.game.time.events.add(Math.random() * 20 * Phaser.Timer.SECOND, () => {
             this.exitZone = zone;
         });
     }
