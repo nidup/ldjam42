@@ -13,6 +13,7 @@ import {Citizens} from "./Bot/Citizens";
 import {Swats} from "./Bot/Swats";
 import {AlienQueen} from "./Bot/AlienQueen";
 import {PickableItem} from "./Player/PickableItem";
+import {ScoreDisplay} from "../Yolo/ScoreDisplay";
 
 export class CharactersGenerator
 {
@@ -42,7 +43,7 @@ export class CharactersGenerator
         this.heroPosition = heroPosition;
     }
 
-    generateHero(street: Street): Hero
+    generateHero(street: Street, scoreDisplay: ScoreDisplay): Hero
     {
         const x = (this.heroPosition) ? this.heroPosition.x : 100;
         const y = (this.heroPosition) ? this.heroPosition.y : 370;
@@ -55,7 +56,8 @@ export class CharactersGenerator
             street,
             this.backbag,
             this.controller,
-            this.heroGunType
+            this.heroGunType,
+            scoreDisplay
         );
     }
 

@@ -5,6 +5,7 @@ import {Hero} from "../Character/Player/Hero";
 import {Swats} from "../Character/Bot/Swats";
 import {CharactersGenerator} from "../Character/CharactersGenerator";
 import {AlienQueen} from "../Character/Bot/AlienQueen";
+import {ScoreDisplay} from "../Yolo/ScoreDisplay";
 
 export class Street
 {
@@ -15,7 +16,7 @@ export class Street
     private queen: AlienQueen;
     private generator;
 
-    constructor(generator: CharactersGenerator, lastLevel: boolean = false)
+    constructor(generator: CharactersGenerator, lastLevel: boolean = false, scoreDisplay: ScoreDisplay)
     {
         this.copRepository = new Cops();
         this.citizenRepository = new Citizens();
@@ -26,7 +27,7 @@ export class Street
         this.addPeople();
 
 
-        this.hero = generator.generateHero(this);
+        this.hero = generator.generateHero(this, scoreDisplay);
         if (lastLevel) {
             this.queen = generator.generateAlienQueen(this.hero);
         }

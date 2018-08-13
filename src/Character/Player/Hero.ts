@@ -19,6 +19,8 @@ import {Config} from "../../Config";
 import {Controller} from "../../Game/Controller";
 import {AggressivenessGauge} from "./AggressivenessGauge";
 import {Hospital} from "../../Building/Hospital";
+import Score from "../../Game/State/Score";
+import {ScoreDisplay} from "../../Yolo/ScoreDisplay";
 
 export class Hero extends Phaser.Sprite implements CanBeHurt
 {
@@ -40,6 +42,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
     public energy = 100;
     private exitZone;
     public finished = false;
+    private scoreDisplay: ScoreDisplay;
 
     constructor(
         group: Phaser.Group,
@@ -49,12 +52,14 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         street: Street,
         backbag: BackBag,
         controller: Controller,
-        gunIdentifier: string
+        gunIdentifier: string,
+        scoreDisplay: ScoreDisplay
     ) {
         super(group.game, x, y, key, 0);
         group.game.physics.enable(this, Phaser.Physics.ARCADE);
         group.add(this);
         this.group = group;
+        this.scoreDisplay = scoreDisplay;
 
         this.inputEnabled = true;
         this.scale.setTo(-Config.pixelScaleRatio(), Config.pixelScaleRatio());
@@ -185,6 +190,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
             this.animations.play(walkAnimName);
             if (this.energy)  {
                 this.x += 5;
+                this.scoreDisplay.animPushing();
                 const change = 0.5;
                 const minRadius = 3;
                 const radius = this.body.radius - change;
