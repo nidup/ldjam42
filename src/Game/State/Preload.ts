@@ -3,7 +3,7 @@ export default class Preload extends Phaser.State
 {
     private skipMenu = false;
     private skipToLevel = 1;
-    private testScoreScreen = true;
+    private testScoreScreen = false;
 
     public preload ()
     {
