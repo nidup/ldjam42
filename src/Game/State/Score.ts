@@ -7,13 +7,21 @@ export const STORY_TEXT_STYLE = {
     font: '15px PICO-8'
 };
 
-export default class Menu extends Phaser.State {
+export default class Score extends Phaser.State {
 
     private startText : Phaser.Text;
-    private background;
     private keyboardController: KeyBoardController;
     private chosenController: Controller;
+    private background;
     private starting: boolean = false;
+    private score: number;
+
+    public init (
+        controllerType: string,
+        score: number
+    ) {
+        this.score = score;
+    }
 
     public create ()
     {
@@ -30,7 +38,7 @@ export default class Menu extends Phaser.State {
         const storyX = titleX - 90;
         const storyY = titleY + 320;
         const storyText =
-            "Johnny Kilmister is a huge fan of Motor Raid.\n" +
+            "AAAAAA Kilmister is a huge fan of Motor Raid.\n" + this.score+
             "He never went to any concert because he’s not comfortable in a crowd.\n" +
             "Motor Raid just announced their very last show, Johnny decided to go.\n" +
             "Help Johnny to level up his metal concert skills!";
@@ -70,11 +78,6 @@ export default class Menu extends Phaser.State {
                 },
                 this
             );
-
-            this.game.time.events.add(Phaser.Timer.SECOND * 0.5, () => {
-                this.camera.shake(0.006, 2000);
-                this.camera.flash(0xffffff, 100, true, 0.3);
-            });
         }
     }
 

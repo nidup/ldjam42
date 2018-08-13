@@ -4,6 +4,7 @@ import Boot from "./Game/State/Boot";
 import Preload from "./Game/State/Preload";
 import Menu from "./Game/State/Menu";
 import Play from "./Game/State/Play";
+import Score from "./Game/State/Score";
 
 class SimpleGame extends Phaser.Game {
 
@@ -22,6 +23,7 @@ class SimpleGame extends Phaser.Game {
         this.state.add('Preload', Preload);
         this.state.add('Menu', Menu);
         this.state.add('Play', Play);
+        this.state.add('Score', Score);
         this.state.start('Boot');
     }
 }
