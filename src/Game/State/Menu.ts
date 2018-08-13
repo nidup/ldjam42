@@ -3,6 +3,12 @@ import {Config} from "../../Config";
 import {Controller, KeyBoardController} from "../Controller";
 import {TEXT_STYLE, TEXT_STYLE_BIG, TEXT_STYLE_MIDDLE} from "../../Character/Bot/Citizen";
 
+export const STORY_TEXT_STYLE = {
+    align: 'left',
+    fill: '#fff',
+    font: '15px PICO-8'
+};
+
 export default class Menu extends Phaser.State {
 
     private startText : Phaser.Text;
@@ -21,40 +27,25 @@ export default class Menu extends Phaser.State {
         this.chosenController = this.keyboardController;
         this.game.stage.backgroundColor = '#050505';
 
-//        let pointsDisplay = this.game.add.text(10, 10, 'michel une chanson', TEXT_STYLE_BIG);
+        const titleX = 160;
+        const titleY = 0;
 
+        this.background = this.game.add.sprite(titleX, titleY, 'splash');
+//        this.background.scale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
+        this.background.scale.set(1.2, 1.2);
 
-        /*
-        const verySmallFontSize = 10;
-        const smallFontSize = 14;
-        const mediumFontSize = 20;
-        const largeFontSize = 34;
+        const storyX = titleX - 100;
+        const storyY = titleY + 320;
+        const storyText =
+            "Johnny Kilmister is a huge fan of Motor Raid.\n" +
+            "He never went to any concert because he’s not comfortable in a crowd.\n" +
+            "Motor Raid just announced their very last show, Johnny decided to go.\n" +
+            "Help Johnny to level up his metal concert skills!";
+        this.game.add.text(storyX, storyY, storyText, STORY_TEXT_STYLE);
 
-*/
-        this.background = this.game.add.sprite(0, 0, 'splash');
-        this.background.scale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
-
-        let titleX = 260;
-        const titleY = 113;
-  //      this.game.add.bitmapText(titleX, titleY, 'cowboy','Cowboys vs Aliens', largeFontSize);
-
-        const storyX = titleX - 150;
-        const storyY = titleY + 150;
-        const storyText = "Hey Rick MacMorty,\n\n"
-            +"Aliens are infesting citizens in our town, you\n"
-            +"can't distinguish who is sane or contaminated.\n"
-            +"You have only one option... kill them all to stop\n"
-            +"this plague and save the far west.\n";
- //       this.game.add.bitmapText(storyX, storyY, 'cowboy',storyText, mediumFontSize);
-/*
-        const controlsChoiceX = storyX;
-        const controlsChoiceY = storyY + 350;
-        this.setupForComputer(controlsChoiceX, controlsChoiceY, smallFontSize);
-*/
-
-        const startX = storyX + 250;
-        const startY = storyY + 220;
-        this.startText = this.game.add.text(startX, startY, 'Press space key to start', TEXT_STYLE);
+        const startX = storyX + 310;
+        const startY = storyY + 130;
+        this.startText = this.game.add.text(startX, startY, 'Press space key to start', STORY_TEXT_STYLE);
         //this.startText = this.game.add.bitmapText(startX, startY, 'cowboy','', mediumFontSize);
         this.startText.alpha = 1;
         const tweenAlpha = this.game.add.tween(this.startText).to( { alpha: 0.3 }, 0, "Linear", true);
