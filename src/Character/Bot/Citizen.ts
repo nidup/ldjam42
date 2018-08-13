@@ -264,6 +264,9 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
                     });
                     if (!this.text) {
                         this.text = this.game.add.text(this.x, this.y, text, TEXT_STYLE);
+                        this.text.alpha = Math.max(1.1 - this.street.citizens().all().filter((citizen: Citizen) => {
+                            return citizen.isVenere();
+                        }).length * 0.1, 0.6);
 
                         const venereAudio = this.game.add.audio(soundName, 0.6, false);
                         venereAudio.play();
@@ -315,6 +318,10 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
         }
 
         this.mirrorIfNeeded(previousX);
+    }
+
+    isVenere() {
+        return this.venere;
     }
 
     exit(zone)

@@ -477,10 +477,6 @@ export default class Play extends Phaser.State
             }
         }
 
-        // this.energyForeground.clear();
-        // this.energyForeground.beginFill(player.energy > 50  ? 0x2dcd41 : player.energy  > 20 ? 0xffc80a : 0xf04b36 );
-        // this.energyForeground.drawRect(0, 0, 240 * (player.energy / 100), 54);
-
         if (this.currentMetalMovement) {
             if (this.currentMetalMovement.isIn(this.street.player().position)) {
                 this.graphics.visible = false;

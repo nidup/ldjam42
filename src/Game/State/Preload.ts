@@ -117,6 +117,7 @@ export default class Preload extends Phaser.State
         this.load.spritesheet('score_main', 'assets/sprites/score_main.png', 96, 65);
         this.load.spritesheet('score_power', 'assets/sprites/score_power.png', 82, 16);
         this.load.spritesheet('player_mini', 'assets/sprites/player_mini.png', 16, 19);
+        this.load.spritesheet('Side', 'assets/sprites/side.png', 12, 12);
     }
 
     private loadFonts()

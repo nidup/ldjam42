@@ -71,6 +71,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         this.animations.add('walk', [94, 95, 96, 97, 98, 99], 8, true);
         this.animations.add('die', [0], 12, false);
         this.animations.add('sorry', [103, 104, 105, 106, 107, 108], 8, false);
+        this.animations.add('recule', [116, 117, 118, 119, 120, 121], 16, true);
 
         this.controller = controller;
 
@@ -85,16 +86,25 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         if (this.exitZone && this.exitZone.isIn(this.position)) {
             this.finished = true;
         }
-        this.controls();
+
+        let swithAnim = true;
+
         let angryCount = this.citizens.all().filter(citizen => citizen.text).length;
         if (angryCount > 2 && this.x > 0) {
+            if (this.animations.currentAnim.name !== 'recule') {
+                this.animations.play('recule', 16, true);
+            }
             this.body.checkCollision.none = !this.movingToTheRight();
             this.x -= 1;
             this.y += (Math.random() - 0.5) * 4;
+
+            swithAnim = false;
         }
         else {
             this.body.checkCollision.none = false;
         }
+
+        this.controls(swithAnim);
 
         this.mirrorIfNeeded();
 
@@ -167,7 +177,7 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         return this.gameEvents;
     }
 
-    private controls()
+    private controls(switchAnim)
     {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
@@ -179,12 +189,13 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
         }
 
         if (this.controller.shooting()) {
-            this.energy = Math.max(0, this.energy - 1);
-            this.animations.play(walkAnimName);
+            this.energy = Math.max(0, this.energy - 4);
+            if (switchAnim) { this.animations.play(walkAnimName); }
             if (this.energy)  {
-                this.x += 5;
+                this.x += 8;
+                this.y += -2 + Math.random() * 4;
                 this.scoreDisplay.animPushing();
-                const change = 0.5;
+                const change = 1;
                 const minRadius = 3;
                 const radius = this.body.radius - change;
                 if (radius > minRadius) {
@@ -200,25 +211,25 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
             if (this.controller.goingLeft()) {
                 this.body.velocity.x = -this.speed;
                 this.gun.turnToTheLeft();
-                this.animations.play(walkAnimName);
+                if (switchAnim) { this.animations.play(walkAnimName); }
 
             } else if (this.controller.goingRight()) {
                 this.body.velocity.x = this.speed;
                 this.gun.turnToTheRight();
-                this.animations.play(walkAnimName);
+                if (switchAnim) { this.animations.play(walkAnimName); }
             }
 
             if (this.controller.goingUp()) {
                 this.body.velocity.y = -this.speed;
-                this.animations.play(walkAnimName);
+                if (switchAnim) { this.animations.play(walkAnimName); }
 
             } else if (this.controller.goingDown()) {
                 this.body.velocity.y = this.speed;
-                this.animations.play(walkAnimName);
+                if (switchAnim) { this.animations.play(walkAnimName); }
             }
 
             if (!this.controller.goingLeft() && !this.controller.goingRight() && !this.controller.goingDown() && !this.controller.goingUp()) {
-                this.animations.play('idle');
+                if (switchAnim) { this.animations.play('idle'); }
             }
         }
     }

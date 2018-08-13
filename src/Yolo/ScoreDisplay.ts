@@ -81,6 +81,10 @@ export class ScoreDisplay {
     }
 
     animPushing() {
+        this.power.visible = false;
+        this.game.time.events.add(0.15 * Phaser.Timer.SECOND, () => {
+            this.power.visible = true;
+        });
         this.playerMini.animations.play('push', 12, true);
         const now = window.performance.now();
         this.stopAnim = now + 500;
