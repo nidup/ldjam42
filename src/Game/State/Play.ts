@@ -17,6 +17,8 @@ import {Exit} from "../../Yolo/Exit";
 import {BigText} from "../../Yolo/BigText";
 import {BigTextPositionner} from "../../Yolo/BigTextPositionner";
 
+const POINTS_MULTIPLIER = 20;
+
 const SINGER_TEXTS = {
     "You're awesome!": 'singer-yourawesome',
     'You rock!!!': 'singer-yourock',
@@ -455,6 +457,9 @@ export default class Play extends Phaser.State
 
     private displayEndScreen() {
         console.log('Finished!');
+        const player = this.street.player();
+        const score = Math.ceil(player.points * POINTS_MULTIPLIER);
+        this.game.state.start('Score', true, false, 'keyboard', score);
     }
 
     public update()
@@ -473,12 +478,13 @@ export default class Play extends Phaser.State
         this.energyForeground.clear();
         this.energyForeground.beginFill(player.energy > 50  ? 0x2dcd41 : player.energy  > 20 ? 0xffc80a : 0xf04b36 );
         this.energyForeground.drawRect(0, 0, 240 * (player.energy / 100), 54);
-        this.pointsDisplay.text = Math.ceil(player.points * 20).toString()['padStart'](8, '.');
+        this.pointsDisplay.text = Math.ceil(player.points * POINTS_MULTIPLIER).toString()['padStart'](8, '.');
 
         if (this.currentMetalMovement) {
             if (this.currentMetalMovement.isIn(this.street.player().position)) {
                 if (this.currentMetalMovement.constructor.name === 'Exit') {
                     this.displayEndScreen();
+                    return;
                 }
                 if (this.beginningIsIn === null) {
                     this.beginningIsIn = window.performance.now();
