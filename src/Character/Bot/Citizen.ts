@@ -44,6 +44,12 @@ export const TEXT_STYLE_MIDDLE = {
     font: '14px PICO-8'
 };
 
+export const TEXT_STYLE_HUGE = {
+    align: 'center',
+    fill: '#fff',
+    font: '60px PICO-8'
+};
+
 export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplicant
 {
     public body: Phaser.Physics.Arcade.Body;

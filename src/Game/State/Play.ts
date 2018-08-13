@@ -14,6 +14,7 @@ import {WallOfDeath} from "../../Yolo/WallOfDeath";
 import {BLINKCOLOR, MetalMovement} from "../../Yolo/MetalMovement";
 import {Nothing} from "../../Yolo/Nothing";
 import {Exit} from "../../Yolo/Exit";
+import {BigText} from "../../Yolo/BigText";
 
 const SINGER_TEXTS = [
     "You're awesome!",
@@ -51,6 +52,7 @@ export default class Play extends Phaser.State
     private singerTextShadow: Phaser.Text = null;
     private lamps: Phaser.Sprite[];
     private musicians;
+    private bigTexts: BigText[];
 
     public init (
         controllerType: string,
@@ -72,6 +74,7 @@ export default class Play extends Phaser.State
 
     public create()
     {
+        this.bigTexts = [];
         if (Config.debug()) {
             this.game.time.advancedTiming = true
         }
@@ -420,6 +423,8 @@ export default class Play extends Phaser.State
 
         this.currentMetalMovement = new Nothing();
         this.currentMetalMovement.start(this.draw());
+
+        this.bigTexts.push(new BigText(this.game, 'WALL OF DEATH!'));
     }
 
     private draw() {
@@ -482,6 +487,15 @@ export default class Play extends Phaser.State
         this.game.physics.arcade.collide(this.rightBoundMargin, this.street.citizens().all());
 
         this.characterLayer.sort('y', Phaser.Group.SORT_ASCENDING);
+
+        let i = 0;
+        while (i < this.bigTexts.length) {
+            if (this.bigTexts[i].update()) {
+                i++;
+            } else {
+                this.bigTexts.splice(i, 1);
+            }
+        }
     }
 
     public render()
