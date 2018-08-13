@@ -7,8 +7,6 @@ import {Controller} from "../Game/Controller";
 import {Street} from "../Game/Street";
 import {Citizen} from "./Bot/Citizen";
 import {Citizens} from "./Bot/Citizens";
-import {AlienQueen} from "./Bot/AlienQueen";
-import {PickableItem} from "./Player/PickableItem";
 import {ScoreDisplay} from "../Yolo/ScoreDisplay";
 
 export class CharactersGenerator
@@ -55,19 +53,6 @@ export class CharactersGenerator
             this.heroGunType,
             scoreDisplay
         );
-    }
-
-    generateAlienQueen(hero: Hero): AlienQueen
-    {
-        const queenX = 700;
-        const queenY = 620;
-        const firstWeaponX = queenX - 450;
-        const firstWeaponY = queenY - 20;
-        new PickableItem(this.characterGroup, firstWeaponX, firstWeaponY, 'MachineGun', hero);
-        new PickableItem(this.characterGroup, firstWeaponX, firstWeaponY+50, 'MachineGun', hero);
-        new PickableItem(this.characterGroup, firstWeaponX, firstWeaponY+100, 'MachineGun', hero);
-        new PickableItem(this.characterGroup, firstWeaponX, firstWeaponY+150, 'MachineGun', hero);
-        return new AlienQueen(this.characterGroup, queenX, queenY, 'AlienQueen');
     }
 
     generateRandomPosition(citizens: Citizens)
