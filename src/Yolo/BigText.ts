@@ -6,12 +6,14 @@ export class BigText {
     private phaserText: Phaser.Text;
     private phaserTextShadow: Phaser.Text;
     private shouldDisappear: boolean = false;
+    private position: number;
 
-    constructor(game: Phaser.Game, text: string) {
+    constructor(game: Phaser.Game, text: string, position: number) {
         this.game = game;
         this.text = text;
         this.phaserText = null;
         this.phaserTextShadow = null;
+        this.position = position;
     }
 
     private display() {
@@ -48,10 +50,14 @@ export class BigText {
                 }
             } else {
                 if (this.phaserText.scale.x > 1) {
+                    const previousScale = this.phaserText.scale.x;
                     this.phaserText.scale.set(this.phaserText.scale.x - 0.08);
                     this.phaserText.alpha = -this.phaserText.scale.x + 2;
                     this.phaserTextShadow.scale.set(this.phaserText.scale.x - 0.08);
                     this.phaserTextShadow.alpha = (-this.phaserText.scale.x + 2) / 2;
+                    if (this.phaserText.scale.x <= 1 && previousScale > 1) {
+                        this.game.camera.shake(0.006, 100);
+                    }
                 } else {
                     this.phaserText.alpha = 1;
                     this.phaserTextShadow.alpha = 0.5;
@@ -66,8 +72,8 @@ export class BigText {
 
     private centerTexts() {
         this.phaserText.x = 600 - this.phaserText.width / 2;
-        this.phaserText.y = 300 - this.phaserText.height / 2;
+        this.phaserText.y = 150 - this.phaserText.height / 2 + this.position * 100;
         this.phaserTextShadow.x = 600 - this.phaserText.width / 2 + 50;
-        this.phaserTextShadow.y = 300 - this.phaserText.height / 2 + 50;
+        this.phaserTextShadow.y = 150 - this.phaserText.height / 2 + 50 + this.position * 100;
     }
 }

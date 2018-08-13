@@ -15,6 +15,7 @@ import {BLINKCOLOR, MetalMovement} from "../../Yolo/MetalMovement";
 import {Nothing} from "../../Yolo/Nothing";
 import {Exit} from "../../Yolo/Exit";
 import {BigText} from "../../Yolo/BigText";
+import {BigTextPositionner} from "../../Yolo/BigTextPositionner";
 
 const SINGER_TEXTS = [
     "You're awesome!",
@@ -48,11 +49,11 @@ export default class Play extends Phaser.State
     private currentMetalMovement: MetalMovement;
     private beginningIsIn = null;
     private singerText: Phaser.Text = null;
-    private finishText: Phaser.Text = null;
     private singerTextShadow: Phaser.Text = null;
     private lamps: Phaser.Sprite[];
     private musicians;
-    private bigTexts: BigText[];
+    private previousDiffPoints: number = 0;
+    private bigTextPositionner: BigTextPositionner;
 
     public init (
         controllerType: string,
@@ -74,7 +75,8 @@ export default class Play extends Phaser.State
 
     public create()
     {
-        this.bigTexts = [];
+        this.bigTextPositionner = new BigTextPositionner(this.game);
+
         if (Config.debug()) {
             this.game.time.advancedTiming = true
         }
@@ -207,7 +209,7 @@ export default class Play extends Phaser.State
         const finalPeople = 300;
         const totalDuration = 37 * measureTime * Phaser.Timer.SECOND;
 
-        const begginingSlow = [0, 9, 17, 24, 34, 40];
+        const begginingSlow = [0, 9, 17, 24, 34];
         const beginningHard = [5, 15, 20, 30, 38];
 
         begginingSlow.forEach((measure) => {
@@ -262,7 +264,7 @@ export default class Play extends Phaser.State
         this.game.time.events.add(littleCirclePitInfo.startingTime - prepareTime, () => {
             const singerAudio = this.game.add.audio('i-want-a-circlepit', 1, false);
             singerAudio.play();
-            this.singerSay('CIRCLE PIT!')
+            this.bigTextPositionner.push('Circle pit!');
         });
         this.game.time.events.add(littleCirclePitInfo.startingTime, () => {
             this.currentMetalMovement = new CirclePit(this.game, this.street.citizens(), littleCirclePitInfo.duration, littleCirclePitInfo.radiusMin, littleCirclePitInfo.radiusMax);
@@ -280,7 +282,7 @@ export default class Play extends Phaser.State
         this.game.time.events.add(littleWallOfDeath.startingTime - prepareTime, () => {
             const singerAudio = this.game.add.audio('the-wall-of-death', 1, false);
             singerAudio.play();
-            this.singerSay('WALL OF DEATH!');
+            this.bigTextPositionner.push('Wall of death!');
         });
         this.game.time.events.add(littleWallOfDeath.startingTime, () => {
             this.currentMetalMovement = new WallOfDeath(this.game, this.street.citizens(), littleWallOfDeath.waitDuration, littleWallOfDeath.fightDuration, littleWallOfDeath.length, littleWallOfDeath.height);
@@ -298,7 +300,7 @@ export default class Play extends Phaser.State
         this.game.time.events.add(bigCirclePitInfo.startingTime - prepareTime, () => {
             const singerAudio = this.game.add.audio('i-want-a-circlepit', 1, false);
             singerAudio.play();
-            this.singerSay('CIRCLE PIT!')
+            this.bigTextPositionner.push('CIRCLE PIT!');
         });
         this.game.time.events.add(bigCirclePitInfo.startingTime, () => {
             this.currentMetalMovement = new CirclePit(this.game, this.street.citizens(), bigCirclePitInfo.duration, bigCirclePitInfo.radiusMin, bigCirclePitInfo.radiusMax);
@@ -318,7 +320,7 @@ export default class Play extends Phaser.State
         this.game.time.events.add(bigWallOfDeath.startingTime - prepareTime, () => {
             const singerAudio = this.game.add.audio('the-wall-of-death', 1, false);
             singerAudio.play();
-            this.singerSay('WALL OF DEATH!');
+            this.bigTextPositionner.push('WALL OF DEATH!');
         });
         this.game.time.events.add(bigWallOfDeath.startingTime, () => {
             this.currentMetalMovement = new WallOfDeath(this.game, this.street.citizens(), bigWallOfDeath.waitDuration, bigWallOfDeath.fightDuration, bigWallOfDeath.length, bigWallOfDeath.height);
@@ -340,12 +342,12 @@ export default class Play extends Phaser.State
             this.hellyeah(1.0, 8);
         });
 
-        this.game.time.events.add(42 * measureTime * Phaser.Timer.SECOND, () => {
+        this.game.time.events.add(40 * measureTime * Phaser.Timer.SECOND, () => {
             this.currentMetalMovement = new Exit(this.street.citizens(), this.street.player());
             this.currentMetalMovement.start(this.draw());
         });
 
-        this.game.time.events.add(40.1 * measureTime * Phaser.Timer.SECOND, () => {
+        this.game.time.events.add(39.5 * measureTime * Phaser.Timer.SECOND, () => {
             this.musicians.animations.stop();
             this.lamps.forEach(lamp => lamp.destroy());
         });
@@ -419,12 +421,8 @@ export default class Play extends Phaser.State
         this.singerTextShadow.fill = '#000';
         this.singerText = this.game.add.text(textPos.x, textPos.y, '', TEXT_STYLE_MIDDLE);
 
-        this.finishText = this.game.add.text(textPos.x, textPos.y, '', TEXT_STYLE_BIG);
-
         this.currentMetalMovement = new Nothing();
         this.currentMetalMovement.start(this.draw());
-
-        this.bigTexts.push(new BigText(this.game, 'WALL OF DEATH!'));
     }
 
     private draw() {
@@ -444,7 +442,7 @@ export default class Play extends Phaser.State
         let player = this.street.player();
 
         if (player.finished) {
-            this.finishText.text = 'BYE';
+            this.singerSay('Thank you! Bye!');
         }
 
         this.energyForeground.clear();
@@ -465,6 +463,12 @@ export default class Play extends Phaser.State
                 this.beginningIsIn = null;
             }
         }
+
+        if (this.switchPalier()) {
+            this.bigTextPositionner.push('bonus x' + this.switchPalier());
+        }
+        this.previousDiffPoints = this.getPointsDiff();
+
 
         if (this.isInFuryMode()) {
             if (this.singerText.text === '') {
@@ -488,14 +492,7 @@ export default class Play extends Phaser.State
 
         this.characterLayer.sort('y', Phaser.Group.SORT_ASCENDING);
 
-        let i = 0;
-        while (i < this.bigTexts.length) {
-            if (this.bigTexts[i].update()) {
-                i++;
-            } else {
-                this.bigTexts.splice(i, 1);
-            }
-        }
+        this.bigTextPositionner.update();
     }
 
     public render()
@@ -599,5 +596,17 @@ export default class Play extends Phaser.State
                 citizens[i].hellYeah(duration);
             });
         }
+    }
+
+    private switchPalier() {
+        const paliers = [5, 8, 11, 14, 17, 20, 23, 26, 29];
+        for (let i = 0; i < paliers.length; i++) {
+            const limit = paliers[i];
+            if (this.previousDiffPoints < limit && this.getPointsDiff() >= limit) {
+                return i + 2;
+            }
+        };
+
+        return null;
     }
 }
