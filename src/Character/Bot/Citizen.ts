@@ -10,21 +10,23 @@ import {CouldBeAReplicant} from "./CouldBeAReplicant";
 import {Hero} from "../Player/Hero";
 
 const reactionsWithSounds = {
-    'hey!': ['hey'],
+    'hey!': ['hey', 'hey1', 'hey2', 'hey3', 'hey4'],
     'dude...': ['dude'],
-    'no worries mate': ['no-worries-mates'],
-    'want some?': ['heyman-want-some'],
-    'STAHP': ['stap-go-away'],
+    'no worries mate': ['no-worries-mates', 'noworries2'],
+    'want some?': ['heyman-want-some', 'wantsome2'],
+    'STAHP': ['stap-go-away', 'stap2'],
     'what the.': ['what-de'],
-    ':|': ['ouuuufffw'],
+    ':|': ['ouuuufffw', 'ouuuuuffff2'],
     'FU': ['huuuuum'],
     'don\'t touch my boobs': ['dont-touch-my-boobs'],
     'you wanna dance?': ['youwannadance'],
     'calm down': ['calm-down'],
-    'fuck you': ['fuckyou1', 'fuckyou2', 'fuckyou3', 'fuckyou4', 'fuckyou5']
+    'fuck you': ['fuckyou1', 'fuckyou2', 'fuckyou3', 'fuckyou4', 'fuckyou5'],
+    'burp': ['rototo2', 'rototo', 'bruitdegerbe3', 'bruitedegerb2', 'bruitdegerb']
 };
 
-const playerApologizes = ['sorry-o-sorry', 'oups-sorry', 'iaaaam-so-sorry'];
+const playerApologizes = ['sorry-o-sorry', 'oups-sorry', 'iaaaam-so-sorry',
+    'sorry1', 'sorry3', 'sorry6', 'sorry9', 'sorry2', 'sorry5', 'sorry8', 'sorry4', 'sorry7', 'sorry10'];
 
 export const TEXT_STYLE = {
     align: 'center',
@@ -249,12 +251,16 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
                     }
                     this.animations.play('nervous');
 
-                    let text = Object.keys(reactionsWithSounds)[Math.floor(Math.random() * Object.keys(reactionsWithSounds).length)];
+                    let allSounds = Object.keys(reactionsWithSounds).reduce((acc, key) => {
+                        return acc.concat(reactionsWithSounds[key]);
+                    }, []);
+                    let soundName = allSounds[Math.floor(Math.random() * allSounds.length)];
+                    let text = Object.keys(reactionsWithSounds).find((key) => {
+                        return reactionsWithSounds[key].indexOf(soundName) >= 0;
+                    });
                     if (!this.text) {
                         this.text = this.game.add.text(this.x, this.y, text, TEXT_STYLE);
 
-                        let possibleSounds = reactionsWithSounds[text];
-                        let soundName = possibleSounds[Math.floor(Math.random() * possibleSounds.length)];
                         const venereAudio = this.game.add.audio(soundName, 0.6, false);
                         venereAudio.play();
 
