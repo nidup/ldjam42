@@ -17,8 +17,6 @@ export default class Menu extends Phaser.State {
     private controlsKeyboardText: string;
     private controlsText: Phaser.BitmapText;
     private chosenController: Controller;
-    private shootAudio: Phaser.Sound;
-    private music: Phaser.Sound;
     private starting: boolean = false;
 
     public create ()
@@ -31,10 +29,9 @@ export default class Menu extends Phaser.State {
         const titleY = 0;
 
         this.background = this.game.add.sprite(titleX, titleY, 'splash');
-//        this.background.scale.set(Config.pixelScaleRatio(), Config.pixelScaleRatio());
         this.background.scale.set(1.2, 1.2);
 
-        const storyX = titleX - 100;
+        const storyX = titleX - 90;
         const storyY = titleY + 320;
         const storyText =
             "Johnny Kilmister is a huge fan of Motor Raid.\n" +
@@ -43,36 +40,26 @@ export default class Menu extends Phaser.State {
             "Help Johnny to level up his metal concert skills!";
         this.game.add.text(storyX, storyY, storyText, STORY_TEXT_STYLE);
 
-        const startX = storyX + 310;
-        const startY = storyY + 130;
+        const controlX = storyX;
+        const controlY = storyY + 190;
+        const controlText =
+            "> Controls:\n" +
+            "- Press arrow keys to move\n" +
+            "- Spam space key to pass through the crowd\n\n" +
+            "> Increase your concert skills by staying\nas much as possible in blue action area!\n";
+        this.game.add.text(controlX, controlY, controlText, STORY_TEXT_STYLE);
+
+        const startX = controlX + 110;
+        const startY = controlY + 190;
         this.startText = this.game.add.text(startX, startY, 'Press space key to start', STORY_TEXT_STYLE);
-        //this.startText = this.game.add.bitmapText(startX, startY, 'cowboy','', mediumFontSize);
         this.startText.alpha = 1;
         const tweenAlpha = this.game.add.tween(this.startText).to( { alpha: 0.3 }, 0, "Linear", true);
         tweenAlpha.repeat(10000, 400);
-/*
-        const gunSprite = this.game.add.sprite(startX - 50, startY , 'Gun', 1);
-        gunSprite.scale.setTo(Config.pixelScaleRatio(), Config.pixelScaleRatio());
-        gunSprite.animations.add('selected', [0, 1], 1, true);
-        gunSprite.play('selected');
 
-        const gunSprite2 = this.game.add.sprite(startX + 550, startY , 'Gun', 1);
-        gunSprite2.scale.setTo(Config.pixelScaleRatio(), Config.pixelScaleRatio());
-        gunSprite2.scale.x = -Config.pixelScaleRatio();
-        gunSprite2.animations.add('selected', [0, 1], 1, true);
-        gunSprite2.play('selected');
-
-        const authorX = 860;
-        const authorY = 740;
-        this.game.add.bitmapText(authorX, authorY, 'carrier-command','LDJAM #41 by Nidup', verySmallFontSize);
-
-        const heroSprite = this.game.add.sprite(authorX - 5, authorY - 45 , 'hero', 1);
-        heroSprite.scale.setTo(Config.pixelScaleRatio(), Config.pixelScaleRatio());
-        heroSprite.scale.x = -Config.pixelScaleRatio();
-        heroSprite.animations.add('selected', [0, 1, 2, 3, 4], 4, true);
-        heroSprite.play('selected')
-        */
-
+        const tutoX = controlX + 660;
+        const tutoY = storyY + 170;
+        const tuto = this.game.add.sprite(tutoX, tutoY, 'tuto');
+        tuto.scale.set(0.5, 0.5);
     }
 
     private setupForComputer(controlsChoiceX: number, controlsChoiceY:number, smallFontSize: number)
@@ -88,20 +75,16 @@ export default class Menu extends Phaser.State {
 
     public update()
     {
-
-        //this.startText.setText('Press space key to start');
-
         if (this.chosenController.shooting() && this.starting == false) {
             this.starting = true;
-            this.game.state.start('Play', true, false, this.chosenController.identifier());
-            /*
-            this.shootAudio.play('', 0, 0.5, false);
-            this.shootAudio.onStop.addOnce(
+            const wwwwwooowwwwAudio = this.game.add.audio('wwwwwwwoooooooww', 1, false);
+            wwwwwooowwwwAudio.play();
+            wwwwwooowwwwAudio.onStop.addOnce(
                 function() {
                     this.game.state.start('Play', true, false, this.chosenController.identifier());
                 },
                 this
-            );*/
+            );
         }
     }
 

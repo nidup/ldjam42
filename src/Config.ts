@@ -18,6 +18,6 @@ export class Config
 
     static debug(): boolean
     {
-        return true;
+        return false;
     }
 }
