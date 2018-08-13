@@ -280,7 +280,6 @@ export default class Play extends Phaser.State
             this.singerSay('WALL OF DEATH!');
         });
         this.game.time.events.add(littleWallOfDeath.startingTime, () => {
-
             this.currentMetalMovement = new WallOfDeath(this.game, this.street.citizens(), littleWallOfDeath.waitDuration, littleWallOfDeath.fightDuration, littleWallOfDeath.length, littleWallOfDeath.height);
             this.currentMetalMovement.start(this.draw());
             this.game.time.events.add(littleWallOfDeath.waitDuration + littleWallOfDeath.fightDuration, () => {
@@ -431,6 +430,10 @@ export default class Play extends Phaser.State
         return this.graphics;
     }
 
+    private displayEndScreen() {
+        console.log('Finished!');
+    }
+
     public update()
     {
         let player = this.street.player();
@@ -446,6 +449,9 @@ export default class Play extends Phaser.State
 
         if (this.currentMetalMovement) {
             if (this.currentMetalMovement.isIn(this.street.player().position)) {
+                if (this.currentMetalMovement.constructor.name === 'Exit') {
+                    this.displayEndScreen();
+                }
                 if (this.beginningIsIn === null) {
                     this.beginningIsIn = window.performance.now();
                 }
