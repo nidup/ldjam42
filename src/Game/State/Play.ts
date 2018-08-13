@@ -464,7 +464,10 @@ export default class Play extends Phaser.State
         if (player.finished) {
             const keys = Object.keys(SINGER_TEXTS);
             const lastKey = keys[keys.length - 1];
-            this.singerSay(lastKey);
+            if (this.singerCanSpeak) {
+                this.singerSay(lastKey);
+                this.singerCanSpeak = false;
+            }
         }
 
         this.energyForeground.clear();
