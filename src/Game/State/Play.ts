@@ -16,6 +16,7 @@ import {Nothing} from "../../Yolo/Nothing";
 import {Exit} from "../../Yolo/Exit";
 import {BigText} from "../../Yolo/BigText";
 import {BigTextPositionner} from "../../Yolo/BigTextPositionner";
+import {ScoreDisplay} from "../../Yolo/ScoreDisplay";
 
 const POINTS_MULTIPLIER = 20;
 
@@ -44,10 +45,6 @@ export default class Play extends Phaser.State
     private rightBoundMargin: Phaser.TileSprite;
     private topBoundMargin: Phaser.TileSprite;
     private isFinalLevel: boolean = false;
-    private pointsDisplay: Phaser.Text;
-    private pointsBackground: Phaser.Graphics;
-    private energyForeground: Phaser.Graphics;
-    private energyBackground: Phaser.Graphics;
     private graphics: Phaser.Graphics;
     private graphicsIn: Phaser.Graphics;
     private currentMetalMovement: MetalMovement;
@@ -60,6 +57,7 @@ export default class Play extends Phaser.State
     private bigTextPositionner: BigTextPositionner;
     private lastRandomSinger: string = '';
     private singerCanSpeak: boolean = true;
+    private scoreDisplay: ScoreDisplay;
 
     public init (
         controllerType: string,
@@ -391,26 +389,6 @@ export default class Play extends Phaser.State
             });
         }
 
-        const pointsPosition = new PIXI.Point(900, 680);
-
-        this.pointsBackground = this.game.add.graphics(pointsPosition.x, pointsPosition.y);
-        this.pointsBackground.beginFill(0x000000);
-        this.pointsBackground.lineStyle(4, 0xFFFFFF);
-        this.pointsBackground.drawRect(0, 0, 240, 54);
-        this.pointsDisplay = this.game.add.text(pointsPosition.x + 10, pointsPosition.y + 10, '', TEXT_STYLE_BIG);
-
-        const energyPosition = new PIXI.Point(600, 680);
-
-        this.energyBackground = this.game.add.graphics(energyPosition.x, energyPosition.y);
-        this.energyBackground.beginFill(0x000000);
-        this.energyBackground.lineStyle(4, 0xFFFFFF);
-        this.energyBackground.drawRect(0, 0, 240, 54);
-
-        this.energyForeground = this.game.add.graphics(energyPosition.x, energyPosition.y);
-        this.energyForeground.beginFill(0x00FF00);
-        this.energyForeground.lineStyle(2, 0x000000);
-        this.energyForeground.drawRect(0, 0, 240, 52);
-
         this.game.time.events.loop(0.25 * Phaser.Timer.SECOND, () => {
             if (this.graphics) {
                 if (this.graphics.alpha > 0) {
@@ -431,15 +409,15 @@ export default class Play extends Phaser.State
         const music = this.game.add.audio('music');
         music.play();
 
-        const blinkScoreEvent = this.game.time.events.loop(measureTime / 32 * Phaser.Timer.SECOND, () => {
-            if (this.pointsDisplay.fill === '#fff') {
+        this.game.time.events.loop(measureTime / 32 * Phaser.Timer.SECOND, () => {
+            if (!this.scoreDisplay.isInFuryMode()) {
                 if (this.isInFuryMode()) {
-                    this.pointsDisplay.fill = '#ff0000';
+                    this.scoreDisplay.setFuryMode(true);
                     this.camera.shake(0.006, 100);
                     this.camera.flash(0xffffff, 100, true, 0.3);
                 }
             } else {
-                this.pointsDisplay.fill = '#fff';
+                this.scoreDisplay.setFuryMode(false);
             }
         });
 
@@ -461,6 +439,8 @@ export default class Play extends Phaser.State
 
         this.currentMetalMovement = new Nothing();
         this.currentMetalMovement.start(this.draw(), this.drawIn());
+
+        this.scoreDisplay = new ScoreDisplay(this.game);
     }
 
     private draw() {
@@ -498,10 +478,9 @@ export default class Play extends Phaser.State
             }
         }
 
-        this.energyForeground.clear();
-        this.energyForeground.beginFill(player.energy > 50  ? 0x2dcd41 : player.energy  > 20 ? 0xffc80a : 0xf04b36 );
-        this.energyForeground.drawRect(0, 0, 240 * (player.energy / 100), 54);
-        this.pointsDisplay.text = Math.ceil(player.points * POINTS_MULTIPLIER).toString()['padStart'](8, '.');
+        // this.energyForeground.clear();
+        // this.energyForeground.beginFill(player.energy > 50  ? 0x2dcd41 : player.energy  > 20 ? 0xffc80a : 0xf04b36 );
+        // this.energyForeground.drawRect(0, 0, 240 * (player.energy / 100), 54);
 
         if (this.currentMetalMovement) {
             if (this.currentMetalMovement.isIn(this.street.player().position)) {
@@ -552,6 +531,8 @@ export default class Play extends Phaser.State
         this.characterLayer.sort('y', Phaser.Group.SORT_ASCENDING);
 
         this.bigTextPositionner.update();
+
+        this.scoreDisplay.update(player.points * POINTS_MULTIPLIER, player.energy, this.getPalier());
     }
 
     public render()
@@ -669,9 +650,21 @@ export default class Play extends Phaser.State
             if (this.previousDiffPoints < limit && this.getPointsDiff() >= limit) {
                 return i + 2;
             }
-        };
+        }
 
         return null;
+    }
+
+    private getPalier() {
+        const paliers = [5, 8, 11, 14, 17, 20, 23, 26, 29];
+        for (let i = paliers.length - 1; i >= 0; i--) {
+            const limit = paliers[i];
+            if (this.getPointsDiff() >= limit) {
+                return i + 2;
+            }
+        }
+
+        return 1;
     }
 
     private getRandomSinger() {
