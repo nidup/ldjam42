@@ -5,9 +5,7 @@
     "outDir": "build",
     "rootDir": "src",
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "sourceMap": true,
-    "allowJs": true
+    "experimentalDecorators": true
   },
   "exclude": [
     "node_modules",
