@@ -40,6 +40,12 @@ export const TEXT_STYLE_BIG = {
     font: '28px PICO-8'
 };
 
+export const TEXT_STYLE_SCORE = {
+    align: 'center',
+    fill: '#fff',
+    font: '30px PICO-8'
+};
+
 export const TEXT_STYLE_MIDDLE = {
     align: 'center',
     fill: '#fff',
