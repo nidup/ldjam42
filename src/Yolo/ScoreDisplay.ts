@@ -9,6 +9,7 @@ export class ScoreDisplay {
     private pointsDisplay: Phaser.Text;
     private playerMini: Phaser.TileSprite;
     private stopAnim = null;
+    private background: Phaser.TileSprite;
 
     constructor(game: Phaser.Game) {
         this.game = game;
@@ -18,22 +19,35 @@ export class ScoreDisplay {
     display() {
         const position = new PIXI.Point(880, 550);
 
-        const background = this.game.add.sprite(position.x, position.y, 'score_main');
-        background.scale.set(SPECIAL_RATIO, SPECIAL_RATIO);
+        this.background = this.game.add.tileSprite(position.x, position.y, 96, 65, 'score_main');
+        this.background.scale.set(SPECIAL_RATIO, SPECIAL_RATIO);
+        this.background.animations.add('blink', [0, 1], 12);
+        this.background.animations.add('normal', [0]);
+        this.background.animations.play('normal', 12, true);
 
-        this.power = this.game.add.sprite(position.x + 5 * SPECIAL_RATIO, position.y + 47 * SPECIAL_RATIO, 'score_power');
+        this.power = this.game.add.sprite(position.x + 6 * SPECIAL_RATIO, position.y + 48 * SPECIAL_RATIO, 'score_power');
         this.power.scale.set(SPECIAL_RATIO, SPECIAL_RATIO);
 
-        this.combo = this.game.add.tileSprite(position.x, position.y, 94, 28, 'score_combo', 9);
+        this.combo = this.game.add.tileSprite(position.x + SPECIAL_RATIO, position.y + SPECIAL_RATIO, 94, 28, 'score_combo', 9);
         this.combo.scale.set(SPECIAL_RATIO, SPECIAL_RATIO);
 
-        this.pointsDisplay = this.game.add.text(position.x + 7 * SPECIAL_RATIO, position.y + 33 * SPECIAL_RATIO, '', TEXT_STYLE_SCORE);
+        this.pointsDisplay = this.game.add.text(position.x + 8 * SPECIAL_RATIO, position.y + 34 * SPECIAL_RATIO, '', TEXT_STYLE_SCORE);
         this.pointsDisplay.rotation = -0.12;
 
-        this.playerMini = this.game.add.tileSprite(position.x + 72 * SPECIAL_RATIO, position.y + 20 * SPECIAL_RATIO, 16, 19,  'player_mini', 2);
+        this.playerMini = this.game.add.tileSprite(position.x + 73 * SPECIAL_RATIO, position.y + 21 * SPECIAL_RATIO, 16, 19,  'player_mini', 2);
         this.playerMini.scale.set(SPECIAL_RATIO * 2, SPECIAL_RATIO * 2);
         this.playerMini.animations.add('push', [0, 1], 12);
         this.playerMini.animations.add('normal', [2]);
+    }
+
+    setIsIn(value: boolean) {
+        if (value && this.background.animations.currentAnim.name !== 'blink') {
+            this.background.animations.play('blink', 12, true);
+        } else {
+            if (!value && this.background.animations.currentAnim.name === 'blink') {
+                this.background.animations.play('normal', 12, true);
+            }
+        }
     }
 
     /**

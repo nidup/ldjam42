@@ -493,10 +493,12 @@ export default class Play extends Phaser.State
                     this.beginningIsIn = window.performance.now();
                 }
                 this.increasePoints();
+                this.scoreDisplay.setIsIn(true);
             } else {
                 this.graphics.visible = true;
                 this.graphicsIn.visible = false;
                 this.beginningIsIn = null;
+                this.scoreDisplay.setIsIn(false);
             }
         }
 
