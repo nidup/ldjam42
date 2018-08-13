@@ -5,12 +5,8 @@ import {Level} from "../Game/Level";
 import {BackBag} from "./Player/BackBag";
 import {Controller} from "../Game/Controller";
 import {Street} from "../Game/Street";
-import {Cop} from "./Bot/Cop";
-import {Cops} from "./Bot/Cops";
-import {Swat} from "./Bot/Swat";
 import {Citizen} from "./Bot/Citizen";
 import {Citizens} from "./Bot/Citizens";
-import {Swats} from "./Bot/Swats";
 import {AlienQueen} from "./Bot/AlienQueen";
 import {PickableItem} from "./Player/PickableItem";
 
