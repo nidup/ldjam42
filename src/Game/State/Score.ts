@@ -23,6 +23,8 @@ export default class Score extends Phaser.State {
     private starting: boolean = false;
     private score: number;
 
+    private tweetIt: Phaser.Text;
+
     public init (
         controllerType: string,
         score: number
@@ -39,7 +41,8 @@ export default class Score extends Phaser.State {
         const titleX = 160;
         const titleY = 0;
 
-        this.background = this.game.add.sprite(titleX, titleY, 'splash');
+        this.background = this.game.add.sprite(titleX + 400, titleY + 250, 'splash');
+        this.background.anchor.set(0.5, 0.5);
         this.background.scale.set(1.2, 1.2);
         const tweenScale = this.game.add.tween(this.background.scale)
             .to( { x: 1.25, y:1.25 }, 100, "Linear", true);
@@ -62,12 +65,30 @@ export default class Score extends Phaser.State {
             "Score:" + this.score+"";
         this.game.add.text(storyX, storyY, storyText, SCORE_TEXT_STYLE);
 
-        const startX = titleX + 220;
+        const startX = titleX + 230;
         const startY = storyY + 150;
         this.startText = this.game.add.text(startX, startY, 'Press space key to restart', STORY_TEXT_STYLE);
         this.startText.alpha = 1;
         const tweenAlpha = this.game.add.tween(this.startText).to( { alpha: 0.3 }, 0, "Linear", true);
         tweenAlpha.repeat(10000, 400);
+
+        this.tweetIt = this.game.add.text(titleX + 200, titleY + 630, 'Share you score', SCORE_TEXT_STYLE);
+        this.tweetIt.alpha = 1;
+        this.tweetIt.inputEnabled = true;
+        this.tweetIt.events.onInputOver.add(() => {
+            document.body.style.cursor = 'pointer';
+            this.tweetIt.alpha = 0.7;
+        });
+        this.tweetIt.events.onInputOut.add(() => {
+            document.body.style.cursor = 'default';
+            this.tweetIt.alpha = 1;
+        });
+        this.tweetIt.events.onInputDown.add(() => {
+            window.open(
+                'https://twitter.com/intent/tweet?text=I helped Johnny to survive a Metal Concert! ' +
+                'Try to beat my ' + this.score + ' points 🤘! %23LDJAM42 %23sorryohsorry ' + window.location.href
+            );
+        }, this);
     }
 
     public update()
