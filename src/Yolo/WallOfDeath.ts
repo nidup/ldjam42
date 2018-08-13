@@ -74,6 +74,6 @@ export class WallOfDeath extends MetalMovement {
     }
 
     isIn(position: Phaser.Point) {
-        return position.x > this.left && position.x < this.right && position.y > 400 - this.gap && position.y < 400 + this.gap;
+        return position.x > this.left && position.x < this.right && (position.y + 10) > 400 - this.gap && (position.y + 10) < 400 + this.gap;
     }
 }

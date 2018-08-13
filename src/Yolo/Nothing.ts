@@ -8,6 +8,6 @@ export class Nothing extends MetalMovement {
     }
 
     isIn(position: Phaser.Point) {
-        return position.x > 840 && position.x < 840 + 70 && position.y > 350 && position.y < 350+150;
+        return position.x > 840 && position.x < 840 + 70 && (position.y + 10) > 350 && (position.y + 10) < 350+150;
     }
 }

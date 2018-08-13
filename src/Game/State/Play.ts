@@ -301,6 +301,10 @@ export default class Play extends Phaser.State
             this.singerCanSpeak = true;
             this.currentMetalMovement = new WallOfDeath(this.game, this.street.citizens(), littleWallOfDeath.waitDuration, littleWallOfDeath.fightDuration, littleWallOfDeath.length, littleWallOfDeath.height);
             this.currentMetalMovement.start(this.draw());
+            this.game.time.events.add(littleWallOfDeath.waitDuration, () => {
+                const singerAudio = this.game.add.audio('wwwwwwwoooooooww', 1, false);
+                singerAudio.play();
+            });
             this.game.time.events.add(littleWallOfDeath.waitDuration + littleWallOfDeath.fightDuration, () => {
                 this.currentMetalMovement = new Nothing();
                 this.currentMetalMovement.start(this.draw());
@@ -347,6 +351,10 @@ export default class Play extends Phaser.State
             this.singerCanSpeak = true;
             this.currentMetalMovement = new WallOfDeath(this.game, this.street.citizens(), bigWallOfDeath.waitDuration, bigWallOfDeath.fightDuration, bigWallOfDeath.length, bigWallOfDeath.height);
             this.currentMetalMovement.start(this.draw());
+            this.game.time.events.add(bigWallOfDeath.waitDuration, () => {
+                const singerAudio = this.game.add.audio('wwwwwwwoooooooww', 1, false);
+                singerAudio.play();
+            });
             this.game.time.events.add(bigWallOfDeath.waitDuration + bigWallOfDeath.fightDuration, () => {
                 this.currentMetalMovement = new Nothing();
                 this.currentMetalMovement.start(this.draw());
