@@ -3,7 +3,7 @@ export default class Preload extends Phaser.State
 {
     private skipMenu = false;
     private skipToLevel = 1;
-    private testScoreScreen = false;
+    private testScoreScreen = true;
 
     public preload ()
     {
@@ -16,7 +16,7 @@ export default class Preload extends Phaser.State
     public create ()
     {
         if (this.testScoreScreen) {
-            this.game.state.start('Score', true, false, 'keyboard', 1234);
+            this.game.state.start('Score', true, false, 'keyboard', 1000000);
         } else if (this.skipMenu) {
             this.game.state.start('Play', true, false, 'keyboard', this.skipToLevel);
         } else {
