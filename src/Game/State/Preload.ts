@@ -1,7 +1,7 @@
 
 export default class Preload extends Phaser.State
 {
-    private skipMenu = true;
+    private skipMenu = false;
     private skipToLevel = 1;
 
     public preload ()
