@@ -113,7 +113,7 @@ const reactionsWithSounds = {
     'you wanna dance?': ['youwannadance'],
     'calm down': ['calm-down'],
     'fuck you': ['fuckyou1', 'fuckyou2', 'fuckyou3', 'fuckyou4', 'fuckyou5'],
-    'burp': ['rototo2', 'rototo', 'bruitdegerbe3', 'bruitedegerb2', 'bruitdegerb']
+    'burp': ['rototo2', 'rototo', 'bruitdegerbe3', 'bruitedegerb2', 'bruitdegerb', 'ouuuufffw', 'ouuuuuffff2', 'huuuuum', 'ouuuufffw', 'ouuuuuffff2', 'huuuuum']
 };
 const playerApologizes = ['sorry-o-sorry', 'oups-sorry', 'iaaaam-so-sorry',
     'sorry1', 'sorry3', 'sorry6', 'sorry9', 'sorry2', 'sorry5', 'sorry8', 'sorry4', 'sorry7', 'sorry10'];
@@ -310,6 +310,9 @@ class Citizen extends Phaser.Sprite {
                     });
                     if (!this.text) {
                         this.text = this.game.add.text(this.x, this.y, text, exports.TEXT_STYLE);
+                        this.text.alpha = Math.max(1.1 - this.street.citizens().all().filter((citizen) => {
+                            return citizen.isVenere();
+                        }).length * 0.1, 0.6);
                         const venereAudio = this.game.add.audio(soundName, 0.6, false);
                         venereAudio.play();
                         this.game.time.events.add(Phaser.Timer.SECOND * 1, () => {
@@ -353,6 +356,9 @@ class Citizen extends Phaser.Sprite {
             }
         }
         this.mirrorIfNeeded(previousX);
+    }
+    isVenere() {
+        return this.venere;
     }
     exit(zone) {
         this.game.time.events.add(Math.random() * 20 * Phaser.Timer.SECOND, () => {
@@ -698,6 +704,7 @@ class Hero extends Phaser.Sprite {
         this.animations.add('walk', [94, 95, 96, 97, 98, 99], 8, true);
         this.animations.add('die', [0], 12, false);
         this.animations.add('sorry', [103, 104, 105, 106, 107, 108], 8, false);
+        this.animations.add('recule', [116, 117, 118, 119, 120, 121], 16, true);
         this.controller = controller;
         this.cameraFx = new HeroCamera_1.HeroCamera(group.game.camera);
         this.gameEvents = new Events_1.GameEvents();
@@ -708,16 +715,21 @@ class Hero extends Phaser.Sprite {
         if (this.exitZone && this.exitZone.isIn(this.position)) {
             this.finished = true;
         }
-        this.controls();
+        let swithAnim = true;
         let angryCount = this.citizens.all().filter(citizen => citizen.text).length;
         if (angryCount > 2 && this.x > 0) {
+            if (this.animations.currentAnim.name !== 'recule') {
+                this.animations.play('recule', 16, true);
+            }
             this.body.checkCollision.none = !this.movingToTheRight();
             this.x -= 1;
             this.y += (Math.random() - 0.5) * 4;
+            swithAnim = false;
         }
         else {
             this.body.checkCollision.none = false;
         }
+        this.controls(swithAnim);
         this.mirrorIfNeeded();
         if (this.x < 20) {
             this.x = 20;
@@ -765,7 +777,7 @@ class Hero extends Phaser.Sprite {
     pastGameEvents() {
         return this.gameEvents;
     }
-    controls() {
+    controls(switchAnim) {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
         let angryCount = this.citizens.all().filter(citizen => citizen.text).length;
@@ -774,12 +786,15 @@ class Hero extends Phaser.Sprite {
             walkAnimName = 'sorry';
         }
         if (this.controller.shooting()) {
-            this.energy = Math.max(0, this.energy - 1);
-            this.animations.play(walkAnimName);
+            this.energy = Math.max(0, this.energy - 4);
+            if (switchAnim) {
+                this.animations.play(walkAnimName);
+            }
             if (this.energy) {
-                this.x += 5;
+                this.x += 8;
+                this.y += -2 + Math.random() * 4;
                 this.scoreDisplay.animPushing();
-                const change = 0.5;
+                const change = 1;
                 const minRadius = 3;
                 const radius = this.body.radius - change;
                 if (radius > minRadius) {
@@ -795,23 +810,33 @@ class Hero extends Phaser.Sprite {
             if (this.controller.goingLeft()) {
                 this.body.velocity.x = -this.speed;
                 this.gun.turnToTheLeft();
-                this.animations.play(walkAnimName);
+                if (switchAnim) {
+                    this.animations.play(walkAnimName);
+                }
             }
             else if (this.controller.goingRight()) {
                 this.body.velocity.x = this.speed;
                 this.gun.turnToTheRight();
-                this.animations.play(walkAnimName);
+                if (switchAnim) {
+                    this.animations.play(walkAnimName);
+                }
             }
             if (this.controller.goingUp()) {
                 this.body.velocity.y = -this.speed;
-                this.animations.play(walkAnimName);
+                if (switchAnim) {
+                    this.animations.play(walkAnimName);
+                }
             }
             else if (this.controller.goingDown()) {
                 this.body.velocity.y = this.speed;
-                this.animations.play(walkAnimName);
+                if (switchAnim) {
+                    this.animations.play(walkAnimName);
+                }
             }
             if (!this.controller.goingLeft() && !this.controller.goingRight() && !this.controller.goingDown() && !this.controller.goingUp()) {
-                this.animations.play('idle');
+                if (switchAnim) {
+                    this.animations.play('idle');
+                }
             }
         }
     }
@@ -1384,31 +1409,31 @@ class Menu extends Phaser.State {
         this.background.scale.set(1.2, 1.2);
         const storyX = titleX - 90;
         const storyY = titleY + 320;
-        const storyText = "Johnny Kilmister is a huge fan of Motor Raid.\n" +
-            "He never went to any concert because he’s not comfortable in a crowd.\n" +
-            "Motor Raid just announced their very last show, Johnny decided to go.\n" +
-            "Help Johnny to level up his metal concert skills!";
+        const storyText = "Johnny Kilmister is a huge fan of Motor Raid.\n".toUpperCase() +
+            "He never went to any concert because he’s not comfortable in a crowd.\n".toUpperCase() +
+            "Motor Raid just announced their very last show, Johnny decided to go.\n".toUpperCase() +
+            "Help Johnny to level up his metal concert skills!".toUpperCase();
         this.game.add.text(storyX, storyY, storyText, exports.STORY_TEXT_STYLE);
         const controlX = storyX;
         const controlY = storyY + 170;
-        const controlText = "> Controls:\n" +
-            "- Press arrow keys to move\n" +
-            "- Spam space key to pass through the crowd\n\n" +
-            "> Increase your concert skills by staying\nas much as possible in blue action area!\n";
+        const controlText = "> Controls:\n".toUpperCase() +
+            "- Press arrow keys to move\n".toUpperCase() +
+            "- Spam space key to pass through the crowd\n\n".toUpperCase() +
+            "> Increase your concert skills by staying\nas much as possible in blue action area!\n".toUpperCase();
         this.game.add.text(controlX, controlY, controlText, exports.STORY_TEXT_STYLE);
         const startX = controlX + 110;
         const startY = controlY + 190;
-        this.startText = this.game.add.text(startX, startY, 'Press space key to start', exports.STORY_TEXT_STYLE);
+        this.startText = this.game.add.text(startX, startY, 'Press space key to start'.toUpperCase(), exports.STORY_TEXT_STYLE);
         this.startText.alpha = 1;
         const tweenAlpha = this.game.add.tween(this.startText).to({ alpha: 0.3 }, 0, "Linear", true);
         tweenAlpha.repeat(10000, 400);
-        const tutoX = controlX + 660;
+        const tutoX = controlX + 680;
         const tutoY = storyY + 150;
         const tuto = this.game.add.sprite(tutoX, tutoY, 'tuto');
         tuto.scale.set(0.5, 0.5);
-        const ldjamX = tutoX + 90;
+        const ldjamX = tutoX + 60;
         const ldjamY = tutoY + 280;
-        const ldjamText = this.game.add.text(ldjamX, ldjamY, 'Hand-crafted with ❤️ for LDJAM 42', exports.LDJAM_TEXT_STYLE);
+        const ldjamText = this.game.add.text(ldjamX, ldjamY, 'Hand-crafted with ❤️ for LDJAM 42'.toUpperCase(), exports.LDJAM_TEXT_STYLE);
     }
     update() {
         if (this.chosenController.shooting() && this.starting == false) {
@@ -1826,9 +1851,6 @@ class Play extends Phaser.State {
                 this.singerCanSpeak = false;
             }
         }
-        // this.energyForeground.clear();
-        // this.energyForeground.beginFill(player.energy > 50  ? 0x2dcd41 : player.energy  > 20 ? 0xffc80a : 0xf04b36 );
-        // this.energyForeground.drawRect(0, 0, 240 * (player.energy / 100), 54);
         if (this.currentMetalMovement) {
             if (this.currentMetalMovement.isIn(this.street.player().position)) {
                 this.graphics.visible = false;
@@ -2102,6 +2124,7 @@ class Preload extends Phaser.State {
         this.load.spritesheet('score_main', 'assets/sprites/score_main.png', 96, 65);
         this.load.spritesheet('score_power', 'assets/sprites/score_power.png', 82, 16);
         this.load.spritesheet('player_mini', 'assets/sprites/player_mini.png', 16, 19);
+        this.load.spritesheet('Side', 'assets/sprites/side.png', 12, 12);
     }
     loadFonts() {
     }
@@ -2180,7 +2203,7 @@ class Score extends Phaser.State {
         });
         this.tweetIt.events.onInputDown.add(() => {
             window.open('https://twitter.com/intent/tweet?text=I helped Johnny to survive a Metal Concert! ' +
-                'Try to beat my ' + this.score + ' points 🤘! %23LDJAM42 %23sorryohsorry ' + window.location.href);
+                'Try to beat my ' + this.score + ' points 🤘! %23LDJAM42 %23sorryohsorry ' + 'https://nidup.itch.io/sorry-oh-sorry');
         }, this);
     }
     update() {
@@ -2598,6 +2621,10 @@ class ScoreDisplay {
         this.pointsDisplay.fill = value ? '#ff0000' : '#fff';
     }
     animPushing() {
+        this.power.visible = false;
+        this.game.time.events.add(0.15 * Phaser.Timer.SECOND, () => {
+            this.power.visible = true;
+        });
         this.playerMini.animations.play('push', 12, true);
         const now = window.performance.now();
         this.stopAnim = now + 500;
