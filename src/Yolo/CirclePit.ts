@@ -39,7 +39,7 @@ export class CirclePit extends MetalMovement {
     }
 
     isIn(position: Phaser.Point) {
-        const distFromCenter = Phaser.Math.distance(this.center.x, this.center.y, position.x, position.y);
+        const distFromCenter = Phaser.Math.distance(this.center.x, this.center.y, position.x, (position.y + 10));
 
         return distFromCenter < this.radiusMax && distFromCenter > this.radiusMin;
     }

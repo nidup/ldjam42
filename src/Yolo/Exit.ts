@@ -20,6 +20,6 @@ export class Exit extends MetalMovement {
     }
 
     isIn(position: Phaser.Point) {
-        return position.x > 0 && position.x < 0 + 70 && position.y > 300 && position.y < 300+150;
+        return position.x > 0 && position.x < 0 + 70 && (position.y + 10) > 300 && (position.y + 10) < 300+150;
     }
 }

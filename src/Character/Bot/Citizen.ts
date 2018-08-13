@@ -296,15 +296,17 @@ export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplica
                 this.startingPosition.x + Math.random() * max - max / 2,
                 this.startingPosition.y + Math.random() * max - max / 2
             );
+            if (newStartingPosition.x < 900 && newStartingPosition.x > 0 && newStartingPosition.y > 20 && newStartingPosition.y < 780) {
+                const yolo = this.street.citizens().all().find((citizen) => {
+                    const distance = Phaser.Math.distance(newStartingPosition.x, newStartingPosition.y, citizen.x, citizen.y) < 20;
+                    const distance2 = Phaser.Math.distance(newStartingPosition.x, newStartingPosition.y, citizen.startingPosition.x, citizen.startingPosition.y) < 20;
+                    const c_est_moi = citizen === this;
+                    return distance && distance2 && !c_est_moi;
+                });
 
-            const yolo = this.street.citizens().all().find((citizen) => {
-                const distance = Phaser.Math.distance(newStartingPosition.x, newStartingPosition.y, citizen.x, citizen.y) < 20;
-                const c_est_moi = citizen === this;
-                return distance && !c_est_moi;
-            });
-
-            if (!yolo) {
-                this.startingPosition = newStartingPosition;
+                if (!yolo) {
+                    this.startingPosition = newStartingPosition;
+                }
             }
         }
 
