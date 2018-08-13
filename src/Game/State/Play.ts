@@ -11,7 +11,7 @@ import {StreetLimits} from "../StreetLimits";
 import {CharactersGenerator} from "../../Character/CharactersGenerator";
 import {CirclePit} from "../../Yolo/CirclePit";
 import {WallOfDeath} from "../../Yolo/WallOfDeath";
-import {BLINKCOLOR, MetalMovement} from "../../Yolo/MetalMovement";
+import {BLINKCOLOR, BLINKINCOLOR, MetalMovement} from "../../Yolo/MetalMovement";
 import {Nothing} from "../../Yolo/Nothing";
 import {Exit} from "../../Yolo/Exit";
 import {BigText} from "../../Yolo/BigText";
@@ -49,6 +49,7 @@ export default class Play extends Phaser.State
     private energyForeground: Phaser.Graphics;
     private energyBackground: Phaser.Graphics;
     private graphics: Phaser.Graphics;
+    private graphicsIn: Phaser.Graphics;
     private currentMetalMovement: MetalMovement;
     private beginningIsIn = null;
     private singerText: Phaser.Text = null;
@@ -261,7 +262,7 @@ export default class Play extends Phaser.State
         };
 
         this.currentMetalMovement = new Nothing();
-        this.currentMetalMovement.start(this.draw());
+        this.currentMetalMovement.start(this.draw(), this.drawIn());
 
         const prepareTime = 3 * Phaser.Timer.SECOND;
         const dontTalkTime = 2 * Phaser.Timer.SECOND;
@@ -278,10 +279,10 @@ export default class Play extends Phaser.State
         this.game.time.events.add(littleCirclePitInfo.startingTime, () => {
             this.singerCanSpeak = true;
             this.currentMetalMovement = new CirclePit(this.game, this.street.citizens(), littleCirclePitInfo.duration, littleCirclePitInfo.radiusMin, littleCirclePitInfo.radiusMax);
-            this.currentMetalMovement.start(this.draw());
+            this.currentMetalMovement.start(this.draw(), this.drawIn());
             this.game.time.events.add(littleCirclePitInfo.duration, () => {
                 this.currentMetalMovement = new Nothing();
-                this.currentMetalMovement.start(this.draw());
+                this.currentMetalMovement.start(this.draw(), this.drawIn());
                 const singerAudio = this.game.add.audio('clapclap', 1, false);
                 singerAudio.play()
                 this.hellyeah(0.5, 4);
@@ -300,14 +301,14 @@ export default class Play extends Phaser.State
         this.game.time.events.add(littleWallOfDeath.startingTime, () => {
             this.singerCanSpeak = true;
             this.currentMetalMovement = new WallOfDeath(this.game, this.street.citizens(), littleWallOfDeath.waitDuration, littleWallOfDeath.fightDuration, littleWallOfDeath.length, littleWallOfDeath.height);
-            this.currentMetalMovement.start(this.draw());
+            this.currentMetalMovement.start(this.draw(), this.drawIn());
             this.game.time.events.add(littleWallOfDeath.waitDuration, () => {
                 const singerAudio = this.game.add.audio('wwwwwwwoooooooww', 1, false);
                 singerAudio.play();
             });
             this.game.time.events.add(littleWallOfDeath.waitDuration + littleWallOfDeath.fightDuration, () => {
                 this.currentMetalMovement = new Nothing();
-                this.currentMetalMovement.start(this.draw());
+                this.currentMetalMovement.start(this.draw(), this.drawIn());
                 const singerAudio = this.game.add.audio('clapclap', 1, false);
                 singerAudio.play();
                 this.hellyeah(0.6, 4);
@@ -326,10 +327,10 @@ export default class Play extends Phaser.State
         this.game.time.events.add(bigCirclePitInfo.startingTime, () => {
             this.singerCanSpeak = true;
             this.currentMetalMovement = new CirclePit(this.game, this.street.citizens(), bigCirclePitInfo.duration, bigCirclePitInfo.radiusMin, bigCirclePitInfo.radiusMax);
-            this.currentMetalMovement.start(this.draw());
+            this.currentMetalMovement.start(this.draw(), this.drawIn());
             this.game.time.events.add(bigCirclePitInfo.duration, () => {
                 this.currentMetalMovement = new Nothing();
-                this.currentMetalMovement.start(this.draw());
+                this.currentMetalMovement.start(this.draw(), this.drawIn());
                 const singerAudio = this.game.add.audio('clapclap', 1, false);
                 singerAudio.play();
                 const singerAudio2 = this.game.add.audio('gueulage', 1, false);
@@ -350,14 +351,14 @@ export default class Play extends Phaser.State
         this.game.time.events.add(bigWallOfDeath.startingTime, () => {
             this.singerCanSpeak = true;
             this.currentMetalMovement = new WallOfDeath(this.game, this.street.citizens(), bigWallOfDeath.waitDuration, bigWallOfDeath.fightDuration, bigWallOfDeath.length, bigWallOfDeath.height);
-            this.currentMetalMovement.start(this.draw());
+            this.currentMetalMovement.start(this.draw(), this.drawIn());
             this.game.time.events.add(bigWallOfDeath.waitDuration, () => {
                 const singerAudio = this.game.add.audio('wwwwwwwoooooooww', 1, false);
                 singerAudio.play();
             });
             this.game.time.events.add(bigWallOfDeath.waitDuration + bigWallOfDeath.fightDuration, () => {
                 this.currentMetalMovement = new Nothing();
-                this.currentMetalMovement.start(this.draw());
+                this.currentMetalMovement.start(this.draw(), this.drawIn());
                 const singerAudio = this.game.add.audio('clapclap', 1, false);
                 singerAudio.play();
                 const singerAudio2 = this.game.add.audio('gueulage', 1, false);
@@ -374,7 +375,7 @@ export default class Play extends Phaser.State
 
         this.game.time.events.add(40 * measureTime * Phaser.Timer.SECOND, () => {
             this.currentMetalMovement = new Exit(this.street.citizens(), this.street.player());
-            this.currentMetalMovement.start(this.draw());
+            this.currentMetalMovement.start(this.draw(), this.drawIn());
         });
 
         this.game.time.events.add(39.5 * measureTime * Phaser.Timer.SECOND, () => {
@@ -418,6 +419,13 @@ export default class Play extends Phaser.State
                     this.graphics.alpha = 0.2;
                 }
             }
+            if (this.graphicsIn) {
+                if (this.graphicsIn.alpha > 0) {
+                    this.graphicsIn.alpha = 0;
+                } else {
+                    this.graphicsIn.alpha = 0.35;
+                }
+            }
         });
 
         const music = this.game.add.audio('music');
@@ -452,15 +460,22 @@ export default class Play extends Phaser.State
         this.singerText = this.game.add.text(textPos.x, textPos.y, '', TEXT_STYLE_MIDDLE);
 
         this.currentMetalMovement = new Nothing();
-        this.currentMetalMovement.start(this.draw());
+        this.currentMetalMovement.start(this.draw(), this.drawIn());
     }
 
     private draw() {
         this.graphics && this.graphics.destroy();
         this.graphics = this.game.add.graphics(0, 0);
         this.graphics.alpha = 0;
-        this.graphics.lineStyle(5, BLINKCOLOR);
         return this.graphics;
+    }
+
+    private drawIn() {
+        this.graphicsIn && this.graphicsIn.destroy();
+        this.graphicsIn = this.game.add.graphics(0, 0);
+        this.graphicsIn.alpha = 0;
+
+        return this.graphicsIn;
     }
 
     private displayEndScreen() {
@@ -490,6 +505,8 @@ export default class Play extends Phaser.State
 
         if (this.currentMetalMovement) {
             if (this.currentMetalMovement.isIn(this.street.player().position)) {
+                this.graphics.visible = false;
+                this.graphicsIn.visible = true;
                 if (this.currentMetalMovement.constructor.name === 'Exit') {
                     this.displayEndScreen();
                     return;
@@ -499,6 +516,8 @@ export default class Play extends Phaser.State
                 }
                 this.increasePoints();
             } else {
+                this.graphics.visible = true;
+                this.graphicsIn.visible = false;
                 this.beginningIsIn = null;
             }
         }

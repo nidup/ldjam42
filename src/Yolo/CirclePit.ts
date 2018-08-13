@@ -1,6 +1,6 @@
 import {Citizens} from "../Character/Bot/Citizens";
 import {Citizen} from "../Character/Bot/Citizen";
-import {BLINKCOLOR, MetalMovement} from "./MetalMovement";
+import {BLINKCOLOR, BLINKINCOLOR, MetalMovement} from "./MetalMovement";
 
 export class CirclePit extends MetalMovement {
     private citizens: Citizen[];
@@ -23,7 +23,7 @@ export class CirclePit extends MetalMovement {
         this.time = duration;
     }
 
-    public start(graphics: Phaser.Graphics) {
+    public start(graphics: Phaser.Graphics, graphicsIn: Phaser.Graphics) {
         this.citizens.forEach((citizen) => {
             citizen.setCirclePitCenter(this.center);
         });
@@ -36,6 +36,9 @@ export class CirclePit extends MetalMovement {
 
         graphics.lineStyle(this.radiusMax - this.radiusMin, BLINKCOLOR);
         graphics.drawCircle(this.center.x, this.center.y, (this.radiusMin + this.radiusMax));
+
+        graphicsIn.lineStyle(this.radiusMax - this.radiusMin, BLINKINCOLOR);
+        graphicsIn.drawCircle(this.center.x, this.center.y, (this.radiusMin + this.radiusMax));
     }
 
     isIn(position: Phaser.Point) {

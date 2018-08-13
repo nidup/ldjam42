@@ -1,6 +1,6 @@
 import {Citizen} from "../Character/Bot/Citizen";
 import {Citizens} from "../Character/Bot/Citizens";
-import {BLINKCOLOR, MetalMovement} from "./MetalMovement";
+import {BLINKCOLOR, BLINKINCOLOR, MetalMovement} from "./MetalMovement";
 
 export class WallOfDeath extends MetalMovement {
     private game: Phaser.Game;
@@ -33,7 +33,7 @@ export class WallOfDeath extends MetalMovement {
         });
     }
 
-    public start(graphics: Phaser.Graphics) {
+    public start(graphics: Phaser.Graphics, graphicsIn: Phaser.Graphics) {
         const random = 5;
         const topGap = (this.right - this.left) / this.citizenTop.length;
         this.citizenTop.sort((c1, c2) => {
@@ -70,7 +70,12 @@ export class WallOfDeath extends MetalMovement {
         });
 
         graphics.beginFill(BLINKCOLOR);
+        graphics.lineStyle(5, BLINKCOLOR);
         graphics.drawRect(this.left, 400 - this.gap, this.right - this.left, this.gap * 2);
+
+        graphicsIn.beginFill(BLINKINCOLOR);
+        graphics.lineStyle(5, BLINKINCOLOR);
+        graphicsIn.drawRect(this.left, 400 - this.gap, this.right - this.left, this.gap * 2);
     }
 
     isIn(position: Phaser.Point) {
