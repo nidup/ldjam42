@@ -77,6 +77,7 @@ export default class Play extends Phaser.State
 
     public create()
     {
+        this.scoreDisplay = new ScoreDisplay(this.game);
         this.bigTextPositionner = new BigTextPositionner(this.game);
 
         if (Config.debug()) {
@@ -189,7 +190,7 @@ export default class Play extends Phaser.State
             this.previousGunType,
             this.playerPosition
         );
-        this.street = new Street(generator, this.isFinalLevel);
+        this.street = new Street(generator, this.isFinalLevel, this.scoreDisplay);
 
         const worldBoundX = 0;
         const worldBoundY = 0;
@@ -438,7 +439,7 @@ export default class Play extends Phaser.State
         this.currentMetalMovement = new Nothing();
         this.currentMetalMovement.start(this.draw(), this.drawIn());
 
-        this.scoreDisplay = new ScoreDisplay(this.game);
+        this.scoreDisplay.display();
     }
 
     private draw() {
