@@ -1,6 +1,5 @@
 
 import {Config} from "../../Config";
-import {CitizenBrain} from "./Brain/CitizenBrain";
 import {Street} from "../../Game/Street";
 import {CanBeHurt} from "../CanBeHurt";
 import {HorizontalDirection} from "../HorizontalDirection";
@@ -61,7 +60,6 @@ export const TEXT_STYLE_HUGE = {
 export class Citizen extends Phaser.Sprite implements CanBeHurt, CouldBeAReplicant
 {
     public body: Phaser.Physics.Arcade.Body;
-    private brain: CitizenBrain;
     protected isReplicant: boolean = false;
     private fearStatus: FearStatus;
     private group: Phaser.Group;

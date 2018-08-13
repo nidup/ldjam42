@@ -1,12 +1,10 @@
 
 import {Street} from "../Street";
 import {Citizen, TEXT_STYLE, TEXT_STYLE_BIG, TEXT_STYLE_MIDDLE} from "../../Character/Bot/Citizen";
-import {Cop} from "../../Character/Bot/Cop";
 import {BackBag} from "../../Character/Player/BackBag";
 import {Config} from "../../Config";
 import {LevelLoader} from "../LevelLoader";
-import {GamePadController, KeyBoardController, VirtualPadController} from "../Controller";
-import {DeviceDetector} from "../DeviceDetector";
+import {KeyBoardController} from "../Controller";
 import {StreetLimits} from "../StreetLimits";
 import {CharactersGenerator} from "../../Character/CharactersGenerator";
 import {CirclePit} from "../../Yolo/CirclePit";
@@ -563,7 +561,6 @@ export default class Play extends Phaser.State
         this.background.destroy();
         this.street.player().destroy();
         this.street.citizens().all().map(function(citizen: Citizen) { citizen.destroy()});
-        this.street.cops().all().map(function(cop: Cop) { cop.destroy()});
         this.street = null;
     }
 

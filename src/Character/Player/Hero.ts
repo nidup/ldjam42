@@ -2,23 +2,19 @@
 import {Street} from "../../Game/Street";
 import {Gun} from "../../Weapon/Gun";
 import {PickableItem} from "./PickableItem";
-import {ShotGun} from "../../Weapon/ShotGun";
 import {BaseGun} from "../../Weapon/BaseGun";
 import {BackBag} from "./BackBag";
 import {
     GameEvents, GunPicked, HeroKilled, HeroNursed, MachineGunPicked, MoneyPicked,
     ShotGunPicked
 } from "./Events";
-import {MachineGun} from "../../Weapon/MachineGun";
 import {CanBeHurt} from "../CanBeHurt";
 import {HorizontalDirection} from "../HorizontalDirection";
 import {CharacterHurt} from "../SFX/CharacterHurt";
 import {HeroCamera} from "../SFX/HeroCamera";
-import {BulletHits} from "./BulletHits";
 import {Config} from "../../Config";
 import {Controller} from "../../Game/Controller";
 import {AggressivenessGauge} from "./AggressivenessGauge";
-import {Hospital} from "../../Building/Hospital";
 import Score from "../../Game/State/Score";
 import {ScoreDisplay} from "../../Yolo/ScoreDisplay";
 
@@ -33,7 +29,6 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
     private moneyAmount: number = 0;
     private cameraFx: HeroCamera;
     private gameEvents: GameEvents;
-    private bulletHits: BulletHits;
     private group: Phaser.Group;
     private controller: Controller;
     private agressivenessGauge: AggressivenessGauge;
@@ -81,7 +76,6 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
 
         this.cameraFx = new HeroCamera(group.game.camera);
         this.gameEvents = new GameEvents();
-        this.bulletHits = new BulletHits(this, street);
         this.citizens = street.citizens();
         this.agressivenessGauge = new AggressivenessGauge(this.game.time);
     }
@@ -92,7 +86,6 @@ export class Hero extends Phaser.Sprite implements CanBeHurt
             this.finished = true;
         }
         this.controls();
-        this.bulletHits.hit();
         let angryCount = this.citizens.all().filter(citizen => citizen.text).length;
         if (angryCount > 2 && this.x > 0) {
             this.body.checkCollision.none = !this.movingToTheRight();
