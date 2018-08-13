@@ -36,24 +36,24 @@ export default class Menu extends Phaser.State {
         const storyX = titleX - 90;
         const storyY = titleY + 320;
         const storyText =
-            "Johnny Kilmister is a huge fan of Motor Raid.\n" +
-            "He never went to any concert because he’s not comfortable in a crowd.\n" +
-            "Motor Raid just announced their very last show, Johnny decided to go.\n" +
-            "Help Johnny to level up his metal concert skills!";
+            "Johnny Kilmister is a huge fan of Motor Raid.\n".toUpperCase() +
+            "He never went to any concert because he’s not comfortable in a crowd.\n".toUpperCase() +
+            "Motor Raid just announced their very last show, Johnny decided to go.\n".toUpperCase() +
+            "Help Johnny to level up his metal concert skills!".toUpperCase();
         this.game.add.text(storyX, storyY, storyText, STORY_TEXT_STYLE);
 
         const controlX = storyX;
         const controlY = storyY + 170;
         const controlText =
-            "> Controls:\n" +
-            "- Press arrow keys to move\n" +
-            "- Spam space key to pass through the crowd\n\n" +
-            "> Increase your concert skills by staying\nas much as possible in blue action area!\n";
+            "> Controls:\n".toUpperCase() +
+            "- Press arrow keys to move\n".toUpperCase() +
+            "- Spam space key to pass through the crowd\n\n".toUpperCase() +
+            "> Increase your concert skills by staying\nas much as possible in blue action area!\n".toUpperCase();
         this.game.add.text(controlX, controlY, controlText, STORY_TEXT_STYLE);
 
         const startX = controlX + 110;
         const startY = controlY + 190;
-        this.startText = this.game.add.text(startX, startY, 'Press space key to start', STORY_TEXT_STYLE);
+        this.startText = this.game.add.text(startX, startY, 'Press space key to start'.toUpperCase(), STORY_TEXT_STYLE);
         this.startText.alpha = 1;
         const tweenAlpha = this.game.add.tween(this.startText).to( { alpha: 0.3 }, 0, "Linear", true);
         tweenAlpha.repeat(10000, 400);
@@ -65,7 +65,7 @@ export default class Menu extends Phaser.State {
 
         const ldjamX = tutoX +90;
         const ldjamY = tutoY + 280;
-        const ldjamText = this.game.add.text(ldjamX, ldjamY, 'Hand-crafted with ❤️ for LDJAM 42', LDJAM_TEXT_STYLE);
+        const ldjamText = this.game.add.text(ldjamX, ldjamY, 'Hand-crafted with ❤️ for LDJAM 42'.toUpperCase(), LDJAM_TEXT_STYLE);
     }
 
     public update()
