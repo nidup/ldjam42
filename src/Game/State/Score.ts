@@ -11,7 +11,7 @@ export const STORY_TEXT_STYLE = {
 export const SCORE_TEXT_STYLE = {
     align: 'center',
     fill: '#fff',
-    font: '8px PICO-8'
+    font: '32px PICO-8'
 };
 
 export default class Score extends Phaser.State {
@@ -45,15 +45,25 @@ export default class Score extends Phaser.State {
             .to( { x: 1.25, y:1.25 }, 100, "Linear", true);
         tweenScale.repeat(10000, 200);
 
+        const singerAudio = this.game.add.audio('singer-yourock', 1, false);
+        singerAudio.play();
+        this.game.time.events.add(Phaser.Timer.SECOND * 0.8, () => {
+            const singerAudio = this.game.add.audio('gueulage', 1, false);
+            singerAudio.play();
+        });
+        this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
+            const singerAudio = this.game.add.audio('clapclap', 1, false);
+            singerAudio.play();
+        });
 
-        const storyX = titleX + 250;
-        const storyY = titleY + 400;
+        const storyX = titleX + 220;
+        const storyY = titleY + 430;
         const storyText =
-            "U ROCK!\n\nScore:" + this.score+"";
-        this.game.add.text(storyX, storyY, storyText, TEXT_STYLE_BIG);
+            "Score:" + this.score+"";
+        this.game.add.text(storyX, storyY, storyText, SCORE_TEXT_STYLE);
 
-        const startX = titleX + 240;
-        const startY = storyY + 190;
+        const startX = titleX + 220;
+        const startY = storyY + 150;
         this.startText = this.game.add.text(startX, startY, 'Press space key to restart', STORY_TEXT_STYLE);
         this.startText.alpha = 1;
         const tweenAlpha = this.game.add.tween(this.startText).to( { alpha: 0.3 }, 0, "Linear", true);

@@ -7,6 +7,12 @@ export const STORY_TEXT_STYLE = {
     font: '15px PICO-8'
 };
 
+export const LDJAM_TEXT_STYLE = {
+    align: 'left',
+    fill: '#fff',
+    font: '10px PICO-8'
+};
+
 export default class Menu extends Phaser.State {
 
     private startText : Phaser.Text;
@@ -37,7 +43,7 @@ export default class Menu extends Phaser.State {
         this.game.add.text(storyX, storyY, storyText, STORY_TEXT_STYLE);
 
         const controlX = storyX;
-        const controlY = storyY + 190;
+        const controlY = storyY + 170;
         const controlText =
             "> Controls:\n" +
             "- Press arrow keys to move\n" +
@@ -53,9 +59,13 @@ export default class Menu extends Phaser.State {
         tweenAlpha.repeat(10000, 400);
 
         const tutoX = controlX + 660;
-        const tutoY = storyY + 170;
+        const tutoY = storyY + 150;
         const tuto = this.game.add.sprite(tutoX, tutoY, 'tuto');
         tuto.scale.set(0.5, 0.5);
+
+        const ldjamX = tutoX +90;
+        const ldjamY = tutoY + 280;
+        const ldjamText = this.game.add.text(ldjamX, ldjamY, 'Hand-crafted with ❤️ for LDJAM 42', LDJAM_TEXT_STYLE);
     }
 
     public update()
