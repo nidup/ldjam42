@@ -2,6 +2,10 @@
 
 [Ludum Dare entry](https://ldjam.com/events/ludum-dare/42/sorry-oh-sorry-hellfest-simulator)
 
+<p align="center">
+<img src="https://github.com/nidup/ldjam42/blob/master/assets/doc/gif.gif" alt="LD JAM 41"/>
+</p>
+
 Everything is hand-crafted, from source code to assets:
  - sound tracks with [Beepbox](https://beepbox.co).
  - pixel Art with [Aseprite](https://www.aseprite.org/).
