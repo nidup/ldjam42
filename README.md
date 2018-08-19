@@ -1,15 +1,15 @@
 # Ludum Dare 42
 
-TODO
+[Ludum Dare entry](https://ldjam.com/events/ludum-dare/42/sorry-oh-sorry-hellfest-simulator)
 
 Everything is hand-crafted, from source code to assets:
  - sound tracks with [Beepbox](https://beepbox.co).
  - pixel Art with [Aseprite](https://www.aseprite.org/).
  - code in Typescript + [PhaserJS](https://phaser.io).
 
-# Demo
+# Play!
 
-TODO
+[Play the game online on itch.io](https://nidup.itch.io/sorry-oh-sorry)
 
 # Development
 
